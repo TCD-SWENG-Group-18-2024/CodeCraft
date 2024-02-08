@@ -7,7 +7,7 @@ import {BrowserRouter as Router, Route,Routes} from 'react-router-dom';
 import IBM from "./assets/IBM.PNG"
 
 function App(){
-  // Not useful at the moment, for fetching data from the endpoint(backend)
+  // Not useful at the moment,for fetching data from the endpoint(backend)
   const [data,setData] = useState([{}])
   useEffect(() =>{
     fetch("/...").then(
