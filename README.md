@@ -38,7 +38,7 @@ Follow these steps to get the application running on your local machine:
 5. install Flask App requirements
    (Windows)
    ```
-   pip install flask
+   pip install -r requirements.txt
    ```
    (Mac)
    ```
