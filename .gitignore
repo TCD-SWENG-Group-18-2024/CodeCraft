@@ -1,0 +1,27 @@
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+
+# Ignore environment-specific files
+.env
+
+# Ignore virtual environment directories
+venv/
+env/
+
+# Ignore npm dependencies
+/frontend/node_modules/
+
+# Ignore build artifacts for React
+/frontend/build/
+/frontend/dist/
+
+# Ignore Flask logs and database files
+/backend/*.log
+/backend/*.db
+
+# Ignore Python virtual environment
+/backend/venv/
+
+# Ignore any local development files
+.vscode/
