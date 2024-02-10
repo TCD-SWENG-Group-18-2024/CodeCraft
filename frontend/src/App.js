@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   const [joke, setJoke] = useState(null);
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = 'http://localhost:8080';
 
   useEffect(() => {
     // Fetch joke data from Flask backend

@@ -23,4 +23,4 @@ def get_joke():
         return jsonify({'error': 'Failed to fetch joke'}), 500
 
 if __name__=="__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
