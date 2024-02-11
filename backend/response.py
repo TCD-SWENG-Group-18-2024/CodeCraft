@@ -8,7 +8,7 @@ dotenv.load_dotenv()
 
 chat = ChatOpenAI()
 system_message = SystemMessage(content="""
-You are a code analysis tool. Please analyse the following code which defines a Python Flask application. 
+You are a code analysis tool. Please analyse the following code. 
 State what the code does and give feedback or tips on how to improve it. 
 Be specific. : 
 """)
