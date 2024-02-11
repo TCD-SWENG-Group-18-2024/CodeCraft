@@ -1,12 +1,6 @@
 import React, {useState} from 'react'
 import '../styles/SubmissionPage.css'
 
-// function Submission(){
-//     return(
-//         <p style ={{fontSize :"30px"}}>Submission Page!</p>
-//     )
-    
-// }
 const SubmissionPage = () => {
 
     const[input, setInput] = useState('');
@@ -25,7 +19,7 @@ const SubmissionPage = () => {
     };
 
     /*Handle Submit, probably need to send the in take info to back end and ai */
-    const handleSubmit = () =>{
+    const handleSubmit = async () =>{
         /*Maybe, a language detecter ???*/ 
         if (selectedLanguage === '--Select a Language--'){
             alert("Please select a language before sumbitting");
@@ -37,7 +31,34 @@ const SubmissionPage = () => {
             return;
         }
 
-        setFeedback(`Submission successful. Language: ${selectedLanguage}`);
+        const data ={
+            language: selectedLanguage,
+            code: input,
+        };
+
+        try {
+            const response = await fetch("backend-api-url", 
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok){
+                const responseData = await response.json();
+                setFeedback(`Submission successful. Feedback: ${JSON.stringify(responseData)}`);
+            }
+            else {
+                setFeedback(`Submission failed. Server returned ${response.status} status.`)
+            }
+        } 
+        catch(error){
+            setFeedback(`Error occurred while submitting: ${error.message}`)
+        }
+
+        // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
 
         console.log("Submitted: ",input);
         console.log("Language: ", selectedLanguage);
