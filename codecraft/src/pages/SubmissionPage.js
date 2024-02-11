@@ -36,6 +36,8 @@ const SubmissionPage = () => {
             code: input,
         };
 
+        console.log(data);
+        
         try {
             const response = await fetch("backend-api-url", 
             {
