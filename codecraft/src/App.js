@@ -24,8 +24,7 @@ function App(){
 
   return(
     <div className='App'>
-      <img src={IBM} alt="logo" className="logo" />
-      
+      <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM} alt="logo" className="logo" /></a>
       <Router>
         <Routes>
           {/*landing page, default route path*/}
