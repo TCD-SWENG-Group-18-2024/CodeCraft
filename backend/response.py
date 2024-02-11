@@ -1,7 +1,6 @@
 import dotenv
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
-import time
 
 # For this to work, you need to create a file called '.env' and input the following:
 # OPENAI_API_KEY=YOUR_KEY_HERE
@@ -19,7 +18,6 @@ def default_response(user_input: str) -> str:
     return chat([system_message, HumanMessage(content=user_input)]).content
 
 
-start = time.time()
 
 print(default_response("""
 import requests
@@ -49,6 +47,3 @@ def get_joke():
 if __name__=="__main__":
     app.run(debug=True)
 """))
-
-end = time.time()
-print(end - start)
