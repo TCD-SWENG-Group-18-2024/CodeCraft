@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
 import '../styles/SubmissionPage.css'
+import IBM_White from "../assets/IBM_white.PNG"
+import { Link } from 'react-router-dom'
 
 const SubmissionPage = () => {
 
     const[input, setInput] = useState('');
     const[selectedLanguage, setSelectedLangugage] = useState('--Select a Language--');
     const[feedback, setFeedback] = useState('');
-
+    const[dropdownVisible, setDropdownVisible] = useState(false);
 
     /*Takes input */
     const handleTextBoxChange = (event) => {
@@ -16,6 +18,7 @@ const SubmissionPage = () => {
     /*Takes Selected Language */
     const handleLanguageSelected = (language) => {
         setSelectedLangugage(language);
+        setDropdownVisible(false);
     };
 
     /*Handle Submit, probably need to send the in take info to back end and ai */
@@ -82,26 +85,40 @@ const SubmissionPage = () => {
         }
     };
 
+    const dropDown = () => {
+        setDropdownVisible(!dropdownVisible);
+    };
 
     return [
         <>
+
+            <Link to="/">
+            <button className='backButton'>
+                Back to Home
+            </button>
+            </Link>
+
+            <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className="logo" /></a>
+
             <div class="wave"></div>
             <div class="wave"></div>
             <div class="wave"></div>
 
-            <div><h1 class="">Evaluation Page</h1></div>
+            <div><h1 class="Heading">Evaluation Page</h1></div>
 
 
             <div class="languageDropdown">
-                <button onClick={()=> handleLanguageSelected('Select a Language')}>{selectedLanguage === 'Select a Language'
+                <button onClick={dropDown} >{selectedLanguage === 'Select a Language'
                     ? 'Select a Language Please'
                     : `Language Selected: ${selectedLanguage}`}</button>
 
+                {dropdownVisible && (
                 <div class="languages">
-                    <p onClick={() => handleLanguageSelected("Java")}>Java</p>
-                    <p onClick={() => handleLanguageSelected("Python")}>Python</p>
-                    <p onClick={() => handleLanguageSelected("C")}>C</p>
+                    <p className="Java" onClick={() => handleLanguageSelected("Java")}>Java</p>
+                    <p className="Python" onClick={() => handleLanguageSelected("Python")}>Python</p>
+                    <p className="C" onClick={() => handleLanguageSelected("C")}>C</p>
                 </div>
+                )}
             </div>
 
 

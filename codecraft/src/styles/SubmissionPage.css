@@ -1,3 +1,25 @@
+.Heading{
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: white;
+  padding: 16px;
+  cursor: pointer;
+  font-size: large;
+  margin: 20px;
+  position: absolute;
+  left: 10px
+}
+
+.backButton:hover{
+  color: lightblue;
+}
+
 .submissionArea{
   margin: 20px;
   height: 500px;
@@ -77,6 +99,7 @@
 .submissionArea .submitButton:hover{
     background-color: rgb(42, 199, 199);
 }
+
 .languageDropdown:hover .languages{
   display: block;
 }
@@ -85,7 +108,14 @@
   background-color: rgb(42, 199, 199);
 }
 
-.languageDropdown p:hover{
-  background-color: aquamarine;
+.languageDropdown .languages .Java:hover {
+  background-color: rgb(227, 66, 66);
 }
 
+.languageDropdown .languages .Python:hover {
+  background-color: yellow;
+}
+
+.languageDropdown .languages .C:hover {
+  background-color: blue;
+}

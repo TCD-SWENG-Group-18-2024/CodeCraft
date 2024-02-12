@@ -4,7 +4,9 @@ import Home from "./pages/Home"
 import SubmissionPage from './pages/SubmissionPage';
 import {BrowserRouter as Router, Route,Routes} from 'react-router-dom';
 
-import IBM from "./assets/IBM.PNG"
+// move the logo to the indivdual pages
+// import IBM from "./assets/IBM.PNG"
+// import IBM_White from "./assets/IBM_white.PNG"
 
 function App(){
   // Not useful at the moment,for fetching data from the endpoint(backend)
@@ -24,7 +26,7 @@ function App(){
 
   return(
     <div className='App'>
-      <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM} alt="logo" className="logo" /></a>
+      
       <Router>
         <Routes>
           {/*landing page, default route path*/}
@@ -32,7 +34,6 @@ function App(){
           <Route path ="/SubmissionPage" exact element = {<SubmissionPage/>}/>
         </Routes>
       </Router>
-      
       
       
       
