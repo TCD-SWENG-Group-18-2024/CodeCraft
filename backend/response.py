@@ -1,11 +1,27 @@
 import dotenv
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 from langchain.schema import HumanMessage, SystemMessage
 
 # For this to work, you need to create a file called '.env' and input the following:
 # OPENAI_API_KEY=YOUR_KEY_HERE
 dotenv.load_dotenv()
 
+llm = OpenAI()
+
+code_analyis_template = PromptTemplate(
+    input_variables=['code'],
+    template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell me what my code does and give  \
+        give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {code}'
+)
+
+
+def response(user_input: str) -> str:
+    code_analyis_chain = LLMChain(llm=llm, prompt=code_analyis_template)
+    return code_analyis_chain.invoke(user_input)['text'].strip()
+
+'''
 chat = ChatOpenAI()
 system_message = SystemMessage(content="""
 You are a code analysis tool. Please analyse the following code. 
@@ -13,11 +29,8 @@ State what the code does and give feedback or tips on how to improve it.
 Be specific. : 
 """)
 
-
 def default_response(user_input: str) -> str:
     return chat([system_message, HumanMessage(content=user_input)]).content
-
-
 
 print(default_response("""
 import requests
@@ -47,3 +60,7 @@ def get_joke():
 if __name__=="__main__":
     app.run(debug=True)
 """))
+'''
+
+if __name__ == "__main__":
+    print(response('print("Hello World")'))
