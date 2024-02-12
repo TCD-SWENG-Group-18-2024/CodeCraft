@@ -4,6 +4,9 @@ __pycache__/
 
 # Ignore environment-specific files
 .env
+.idea
+/backend/.env
+/backend/.idea
 
 # Ignore virtual environment directories
 venv/
