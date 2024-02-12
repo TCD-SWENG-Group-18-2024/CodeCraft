@@ -18,7 +18,6 @@ def default_response(user_input: str) -> str:
     return chat([system_message, HumanMessage(content=user_input)]).content
 
 
-
 print(default_response("""
 import requests
 from flask import Flask, request, jsonify
