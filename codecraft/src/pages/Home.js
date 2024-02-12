@@ -5,25 +5,32 @@ import {Link} from 'react-router-dom';
 import {FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 
-// just added 3 divs to make the wave on the background
-function Home(){
-    return(
-        <div>
-            <p style={{ fontSize: '50px' }}>Hello, SwEng Project Group 18</p>
-            <div className="tab">
-            <Link to="/SubmissionPage" className="tab-link">
-                Start Analysis<div className='circleRight'><FontAwesomeIcon icon = {faCircleRight}/></div>
-            </Link>
-            </div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
+function Home() {
+    return (
+      <div className="App">
+        <nav className="App-nav">
+          <div className="App-nav-links">
+            <a href="#features">Features</a>
+            <a href="#team">Meet the team</a>
+            <a href="#about">About</a>
+            <button className="App-sign-up">Sign up</button>
+          </div>
+        </nav>
+  
+        <h1 className="welcome-message"> Hello, SwEng Project Group 18</h1>
+  
+        <div className="tab">
+          <Link to="/SubmissionPage" className="tab-link">
+            Start Analysis <div className="circleRight"><FontAwesomeIcon icon={faCircleRight} /></div>
+          </Link>
         </div>
-    )
-    
-}
+  
+      
+        <div className="wave"></div>
+        <div className="wave"></div>
+        <div className="wave"></div>
+      </div>
+    );
+  }
 
-
-
-
-export default Home;
+  export default Home;
