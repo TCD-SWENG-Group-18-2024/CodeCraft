@@ -1,40 +1,30 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
 
-# backend
+# Ignore environment-specific files
+.env
+.idea
 /backend/.env
-/backend/venv
+/backend/.idea
 
-# dependencies
-/node_modules
-/frontend/node_modules
-.pnp
-.pnp.js
-/frontend/.pnp
-/frontend/.pnp.js
+# Ignore virtual environment directories
+venv/
+env/
 
-# testing
-/coverage
-/frontend/coverage
+# Ignore npm dependencies
+/frontend/node_modules/
 
-# production
-/build
-/frontend/build
+# Ignore build artifacts for React
+/frontend/build/
+/frontend/dist/
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-/frontend/.DS_Store
-/frontend/.env.local
-/frontend/.env.development.local
-/frontend/.env.test.local
-/frontend/.env.production.local
+# Ignore Flask logs and database files
+/backend/*.log
+/backend/*.db
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-/frontend/npm-debug.log*
-/frontend/yarn-debug.log*
-/frontend/yarn-error.log*
+# Ignore Python virtual environment
+/backend/venv/
+
+# Ignore any local development files
+.vscode/
