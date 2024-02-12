@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const SubmissionPage = () => {
 
     const[input, setInput] = useState('');
-    const[selectedLanguage, setSelectedLangugage] = useState('--Select a Language--');
+    //const[selectedLanguage, setSelectedLangugage] = useState('--Select a Language--');
     const[feedback, setFeedback] = useState('');
     const[dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -23,11 +23,11 @@ const SubmissionPage = () => {
 
     /*Handle Submit, probably need to send the in take info to back end and ai */
     const handleSubmit = async () =>{
-        /*Maybe, a language detecter ???*/ 
+        /* Language Detector - Not Necessary for the moment
         if (selectedLanguage === '--Select a Language--'){
             alert("Please select a language before sumbitting");
             return;
-        }
+        }*/
 
         if(input.trim() === ''){
             alert("Please Enter some code before submitting");
@@ -35,7 +35,7 @@ const SubmissionPage = () => {
         }
 
         const data ={
-            language: selectedLanguage,
+            //language: selectedLanguage,
             code: input,
         };
 
@@ -66,7 +66,7 @@ const SubmissionPage = () => {
         // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
 
         console.log("Submitted: ",input);
-        console.log("Language: ", selectedLanguage);
+        //console.log("Language: ", selectedLanguage);
         console.log("Feedback", feedback);
     };
 
@@ -107,7 +107,7 @@ const SubmissionPage = () => {
             <div><h1 class="Heading">Evaluation Page</h1></div>
 
 
-            <div class="languageDropdown">
+            {/*<div class="languageDropdown">
                 <button onClick={dropDown} >{selectedLanguage === 'Select a Language'
                     ? 'Select a Language Please'
                     : `Language Selected: ${selectedLanguage}`}</button>
@@ -119,7 +119,7 @@ const SubmissionPage = () => {
                     <p className="C" onClick={() => handleLanguageSelected("C")}>C</p>
                 </div>
                 )}
-            </div>
+            </div>*/}
 
 
 
