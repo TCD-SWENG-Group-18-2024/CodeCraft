@@ -39,12 +39,25 @@ def response(user_input: str) -> dict:
 #   if AIModel == 'Watsonx':
 #       llm = watsonx.ai
 #   elif AIModel == 'LLAMA':
-#        llm = llama        
+#        llm = llama    
+#   elif AIModel == '':
+#        llm = llm (default llm probably OpenAI)
 #   code_analysis_chain = LLM (llm = llm, prompt=general_AIModel_template)
 #
 #   return code_analysis_chain.invoke({'code': user_input})  
 #
 
+# def code_generation(user_input: str, AIModel: str) -> dict:
+#   if AIModel == 'Watsonx':
+#       llm = watsonx.ai
+#   elif AIModel == 'LLAMA':
+#        llm = llama  
+#   elif AIModel == '':
+#        llm = default llm chosen for code generation      
+#   code_analysis_chain = LLM (llm = llm, prompt=code_generation_template)
+#
+#   return code_analysis_chain.invoke({'code': user_input})  
+#
 
 
 
