@@ -14,7 +14,8 @@ body, h1, h2, p, a, button {
     color: #fefefe;
 }
 
-.App-nav {       
+.App-nav {
+    background: #b1c5e9;       
     margin: 20px;
     padding: 1rem;
     display: flex;
@@ -110,3 +111,9 @@ body, h1, h2, p, a, button {
         transform: translateX(-50%) translateY(-10px);
     }
 }
+
+.logo{
+    margin-top: 50px;
+    font-weight: bold;
+  }
+ 

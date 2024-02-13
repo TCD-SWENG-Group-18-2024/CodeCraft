@@ -4,7 +4,7 @@
   font-weight: 500;
 }
 
-.backButton {
+/* .backButton {
   background: none;
   border: none;
   color: white;
@@ -14,7 +14,7 @@
   margin: 20px;
   position: absolute;
   left: 10px
-}
+} */
 
 .backButton:hover{
   color: lightblue;
@@ -119,3 +119,36 @@
 .languageDropdown .languages .C:hover {
   background-color: blue;
 }
+
+.main-content {
+  transition: margin-left 0.3s ease-in-out;
+ }
+ 
+ 
+ .with-sidebar {
+  margin-left: 200px; /* Same as the sidebar width */
+ }
+ 
+ 
+ .submission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #333; /* Replace with actual color */
+  padding: 20px;
+ 
+ 
+ }
+ 
+ 
+ .submission-title {
+  margin: 10;
+  color: #FFF; /* Replace with actual color */
+  /* Style your title as needed */
+ }
+ 
+ 
+ .header-image {
+  height: 50px; /* Adjust size as needed */
+ }
+ 
