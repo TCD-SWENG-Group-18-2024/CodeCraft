@@ -6,20 +6,24 @@ from langchain.schema import HumanMessage, SystemMessage
 
 # For this to work, you need to create a file called '.env' and input the following:
 # OPENAI_API_KEY=YOUR_KEY_HERE
-dotenv.load_dotenv()
 
+dotenv.load_dotenv()
 llm = OpenAI()
+chat = ChatOpenAI()
 
 code_analyis_template = PromptTemplate(
     input_variables=['code'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell me what my code does and give  \
         give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {code}'
 )
-
+#def response(user_input: str) -> dict:
+ #   code_analysis_chain = LLMChain(llm=llm, prompt=code_analyis_template)
+  #  response_text = code_analysis_chain.invoke(user_input)['text'].strip()
+   # return {'response': response_text}
 
 def response(user_input: str) -> str:
-    code_analyis_chain = LLMChain(llm=llm, prompt=code_analyis_template)
-    return code_analyis_chain.invoke(user_input)['text'].strip()
+    return chat([PromptTemplate, HumanMessage(content=user_input)]).content
+
 
 '''
 chat = ChatOpenAI()

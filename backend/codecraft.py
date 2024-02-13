@@ -1,16 +1,16 @@
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import response as r
+from response import response
+
 #AI team will be coding in response.py ( as pushed to the github already )
 #Uncomment the below line when AI team are ready
-#from response.py import default_response
 
 app = Flask(__name__)
 CORS(app)
 
 # Define the LLM API endpoint and key
-LLM_API_ENDPOINT = 'https://your_llm_api_endpoint.com'
+LLM_API_ENDPOINT = 'http://127.0.0.1:8080/llm'
 LLM_API_KEY = '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'
 
 @app.route('/')
@@ -35,11 +35,13 @@ def get_joke():
 def llm_request():
     # Get JSON data from the frontend
     frontend_request_data = request.get_json()
-    # Define request headers with LLM API key
-    headers = {'Authorization': 'Bearer ' + LLM_API_KEY}
+    # Define request headers with LLM API key   
     # Make API call to LLM
-    #the below line contains a placeholder 'default_response'. Will be removed when AI team is ready
-    llm_response = requests.post(LLM_API_ENDPOINT, json=frontend_request_data)  
+
+    ############################################################################
+    llm_response = requests.post('http://127.0.0.1:8080/llm', json=frontend_request_data)  
+    ############################################################################
+    #llm_response = response(frontend_request_data['code'])
     
     #if successful return  from LLM
     if llm_response.status_code == 200:
