@@ -35,6 +35,17 @@ def response(user_input: str) -> dict:
     # as the value
     return code_analysis_chain.invoke({'code': user_input})
 
+# def AIModel(user_input: str, AIModel: str) -> dict:
+#   if AIModel == 'Watsonx':
+#       llm = watsonx.ai
+#   elif AIModel == 'LLAMA':
+#        llm = llama        
+#   code_analysis_chain = LLM (llm = llm, prompt=general_AIModel_template)
+#
+#   return code_analysis_chain.invoke({'code': user_input})  
+#
+
+
 
 
 
