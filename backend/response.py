@@ -27,4 +27,4 @@ def response(user_input: str) -> dict:
 
 
 if __name__ == "__main__":
-    print(response('print("Hello World")'))
+    print(response('for (int i = 0; i <= 9; i++) System.out.println(i);'))

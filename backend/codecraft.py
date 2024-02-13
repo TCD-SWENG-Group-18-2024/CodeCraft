@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Define the LLM API endpoint and key
-LLM_API_ENDPOINT = 'http://127.0.0.1:8080/llm'
+LLM_API_ENDPOINT = 'http://localhost:8080/llm'
 LLM_API_KEY = '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'
 
 @app.route('/')
@@ -34,24 +34,11 @@ def get_joke():
 @app.route('/llm', methods=['POST']) 
 def llm_request():
     # Get JSON data from the frontend
-    frontend_request_data = request.get_json()
-    # Define request headers with LLM API key   
+    user_input = request.get_json()
     # Make API call to LLM
-
-    ############################################################################
-    llm_response = requests.post('http://127.0.0.1:8080/llm', json=frontend_request_data)  
-    ############################################################################
-    #llm_response = response(frontend_request_data['code'])
-    
-    #if successful return  from LLM
-    if llm_response.status_code == 200:
-        llm_data = llm_response.json()
-        #return response to frontend
-        return jsonify(llm_data) 
-        #if the LLM returns its value as a string, replace the above line with: return llm_data
-    else:
-        #error message:
-        return jsonify({'error': 'Failed to fetch response from LLM'}), 500
+    llm_response = response(user_input)
+    # Return JSON of response
+    return jsonify(llm_response) 
 
 if __name__=="__main__":
     app.run(debug=True, port=8080)
