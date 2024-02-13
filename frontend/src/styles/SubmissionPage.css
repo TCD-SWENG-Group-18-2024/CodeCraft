@@ -61,69 +61,13 @@
     border-radius: 5px;
 }
 
-.languageDropdown{
-  position: relative;
-  display: inline-block;
-  margin: 10px;
-}
-
-.languageDropdown button{
-
-  background-color: white;
-  align-items: center;
-  color: black;
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  
-}
-
-.languageDropdown p {
-  display: block;
-  color: black;
-  text-decoration: none;
-  padding: 10px;
-}
-
-.languageDropdown .languages{
-  display: none;
-  background-color: white;
-  position: relative;
-  line-height: 10px;
-  min-width: 20px;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px black;
-}
-
 .submissionArea .submitButton:hover{
     background-color: rgb(42, 199, 199);
-}
-
-.languageDropdown:hover .languages{
-  display: block;
-}
-
-.languageDropdown:hover button{
-  background-color: rgb(42, 199, 199);
-}
-
-.languageDropdown .languages .Java:hover {
-  background-color: rgb(227, 66, 66);
-}
-
-.languageDropdown .languages .Python:hover {
-  background-color: yellow;
-}
-
-.languageDropdown .languages .C:hover {
-  background-color: blue;
 }
 
 .main-content {
   transition: margin-left 0.3s ease-in-out;
  }
- 
  
  .with-sidebar {
   margin-left: 200px; /* Same as the sidebar width */
@@ -134,21 +78,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #333; /* Replace with actual color */
+  background-color: none; /* Replace with actual color */
   padding: 20px;
- 
+  
  
  }
  
- 
- .submission-title {
-  margin: 10;
+ .submission-header .submission-title {
+  margin-left: 40px;
   color: #FFF; /* Replace with actual color */
   /* Style your title as needed */
+  font-weight: 200;
+  align-items: center;
+  justify-content: center;
  }
  
  
  .header-image {
-  height: 50px; /* Adjust size as needed */
+  height: 100px; /* Adjust size as needed */
+  width: 100px;
+  margin-right: 50px;
  }
  

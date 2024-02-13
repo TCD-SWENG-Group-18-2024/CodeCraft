@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import HeaderImage from '../assets/header-image.png';
+import HeaderImage from '../assets/IBM_white.PNG';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
 

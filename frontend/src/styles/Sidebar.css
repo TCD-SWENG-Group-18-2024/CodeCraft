@@ -1,6 +1,6 @@
 .sidebar {
     width: 200px; /* Width of the sidebar */
-    background: #333; /* Background color of the sidebar */
+    background: none; /* Background color of the sidebar */
     color: white;
     height: 100%;
     position: fixed;
@@ -14,17 +14,18 @@
   }
    .sidebar__toggle {
     width: 20px; /* Width of the toggle tab */
-    height: 100%;
-    background: #666; /* Background color of the toggle tab */
+    height: 20px;
+    background: none; /* Background color of the toggle tab */
     position: absolute;
-    right: -20px; /* Position the toggle tab on the right side of the sidebar */
+    right: -25px; /* Position the toggle tab on the right side of the sidebar */
     top: 0;
     cursor: pointer;
-    display: flex;
+    margin-top: 60px;
     align-items: center;
     justify-content: center;
     /* You can add more styling (like a toggle icon) to the tab here */
   }
+
    .sidebar__nav {
     padding: 20px;
     /* Style your sidebar navigation/content here */
