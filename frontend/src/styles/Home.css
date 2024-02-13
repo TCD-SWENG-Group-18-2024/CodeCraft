@@ -15,7 +15,7 @@ body, h1, h2, p, a, button {
 }
 
 .App-nav {
-    background: #b1c5e9;       
+    background: none;       
     margin: 20px;
     padding: 1rem;
     display: flex;

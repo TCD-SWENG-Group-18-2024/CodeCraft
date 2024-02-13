@@ -10,7 +10,7 @@ const SubmissionPage = () => {
     //const[selectedLanguage, setSelectedLangugage] = useState('--Select a Language--');
     const[feedback, setFeedback] = useState('');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const[dropdownVisible, setDropdownVisible] = useState(false);
+    // const[dropdownVisible, setDropdownVisible] = useState(false);
 
 
     const toggleSidebar = () => {
@@ -93,9 +93,9 @@ const SubmissionPage = () => {
         }
     };
 
-    const dropDown = () => {
-        setDropdownVisible(!dropdownVisible);
-    };
+    // const dropDown = () => {
+    //     setDropdownVisible(!dropdownVisible);
+    // };
 
     return [
         <>
