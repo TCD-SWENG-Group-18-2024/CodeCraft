@@ -17,6 +17,11 @@ code_analysis_template = PromptTemplate(
         give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {code}'
 )
 
+# code_generation_template = PromptTemplate ()
+#   input_variables=['explanation']
+#   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}. Please ensure that the generated code is correct, follows best practices, and meets the given criteria. Be as specific as possible'
+# 
+
 
 def response(user_input: str) -> dict:
     code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
