@@ -16,10 +16,6 @@
   left: 10px
 } */
 
-.backButton:hover{
-  color: lightblue;
-}
-
 .submissionArea{
   margin: 20px;
   height: 500px;
@@ -69,23 +65,22 @@
   transition: margin-left 0.3s ease-in-out;
  }
  
- .with-sidebar {
+.with-sidebar {
   margin-left: 200px; /* Same as the sidebar width */
  }
  
  
- .submission-header {
+.submission-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: none; /* Replace with actual color */
   padding: 20px;
-  
- 
+  margin: 10px;
  }
  
  .submission-header .submission-title {
-  margin-left: 40px;
+  margin-left: 60px;
   color: #FFF; /* Replace with actual color */
   /* Style your title as needed */
   font-weight: 200;
@@ -97,6 +92,6 @@
  .header-image {
   height: 100px; /* Adjust size as needed */
   width: 100px;
-  margin-right: 50px;
+  margin-right: 140px;
  }
  

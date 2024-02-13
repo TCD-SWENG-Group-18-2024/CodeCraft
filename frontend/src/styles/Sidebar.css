@@ -13,14 +13,16 @@
     left: 0; /* Slide in */
   }
    .sidebar__toggle {
+    font-size: 34px;
     width: 20px; /* Width of the toggle tab */
     height: 20px;
     background: none; /* Background color of the toggle tab */
     position: absolute;
-    right: -25px; /* Position the toggle tab on the right side of the sidebar */
+    right: -40px; /* Position the toggle tab on the right side of the sidebar */
     top: 0;
     cursor: pointer;
     margin-top: 60px;
+    
     align-items: center;
     justify-content: center;
     /* You can add more styling (like a toggle icon) to the tab here */

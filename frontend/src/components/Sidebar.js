@@ -1,4 +1,4 @@
-import { faBars, faDashboard, faFileExport, faLanguage, faQuestionCircle, faVial } from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleLeft, faBars, faDashboard, faFileExport, faLanguage, faQuestionCircle, faVial } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
        <hr className="sidebar__menu-line" />
      </div>
      <div className="sidebar__toggle" onClick={toggleSidebar}>
-       <FontAwesomeIcon icon={faBars} />
+       <FontAwesomeIcon icon={isOpen? faArrowCircleLeft : faBars} />
      </div>
      <nav className="sidebar__nav">
      <Link to="/" className="sidebar__link">
