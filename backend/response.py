@@ -17,10 +17,15 @@ code_analysis_template = PromptTemplate(
         give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {code}'
 )
 
-# code_generation_template = PromptTemplate ()
+# code_generation_template = PromptTemplate (
 #   input_variables=['explanation']
 #   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}. Please ensure that the generated code is correct, follows best practices, and meets the given criteria. Be as specific as possible'
-# 
+# )
+
+# general_AIModel_template = PromptTemplate (
+#   input_variables=['explanation']
+#   template = 'You are a coding assistant tool designed to help users with various coding tasks. Please assist the user with their request by providing relevant information, generating code snippets, analyzing code, completing code segments, or offering advice. Please be as specific and helpful as possible.'
+# )
 
 
 def response(user_input: str) -> dict:
@@ -29,6 +34,8 @@ def response(user_input: str) -> dict:
     # the input variable name (in this case 'code') as the key in a dict entry and then put the actual input
     # as the value
     return code_analysis_chain.invoke({'code': user_input})
+
+
 
 
 if __name__ == "__main__":
