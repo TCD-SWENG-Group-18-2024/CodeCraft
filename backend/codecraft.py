@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from response import response
 from response import code_analysis
-
+from response import code_generation
 
 #AI team will be coding in response.py ( as pushed to the github already )
 #Uncomment the below line when AI team are ready
@@ -48,6 +48,8 @@ def llm_request():
 def process_data(user_input, use_case, ai_model):
     if use_case == 'code_analysis':
             result = code_analysis(user_input, ai_model)
+    elif use_case == 'code_generation':
+            result = code_generation(user_input, ai_model)
         # Add more conditions for other AI models
 
     # Can add more conditions for other use cases

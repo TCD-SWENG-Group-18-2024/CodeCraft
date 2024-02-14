@@ -1,6 +1,8 @@
 from flask import Flask, request,jsonify
 import requests
 from response import complete
+from response import code_analysis
+from response import code_generation
 app = Flask(__name__)
 
 @app.route('/process', methods=['POST'])
@@ -22,12 +24,7 @@ def process_data(user_input, use_case, ai_model):
     # elif ai_model == 'openai':
     #      result = openai_call(user_input, use_case)
     if use_case == 'code_generation':
-        if ai_model == 'watsonx.ai':
-            # Call the WatsonX.ai code generation function
-            result = watsonx_ai_code_generation(user_input)
-        elif ai_model == 'openai':
-            # Call the OpenAI code generation function
-            result = openai_code_generation(user_input)
+            result = code_generation(user_input, ai_model)
         # Add more conditions for other AI models
 
     elif use_case == 'code_completion':
@@ -40,13 +37,7 @@ def process_data(user_input, use_case, ai_model):
         # Add more conditions for other AI models
 
     elif use_case == 'code_analysis':
-        if ai_model == 'watsonx.ai':
-            # Call the WatsonX.ai code generation function
-            result = watsonx_ai_code_generation(user_input)
-        elif ai_model == 'openai':
-            # Call the OpenAI code generation function
-            result = openai_code_generation(user_input)
-        # Add more conditions for other AI models
+            result = code_generation(user_input, ai_model)
 
     # Can add more conditions for other use cases
 
