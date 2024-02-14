@@ -17,10 +17,10 @@ code_analysis_template = PromptTemplate(
         give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {code}'
 )
 
-# code_generation_template = PromptTemplate (
-#   input_variables=['explanation']
-#   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}. Please ensure that the generated code is correct, follows best practices, and meets the given criteria. Be as specific as possible'
-# )
+code_generation_template = PromptTemplate(
+   input_variables=['explanation'],
+   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}. Please ensure that the generated code is correct, follows best practices, and meets the given criteria. Be as specific as possible'
+)
 
 # general_AIModel_template = PromptTemplate (
 #   input_variables=['explanation']
@@ -47,17 +47,16 @@ def response(user_input: str) -> dict:
 #   return code_analysis_chain.invoke({'code': user_input})  
 #
 
-# def code_generation(user_input: str, AIModel: str) -> dict:
-#   if AIModel == 'Watsonx':
-#       llm = watsonx.ai
-#   elif AIModel == 'LLAMA':
-#        llm = llama  
-#   elif AIModel == '':
-#        llm = default llm chosen for code generation      
-#   code_analysis_chain = LLM (llm = llm, prompt=code_generation_template)
-#
-#   return code_analysis_chain.invoke({'code': user_input})  
-#
+def code_generation(user_input: str, AIModel: str) -> dict:
+    if AIModel == 'openai':
+       code_generation_chain = LLMChain(llm = llm, prompt=code_generation_template)
+
+    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
+    if AIModel == '':
+        code_generation_chain = LLMChain(llm = llm, prompt=code_generation_template)
+
+    return code_generation_chain.invoke({'code': user_input})  
+
 def code_analysis(user_input: str, AIModel: str) -> dict:
     if AIModel == 'openai':
        code_analysis_chain = LLMChain(llm = llm, prompt=code_analysis_template)
