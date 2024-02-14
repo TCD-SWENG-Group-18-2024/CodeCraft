@@ -1,25 +1,33 @@
-import React, {useState} from 'react'
-import '../styles/SubmissionPage.css'
-import IBM_White from "../assets/IBM_white.PNG"
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import HeaderImage from '../assets/IBM_white.PNG';
+import Sidebar from '../components/Sidebar';
+import '../styles/SubmissionPage.css';
+
 
 const SubmissionPage = () => {
 
     const[input, setInput] = useState('');
     //const[selectedLanguage, setSelectedLangugage] = useState('--Select a Language--');
     const[feedback, setFeedback] = useState('');
-    const[dropdownVisible, setDropdownVisible] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    // const[dropdownVisible, setDropdownVisible] = useState(false);
+
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+ 
 
     /*Takes input */
     const handleTextBoxChange = (event) => {
         setInput(event.target.value);
     };
 
-    /*Takes Selected Language */
-    const handleLanguageSelected = (language) => {
-        setSelectedLangugage(language);
-        setDropdownVisible(false);
-    };
+    // /*Takes Selected Language */
+    // const handleLanguageSelected = (language) => {
+    //     setSelectedLangugage(language);
+    //     setDropdownVisible(false);
+    // };
 
     /*Handle Submit, probably need to send the in take info to back end and ai */
     const handleSubmit = async () =>{
@@ -42,7 +50,7 @@ const SubmissionPage = () => {
         console.log(data);
         
         try {
-            const response = await fetch("backend-api-url", 
+            const response = await fetch("http://localhost:8080/llm", 
             {
                 method: "POST",
                 headers: {
@@ -85,14 +93,25 @@ const SubmissionPage = () => {
         }
     };
 
-    const dropDown = () => {
-        setDropdownVisible(!dropdownVisible);
-    };
+    // const dropDown = () => {
+    //     setDropdownVisible(!dropdownVisible);
+    // };
 
     return [
         <>
+        
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div className={`main-content ${isSidebarOpen ? 'with-sidebar' : ''}`}>
+        <header className="submission-header">
+            <h1 className="submission-title">Submission Area</h1>
+            <img src={HeaderImage} alt="Code Craft" className="header-image"/>
+          </header>
+               <div className="wave"></div>
+               <div className="wave"></div>
+               <div className="wave"></div>
 
-            <Link to="/">
+
+            {/* <Link to="/">
             <button className='backButton'>
                 Back to Home
             </button>
@@ -104,7 +123,7 @@ const SubmissionPage = () => {
             <div class="wave"></div>
             <div class="wave"></div>
 
-            <div><h1 class="Heading">Evaluation Page</h1></div>
+            <div><h1 class="Heading">Evaluation Page</h1></div> */}
 
 
             {/*<div class="languageDropdown">
@@ -144,7 +163,7 @@ const SubmissionPage = () => {
 
                 <button onClick={handleSubmit} class="submitButton">Submit</button>
 
-
+              </div>
 
             </div>
 

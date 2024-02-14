@@ -1,0 +1,81 @@
+.sidebar {
+    width: 200px; /* Width of the sidebar */
+    background: none; /* Background color of the sidebar */
+    color: white;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -200px; /* Initially hide the sidebar off-screen */
+    transition: left 0.3s ease-in-out;
+    z-index: 1000; /* Ensure sidebar is above other content */
+  }
+   .sidebar--open {
+    left: 0; /* Slide in */
+  }
+   .sidebar__toggle {
+    font-size: 34px;
+    width: 20px; /* Width of the toggle tab */
+    height: 20px;
+    background: none; /* Background color of the toggle tab */
+    position: absolute;
+    right: -40px; /* Position the toggle tab on the right side of the sidebar */
+    top: 0;
+    cursor: pointer;
+    margin-top: 60px;
+    
+    align-items: center;
+    justify-content: center;
+    /* You can add more styling (like a toggle icon) to the tab here */
+  }
+
+   .sidebar__nav {
+    padding: 20px;
+    /* Style your sidebar navigation/content here */
+  }
+   .sidebar__nav a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    /* Style your sidebar links here */
+  }
+   .sidebar__nav a:hover {
+    background-color: #444;
+  }
+ 
+ 
+  .fa-bars {
+    color: #FFFFFF;
+    } 
+
+    .sidebar__title {
+        font-size: 24px;
+        color: white;
+        text-align: center;
+        padding: 16px 0;
+      }
+       .sidebar__menu-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 0;
+      }
+       .sidebar__menu-line {
+        border: none;
+        border-top: 1px solid white;
+        width: 25%;
+        margin: 0 8px;
+      }
+     
+     
+      .sidebar__link {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        color: white;
+        text-decoration: none;
+      }
+       .sidebar__link:hover {
+        background-color: #444;
+      }
+     

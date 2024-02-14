@@ -28,3 +28,5 @@ env/
 
 # Ignore any local development files
 .vscode/
+
+/codecraft/node_modules/
