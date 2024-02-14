@@ -32,10 +32,10 @@ code_translation_template = PromptTemplate(
     template='You are a code translation tool. Please translate my code from {input_language} to {target_language}. Please ennsure that the generated code is correct with attention to semicolons, curly braces and indentation where needed. My code is given as follows: {code}'
 )
 
-# general_AIModel_template = PromptTemplate (
-#   input_variables=['explanation']
-#   template = 'You are a coding assistant tool designed to help users with various coding tasks. Please assist the user with their request by providing relevant information, generating code snippets, analyzing code, completing code segments, or offering advice. Please be as specific and helpful as possible.'
-# )
+general_AIModel_template = PromptTemplate (
+   input_variables=['explanation'],
+   template = 'You are a coding assistant tool designed to help users with various coding tasks. Please assist the user with their request {explanation} by providing relevant information, generating code snippets, analyzing code, completing code segments, or offering advice. Please be as specific and helpful as possible.'
+)
 
 
 def response(user_input: str) -> dict:
@@ -45,17 +45,12 @@ def response(user_input: str) -> dict:
     # as the value
     return code_analysis_chain.invoke({'code': user_input})
 
-# def AIModel(user_input: str, AIModel: str) -> dict:
-#   if AIModel == 'Watsonx':
-#       llm = watsonx.ai
-#   elif AIModel == 'LLAMA':
-#        llm = llama    
-#   elif AIModel == '':
-#        llm = llm (default llm probably OpenAI)
-#   code_analysis_chain = LLM (llm = llm, prompt=general_AIModel_template)
-#
-#   return code_analysis_chain.invoke({'code': user_input})  
-#
+def AIModel(user_input: str, AIModel: str) -> dict:
+    if AIModel == 'openai':
+        code_analysis_chain = LLMChain (llm = llm, prompt=general_AIModel_template)
+
+    return code_analysis_chain.invoke({'explanation': user_input})  
+
 
 def code_generation(user_input: str, AIModel: str) -> dict:
     if AIModel == 'openai':
