@@ -2,6 +2,8 @@ import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from response import response
+from response import code_analysis
+
 
 #AI team will be coding in response.py ( as pushed to the github already )
 #Uncomment the below line when AI team are ready
@@ -39,6 +41,32 @@ def llm_request():
     llm_response = response(user_input)
     # Return JSON of response
     return jsonify(llm_response) 
+
+@app.route('/process', methods=['POST'])
+def process_request():
+    data = request.get_json()
+    user_input = data.get('user_input')
+    use_case = data.get('use_case')
+    ai_model = data.get('ai_model')
+    # expects json payload structure from frontend
+    
+    # Call the appropriate function based on use_case and ai_model
+    result = process_data(user_input, use_case, ai_model)
+
+    return jsonify(result)
+
+def process_data(user_input, use_case, ai_model):
+    if use_case == 'code_analysis':
+            result = code_analysis(user_input, ai_model)
+        # Add more conditions for other AI models
+
+    # Can add more conditions for other use cases
+
+    else:
+        result = {"error": "Invalid use case"}
+
+    return result
+
 
 if __name__=="__main__":
     app.run(debug=True, port=8080)
