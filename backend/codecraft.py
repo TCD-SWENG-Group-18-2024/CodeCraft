@@ -31,8 +31,6 @@ def get_joke():
     else:
         # Return an error message if request failed
         return jsonify({'error': 'Failed to fetch joke'}), 500
-    
-
 
 @app.route('/llm', methods=['POST'])
 def llm_request():
@@ -58,6 +56,7 @@ def process_data(user_input, use_case, ai_model):
         result = {"error": "Invalid use case"}
 
     return result
+
 # @app.route('/llm', methods=['POST']) 
 # def llm_request():
 #     # Get JSON data from the frontend

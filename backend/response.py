@@ -58,8 +58,15 @@ def response(user_input: str) -> dict:
 #
 #   return code_analysis_chain.invoke({'code': user_input})  
 #
+def code_analysis(user_input: str, AIModel: str) -> dict:
+    if AIModel == 'openai':
+       code_analysis_chain = LLMChain(llm = llm, prompt=code_analysis_template)
+    
+    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
+    if AIModel == '':
+        code_analysis_chain = LLMChain(llm = llm, prompt=code_analysis_template)
 
-
+    return code_analysis_chain.invoke({'code': user_input})  
 
 
 if __name__ == "__main__":
