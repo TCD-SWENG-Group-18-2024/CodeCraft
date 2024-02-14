@@ -13,7 +13,7 @@ CORS(app)
 
 # Define the LLM API endpoint and key
 LLM_API_ENDPOINT = 'http://localhost:8080/llm'
-LLM_API_KEY = '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'
+
 
 @app.route('/')
 def homepage():
