@@ -17,6 +17,10 @@ def process_request():
     return jsonify(result)
 
 def process_data(user_input, use_case, ai_model):
+    # if ai_model == 'watsonx.ai':
+    #      result = watsonx_ai_call(user_input, use_case)
+    # elif ai_model == 'openai':
+    #      result = openai_call(user_input, use_case)
     if use_case == 'code_generation':
         if ai_model == 'watsonx.ai':
             # Call the WatsonX.ai code generation function
@@ -51,10 +55,10 @@ def process_data(user_input, use_case, ai_model):
 
     return result
 
-def watsonx_ai_code_generation(user_input):
+def watsonx_ai_code_generation(user_input, use_case):
     # Logic for WatsonX.ai code generation
     return {"result": "Generated code from WatsonX.ai"}
 
-def openai_code_generation(user_input):
+def openai_code_generation(user_input, use_case):
     # Logic for OpenAI code generation
     return {"result": "Generated code from OpenAI"}

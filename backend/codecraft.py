@@ -33,17 +33,9 @@ def get_joke():
         return jsonify({'error': 'Failed to fetch joke'}), 500
     
 
-@app.route('/llm', methods=['POST']) 
-def llm_request():
-    # Get JSON data from the frontend
-    user_input = request.get_json()
-    # Make API call to LLM
-    llm_response = response(user_input)
-    # Return JSON of response
-    return jsonify(llm_response) 
 
-@app.route('/process', methods=['POST'])
-def process_request():
+@app.route('/llm', methods=['POST'])
+def llm_request():
     data = request.get_json()
     user_input = data.get('user_input')
     use_case = data.get('use_case')
@@ -66,6 +58,28 @@ def process_data(user_input, use_case, ai_model):
         result = {"error": "Invalid use case"}
 
     return result
+# @app.route('/llm', methods=['POST']) 
+# def llm_request():
+#     # Get JSON data from the frontend
+#     user_input = request.get_json()
+#     # Make API call to LLM
+#     llm_response = response(user_input)
+#     # Return JSON of response
+#     return jsonify(llm_response) 
+
+# @app.route('/process', methods=['POST'])
+# def process_request():
+#     data = request.get_json()
+#     user_input = data.get('user_input')
+#     use_case = data.get('use_case')
+#     ai_model = data.get('ai_model')
+#     # expects json payload structure from frontend
+    
+#     # Call the appropriate function based on use_case and ai_model
+#     result = process_data(user_input, use_case, ai_model)
+
+#     return jsonify(result)
+
 
 
 if __name__=="__main__":
