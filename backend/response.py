@@ -88,5 +88,15 @@ def code_completion(user_input: str, AIModel: str) -> dict:
     
     return code_completion_chain.invoke({'code': user_input})
 
+def code_translation(input_language: str, target_language: str, code: str, AIModel: str) -> dict:
+    if AIModel == 'openai':
+        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
+    
+    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
+    if AIModel == '':
+        code_translation_chain = LLMChain(llm = llm, prompt=code_translation_template)
+    
+    return code_translation_chain.invoke({'input_language': input_language, 'target_language': target_language, 'code': code})
+
 if __name__ == "__main__":
     print(response('for (int i = 0; i <= 9; i++) System.out.println(i);'))
