@@ -27,6 +27,11 @@ code_completion_template = PromptTemplate(
     template='You are a code completion tool. Please complete my code, this includes adding semicolons where needed. Please ensure that the completed code is correct and follows best practices. My code is given as follows: {code}'
 )
 
+code_translation_template = PromptTemplate(
+    input_variables=['input_language', 'target_language', 'code'],
+    template='You are a code translation tool. Please translate my code from {input_language} to {target_language}. Please ennsure that the generated code is correct with attention to semicolons, curly braces and indentation where needed. My code is given as follows: {code}'
+)
+
 # general_AIModel_template = PromptTemplate (
 #   input_variables=['explanation']
 #   template = 'You are a coding assistant tool designed to help users with various coding tasks. Please assist the user with their request by providing relevant information, generating code snippets, analyzing code, completing code segments, or offering advice. Please be as specific and helpful as possible.'
