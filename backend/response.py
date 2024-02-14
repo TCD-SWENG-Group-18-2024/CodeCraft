@@ -55,7 +55,7 @@ def code_generation(user_input: str, AIModel: str) -> dict:
     if AIModel == '':
         code_generation_chain = LLMChain(llm = llm, prompt=code_generation_template)
 
-    return code_generation_chain.invoke({'code': user_input})  
+    return code_generation_chain.invoke({'explanation': user_input})  
 
 def code_analysis(user_input: str, AIModel: str) -> dict:
     if AIModel == 'openai':
