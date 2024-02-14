@@ -1,0 +1,97 @@
+.Heading{
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+/* .backButton {
+  background: none;
+  border: none;
+  color: white;
+  padding: 16px;
+  cursor: pointer;
+  font-size: large;
+  margin: 20px;
+  position: absolute;
+  left: 10px
+} */
+
+.submissionArea{
+  margin: 20px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.submissionArea .textbox {
+  margin-left: 50px;
+  margin: 20px;
+  height: 18vw;
+  width: 60vh;
+}
+
+.submissionArea .submitButton{
+  margin-top: 20px;
+  margin-left: 20px;
+  border-radius: 20px;
+  height: 35px;
+  width: 85px;
+  bottom: 0;
+  left: 0;
+}
+
+.submissionArea .textContainer{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.submissionArea .textContainer .feedBackBox{
+    background-color: lightblue;
+    border: 1px solid black;
+    color: black;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.submissionArea .submitButton:hover{
+    background-color: rgb(42, 199, 199);
+}
+
+.main-content {
+  transition: margin-left 0.3s ease-in-out;
+ }
+ 
+.with-sidebar {
+  margin-left: 200px; /* Same as the sidebar width */
+ }
+ 
+ 
+.submission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: none; /* Replace with actual color */
+  padding: 20px;
+  margin: 10px;
+ }
+ 
+ .submission-header .submission-title {
+  margin-left: 60px;
+  color: #FFF; /* Replace with actual color */
+  /* Style your title as needed */
+  font-weight: 200;
+  align-items: center;
+  justify-content: center;
+ }
+ 
+ 
+ .header-image {
+  height: 100px; /* Adjust size as needed */
+  width: 100px;
+  margin-right: 140px;
+ }
+ 

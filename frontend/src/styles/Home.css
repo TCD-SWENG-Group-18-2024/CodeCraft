@@ -1,0 +1,119 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body, h1, h2, p, a, button {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.welcome-message{
+    color: #fefefe;
+}
+
+.App-nav {
+    background: none;       
+    margin: 20px;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+}
+
+.App-nav-links {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+}
+
+.App-nav-links a, .App-sign-up {
+    color: #ffffff; 
+    text-decoration: none;
+    margin: 0 1rem;
+    padding: 0.5rem 0;
+}
+
+.App-nav-links a:hover,
+.App-sign-up:hover {
+    color: #bbebff; 
+}
+
+.App-sign-up {
+    background: #0062ff; 
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.tab {
+    font-size: 20px;
+    display: inline-block;
+    border: 6px solid #ccc;
+    border-radius: 100px;
+    background-color: #f9f9f9;
+    padding: 18px;
+    margin: 88px;
+}
+
+.tab-link {
+    text-decoration: none;
+    color: black;
+}
+
+.tab:hover {
+    transform: scale(1.1);
+}
+
+.tab:active {
+    transform: scale(0.95);
+}
+
+.welcome-message {
+    margin-top: 68px; 
+}
+.wave {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    width: 200%;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: -1;
+    opacity: 0.5;
+    transform: translateX(-50%);
+}
+
+.wave:nth-of-type(1) {
+    animation: wave 10s linear infinite;
+}
+
+.wave:nth-of-type(2) {
+    animation: wave 12s linear infinite reverse;
+    bottom: -10px;
+}
+
+.wave:nth-of-type(3) {
+    animation: wave 14s linear infinite;
+    bottom: -20px;
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+.logo{
+    margin-top: 50px;
+    font-weight: bold;
+  }
+ 
