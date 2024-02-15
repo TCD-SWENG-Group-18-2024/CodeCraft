@@ -4,8 +4,8 @@ from flask_cors import CORS
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
 import os
 
-#AI team will be coding in response.py ( as pushed to the github already )
-#Uncomment the below line when AI team are ready
+# AI team will be coding in response.py ( as pushed to the github already )
+# Uncomment the below line when AI team are ready
 
 app = Flask(__name__)
 CORS(app)
@@ -16,12 +16,10 @@ ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'h
 MAX_FILE_SIZE_BYTES = 10 * 1024  # 3KB
 
 
-# Define the LLM API endpoint and key
-LLM_API_ENDPOINT = 'http://localhost:8080/llm'
-
 @app.route('/')
 def homepage():
     return{"message": "Hello SwEng Project Group 18"}
+
 
 @app.route('/joke', methods=['GET'])
 def get_joke():
@@ -36,6 +34,7 @@ def get_joke():
         # Return an error message if request failed
         return jsonify({'error': 'Failed to fetch joke'}), 500
 
+
 @app.route('/llm', methods=['POST'])
 def llm_request():
     data = request.get_json()
@@ -46,11 +45,11 @@ def llm_request():
     target_language = data.get('output_language')
     # expects json payload structure from frontend
 
-    #Throws error if empty request
+    # Throws error if empty request
     if user_input is None:
         return jsonify({'error': 'No user input provided'}), 400
     
-    #Throws error if file too big
+    # Throws error if file too big
     if len(file.read()) > MAX_FILE_SIZE_BYTES:
         return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
     
@@ -64,19 +63,22 @@ def llm_request():
     result = process_data(user_input, use_case, ai_model, input_language, target_language)
 
     return jsonify(result)
- 
+
+
 def process_data(user_input, use_case, ai_model, input_language, target_language):
+    use_case = use_case.lower()
+
     if use_case == 'code_analysis':
-            result = code_analysis(user_input, ai_model)
+        result = code_analysis(user_input, ai_model)
     elif use_case == 'code_generation':
-            result = code_generation(user_input, ai_model)
+        result = code_generation(user_input, ai_model)
     elif use_case == 'code_completion':
-            result = code_completion(user_input, ai_model)
+        result = code_completion(user_input, ai_model)
     elif use_case == 'code_translation':
-            result = code_translation(user_input, ai_model, input_language, target_language)
+        result = code_translation(user_input, ai_model, input_language, target_language)
     elif use_case == '':    # general model for no specified operation
-            result = AIModel(user_input, ai_model)
-        # Add more conditions for other AI models
+        result = AIModel(user_input, ai_model)
+    # Add more conditions for other AI models
 
     # Can add more conditions for other use cases
     else:
@@ -106,5 +108,6 @@ def process_data(user_input, use_case, ai_model, input_language, target_language
 
 #     return jsonify(result)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     app.run(debug=True, port=8080)

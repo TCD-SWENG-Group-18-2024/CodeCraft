@@ -11,7 +11,6 @@ import os
 # OPENAI_API_KEY=YOUR_KEY_HERE
 dotenv.load_dotenv()
 
-STARCODER_API_URL = "https://api-inference.huggingface.co/models/bigcode/starcoder"
 # You need to put the hugging face token in .env as well
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
 
