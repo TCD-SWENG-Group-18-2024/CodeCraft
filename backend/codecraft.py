@@ -15,6 +15,7 @@ CORS(app)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'html','css','rb','php','kt','R','pl'}
+MAX_FILE_SIZE_BYTES = 10 * 1024  # 3KB
 
 # Define the LLM API endpoint and key
 LLM_API_ENDPOINT = 'http://localhost:8080/llm'
@@ -47,6 +48,10 @@ def llm_request():
     #Throws error if empty request
     if user_input is None:
         return jsonify({'error': 'No user input provided'}), 400
+    
+    #Throws error if file too big
+    if len(file.read()) > MAX_FILE_SIZE_BYTES:
+        return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
     
     # Check if the provided user_input is a file path
     if os.path.exists(user_input):
