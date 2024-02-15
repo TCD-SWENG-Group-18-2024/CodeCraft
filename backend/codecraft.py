@@ -1,8 +1,7 @@
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from response import code_analysis
-from response import code_generation
+from response import code_generation, code_completion, code_translation, code_analysis, AIModel
 import os
 
 #AI team will be coding in response.py ( as pushed to the github already )
@@ -15,6 +14,7 @@ UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'html','css','rb','php','kt','R','pl'}
 MAX_FILE_SIZE_BYTES = 10 * 1024  # 3KB
+
 
 # Define the LLM API endpoint and key
 LLM_API_ENDPOINT = 'http://localhost:8080/llm'
@@ -42,6 +42,8 @@ def llm_request():
     user_input = data.get('user_input')
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
+    input_language = data.get('input_language')
+    target_language = data.get('output_language')
     # expects json payload structure from frontend
 
     #Throws error if empty request
@@ -59,15 +61,21 @@ def llm_request():
             user_input = file.read()
     
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model)
+    result = process_data(user_input, use_case, ai_model, input_language, target_language)
 
     return jsonify(result)
-
-def process_data(user_input, use_case, ai_model):
+ 
+def process_data(user_input, use_case, ai_model, input_language, target_language):
     if use_case == 'code_analysis':
             result = code_analysis(user_input, ai_model)
     elif use_case == 'code_generation':
             result = code_generation(user_input, ai_model)
+    elif use_case == 'code_completion':
+            result = code_completion(user_input, ai_model)
+    elif use_case == 'code_translation':
+            result = code_translation(user_input, ai_model, input_language, target_language)
+    elif use_case == '':    # general model for no specified operation
+            result = AIModel(user_input, ai_model)
         # Add more conditions for other AI models
 
     # Can add more conditions for other use cases
