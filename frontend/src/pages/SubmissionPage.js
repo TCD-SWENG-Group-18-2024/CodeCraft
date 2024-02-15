@@ -7,7 +7,8 @@ import '../styles/SubmissionPage.css';
 const SubmissionPage = () => {
 
     const[input, setInput] = useState('');
-    //const[selectedLanguage, setSelectedLangugage] = useState('--Select a Language--');
+    const[useCase, setUseCase] = useState('');
+    const[aiModel, setAIModel] = useState('');
     const[feedback, setFeedback] = useState('');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     // const[dropdownVisible, setDropdownVisible] = useState(false);
@@ -21,6 +22,15 @@ const SubmissionPage = () => {
     /*Takes input */
     const handleTextBoxChange = (event) => {
         setInput(event.target.value);
+    };
+
+
+    const handleUseCaseChange = (event) =>{
+        setUseCase(event.target.value);
+    };
+
+    const handleAiModelChange = (event) => {
+        setAIModel(event.target.value);
     };
 
     // /*Takes Selected Language */
@@ -43,8 +53,9 @@ const SubmissionPage = () => {
         }
 
         const data ={
-            //language: selectedLanguage,
-            code: input,
+            user_input: input,
+            use_case: useCase, 
+            ai_model: aiModel
         };
 
         console.log(data);
@@ -143,6 +154,25 @@ const SubmissionPage = () => {
 
 
             <div class="submissionArea">
+
+                <div className='useCaseDropDown'>
+                    <label>Select Use Case</label>
+                    <select value={useCase} onChange={handleUseCaseChange}>
+                        <option value="code_generation">Code Generation</option>
+                        <option value="code_completion">Code Completion</option>
+                        <option value="code_analysis">Code Analysis</option>
+                    </select>
+                </div>
+
+                <div className='aiDropDown'>
+                    <label>Select AI Model</label>
+                    <select value={aiModel} onChange={handleAiModelChange}>
+                        <option value="watsonx.ai">WatsonX AI</option>
+                        <option value="openai">OpenAI</option>
+                    
+                    </select>
+                </div>
+
                 <div className='textContainer'>
                     <textarea 
                         type='text'
