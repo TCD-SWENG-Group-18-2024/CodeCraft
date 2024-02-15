@@ -30,9 +30,9 @@ code_analysis_template = PromptTemplate(
 
 code_generation_template = PromptTemplate(
    input_variables=['explanation'],
-   template= 'You are a code generation tool.'
+   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
-             ' Be as specific as possible. The explanation is as follows: {explanation}'
+             ' Be as specific as possible'
 )
 
 code_completion_template = PromptTemplate(
@@ -49,7 +49,7 @@ code_translation_template = PromptTemplate(
              ' indentation where needed. My code is given as follows: {code}'
 )
 
-general_ai_model_template = PromptTemplate(
+general_ai_model_template = PromptTemplate (
    input_variables=['explanation'],
    template = 'You are a coding assistant tool designed to help users with various coding tasks.'
               ' Please assist the user with their request {explanation} by providing relevant information,'
