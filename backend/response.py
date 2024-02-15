@@ -2,14 +2,25 @@ import dotenv
 from langchain_openai import ChatOpenAI, OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+from langchain_community.llms import HuggingFaceHub
 from langchain.schema import HumanMessage, SystemMessage
+import os
+
 
 # For this to work, you need to create a file called '.env' and input the following:
 # OPENAI_API_KEY=YOUR_KEY_HERE
-
 dotenv.load_dotenv()
-llm = OpenAI()
-chat = ChatOpenAI()
+
+STARCODER_API_URL = "https://api-inference.huggingface.co/models/bigcode/starcoder"
+# You need to put the hugging face token in .env as well
+os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
+
+# AI Models
+gpt = ChatOpenAI()
+starcoder = HuggingFaceHub(
+    repo_id='bigcode/starcoder'
+)
+
 
 code_analysis_template = PromptTemplate(
     input_variables=['code'],
@@ -19,9 +30,9 @@ code_analysis_template = PromptTemplate(
 
 code_generation_template = PromptTemplate(
    input_variables=['explanation'],
-   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}.'
+   template= 'You are a code generation tool.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
-             ' Be as specific as possible'
+             ' Be as specific as possible. The explanation is as follows: {explanation}'
 )
 
 code_completion_template = PromptTemplate(
@@ -38,7 +49,7 @@ code_translation_template = PromptTemplate(
              ' indentation where needed. My code is given as follows: {code}'
 )
 
-general_AIModel_template = PromptTemplate (
+general_ai_model_template = PromptTemplate(
    input_variables=['explanation'],
    template = 'You are a coding assistant tool designed to help users with various coding tasks.'
               ' Please assist the user with their request {explanation} by providing relevant information,'
@@ -47,71 +58,52 @@ general_AIModel_template = PromptTemplate (
 )
 
 
-def response(user_input: str) -> dict:
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
-    # The reason invoke() takes a dict is so that if there were multiple input_variables in the chain, you can set
-    # the input variable name (in this case 'code') as the key in a dict entry and then put the actual input
-    # as the value
-    return code_analysis_chain.invoke({'code': user_input})
+def AIModel(user_input: str, ai_model: str) -> dict:
+    # GPT by default
+    code_analysis_chain = LLMChain(llm=gpt, prompt=general_ai_model_template)
 
-
-def AIModel(user_input: str, AIModel: str) -> dict:
-    code_analysis_chain = LLMChain(llm=llm, prompt=general_AIModel_template)
-
-    if AIModel == 'openai':
-        code_analysis_chain = LLMChain(llm=llm, prompt=general_AIModel_template)
+    if ai_model.lower() == 'starcoder':
+        code_analysis_chain = LLMChain(llm=starcoder, prompt=general_ai_model_template)
 
     return code_analysis_chain.invoke({'explanation': user_input})  
 
 
-def code_generation(user_input: str, AIModel: str) -> dict:
-    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template)
+def code_generation(user_input: str, ai_model: str) -> dict:
+    # GPT by default
+    code_generation_chain = LLMChain(llm=gpt, prompt=code_generation_template)
 
-    if AIModel == 'openai':
-        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template)
-
-    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
-    if AIModel == '':
-        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template)
+    if ai_model.lower() == 'starcoder':
+        code_generation_chain = LLMChain(llm=starcoder, prompt=code_generation_template)
 
     return code_generation_chain.invoke({'explanation': user_input})  
 
 
-def code_analysis(user_input: str, AIModel: str) -> dict:
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
+def code_analysis(user_input: str, ai_model: str) -> dict:
+    # GPT by default
+    code_analysis_chain = LLMChain(llm=gpt, prompt=code_analysis_template)
 
-    if AIModel == 'openai':
-        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
-    
-    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
-    if AIModel == '':
-        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
+    if ai_model.lower() == 'starcoder':
+        code_analysis_chain = LLMChain(llm=starcoder, prompt=code_analysis_template)
 
     return code_analysis_chain.invoke({'code': user_input})  
 
 
-def code_completion(user_input: str, AIModel: str) -> dict:
-    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
+def code_completion(user_input: str, ai_model: str) -> dict:
+    # GPT by default
+    code_completion_chain = LLMChain(llm=gpt, prompt=code_completion_template)
 
-    if AIModel == 'openai':
-        code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
-    
-    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
-    if AIModel == '':
-        code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
+    if ai_model.lower() == 'starcoder':
+        code_completion_chain = LLMChain(llm=starcoder, prompt=code_completion_template)
     
     return code_completion_chain.invoke({'code': user_input})
 
 
-def code_translation(input_language: str, target_language: str, code: str, AIModel: str) -> dict:
-    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
+def code_translation(input_language: str, target_language: str, code: str, ai_model: str) -> dict:
+    # GPT by default
+    code_translation_chain = LLMChain(llm=gpt, prompt=code_translation_template)
 
-    if AIModel == 'openai':
-        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
-    
-    # Default - will eventually be changed to the appropriate AIModel, right now it's just ChatGPT
-    if AIModel == '':
-        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
+    if ai_model.lower() == 'starcoder':
+        code_translation_chain = LLMChain(llm=starcoder, prompt=code_translation_template)
     
     return code_translation_chain.invoke({'input_language': input_language,
                                           'target_language': target_language,
@@ -119,4 +111,5 @@ def code_translation(input_language: str, target_language: str, code: str, AIMod
 
 
 if __name__ == "__main__":
-    print(response('for (int i = 0; i <= 9; i++) System.out.println(i);'))
+    # Enter code here to debug
+    pass
