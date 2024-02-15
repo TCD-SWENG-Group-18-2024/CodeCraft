@@ -4,6 +4,7 @@ from flask_cors import CORS
 from response import response
 from response import code_analysis
 from response import code_generation
+import os
 
 #AI team will be coding in response.py ( as pushed to the github already )
 #Uncomment the below line when AI team are ready
@@ -11,9 +12,12 @@ from response import code_generation
 app = Flask(__name__)
 CORS(app)
 
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'html','css','rb','php','kt','R','pl'}
+
 # Define the LLM API endpoint and key
 LLM_API_ENDPOINT = 'http://localhost:8080/llm'
-
 
 @app.route('/')
 def homepage():
@@ -39,6 +43,16 @@ def llm_request():
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
     # expects json payload structure from frontend
+
+    #Throws error if empty request
+    if user_input is None:
+        return jsonify({'error': 'No user input provided'}), 400
+    
+    # Check if the provided user_input is a file path
+    if os.path.exists(user_input):
+        # If user_input is a file path, read the file and use its contents as input
+        with open(user_input, 'r') as file:
+            user_input = file.read()
     
     # Call the appropriate function based on use_case and ai_model
     result = process_data(user_input, use_case, ai_model)
@@ -53,7 +67,6 @@ def process_data(user_input, use_case, ai_model):
         # Add more conditions for other AI models
 
     # Can add more conditions for other use cases
-
     else:
         result = {"error": "Invalid use case"}
 
@@ -80,8 +93,6 @@ def process_data(user_input, use_case, ai_model):
 #     result = process_data(user_input, use_case, ai_model)
 
 #     return jsonify(result)
-
-
 
 if __name__=="__main__":
     app.run(debug=True, port=8080)
