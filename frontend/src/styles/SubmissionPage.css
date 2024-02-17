@@ -4,57 +4,58 @@
   font-weight: 500;
 }
 
-/* .backButton {
-  background: none;
-  border: none;
-  color: white;
-  padding: 16px;
-  cursor: pointer;
-  font-size: large;
+.userArea{
   margin: 20px;
-  position: absolute;
-  left: 10px
-} */
-
-.submissionArea{
-  margin: 20px;
-  height: 500px;
+  height: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
   position: relative;
 }
 
-.submissionArea .textbox {
-  margin-left: 50px;
-  margin: 20px;
-  height: 18vw;
-  width: 60vh;
+.submissionArea{
+  width: calc(70% - 20px);
+}
+
+.textBoxContainer{
+  display: flex;
+  flex-direction: column;
+  height:100%;
+}
+
+.submissionArea .textBoxContainer .textbox {
+  margin-left: 100px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  height: 20vw;
+  width: calc(60vh - 40px);
 }
 
 .submissionArea .submitButton{
+  position: absolute;
   margin-top: 20px;
   margin-left: 20px;
+  transform: translateX(-50%);
   border-radius: 20px;
   height: 35px;
   width: 85px;
-  bottom: 0;
-  left: 0;
 }
 
-.submissionArea .textContainer{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+.feedBackArea{
+  position: absolute;
+  left: calc(70% - 20px);
+  width: auto;
 }
 
-.submissionArea .textContainer .feedBackBox{
+.feedBackBox{
     background-color: lightblue;
     border: 1px solid black;
     color: black;
     padding: 15px;
     margin-top: 20px;
+    margin-right: 200px;
     border-radius: 5px;
+    max-width: 100%;
 }
 
 .submissionArea .submitButton:hover{
@@ -79,7 +80,7 @@
   margin: 10px;
  }
  
- .submission-header .submission-title {
+.submission-header .submission-title {
   margin-left: 60px;
   color: #FFF; /* Replace with actual color */
   /* Style your title as needed */
@@ -89,9 +90,65 @@
  }
  
  
- .header-image {
+.header-image {
   height: 100px; /* Adjust size as needed */
   width: 100px;
   margin-right: 140px;
  }
  
+ /* https://codepen.io/jkantner/pen/VwbLajq
+ */
+ .loading{
+  justify-content: space-around;
+  display: flex;
+  margin: 1.5em;
+  width: 6em;
+  height: 6em;
+  
+ }
+
+ .loading .loading1,
+ .loading .loading2,
+ .loading .loading3{
+
+  position: relative;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  transform-origin: 50%, 100%;
+  animation: bounce 1s linear infinite;
+ }
+
+ .loading .loading1{
+  background: rgb(92, 183, 213);
+ }
+
+ .loading .loading2{
+  background: white;
+  animation-delay: 0.1s;
+ }
+
+ .loading .loading3{
+  background: rgb(92, 183, 213);
+  animation-delay: 0.2s;
+ }
+
+@keyframes bounce {
+  from, to {
+    transform: translateY(0) scale(1,1);
+    animation-timing-function: ease-in;
+  }
+  45%{
+    transform: translateY(5em) scale(1,1);
+    animation-timing-function: linear;
+  }
+  50%{
+    transform: translateY(5em) scale(1.5,0.5);
+    animation-timing-function: linear;
+  }
+  55%{
+    transform: translateY(5em) scale(1,1);
+    animation-timing-function: ease-out;
+  }
+    
+}

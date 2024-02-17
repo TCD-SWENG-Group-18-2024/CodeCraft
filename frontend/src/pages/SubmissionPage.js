@@ -10,6 +10,7 @@ const SubmissionPage = () => {
     const[useCase, setUseCase] = useState('');
     const[aiModel, setAIModel] = useState('');
     const[feedback, setFeedback] = useState('');
+    const[isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     // const[dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -33,11 +34,7 @@ const SubmissionPage = () => {
         setAIModel(event.target.value);
     };
 
-    // /*Takes Selected Language */
-    // const handleLanguageSelected = (language) => {
-    //     setSelectedLangugage(language);
-    //     setDropdownVisible(false);
-    // };
+
 
     /*Handle Submit, probably need to send the in take info to back end and ai */
     const handleSubmit = async () =>{
@@ -51,6 +48,8 @@ const SubmissionPage = () => {
             alert("Please Enter some code before submitting");
             return;
         }
+
+        setIsLoading(true);
 
         const data ={
             user_input: input,
@@ -72,7 +71,7 @@ const SubmissionPage = () => {
 
             if (response.ok){
                 const responseData = await response.json();
-                setFeedback(`Submission successful. Feedback: ${JSON.stringify(responseData)}`);
+                setFeedback(`Submission successful. \n Feedback: ${JSON.stringify(responseData)}`);
             }
             else {
                 setFeedback(`Submission failed. Server returned ${response.status} status.`)
@@ -80,6 +79,9 @@ const SubmissionPage = () => {
         } 
         catch(error){
             setFeedback(`Error occurred while submitting: ${error.message}`)
+        }
+        finally{
+            setIsLoading(false);
         }
 
         // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
@@ -109,96 +111,81 @@ const SubmissionPage = () => {
     // };
 
     return [
-        <>
+    <>
         
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
         <div className={`main-content ${isSidebarOpen ? 'with-sidebar' : ''}`}>
-        <header className="submission-header">
-            <h1 className="submission-title">Submission Area</h1>
-            <img src={HeaderImage} alt="Code Craft" className="header-image"/>
-          </header>
-               <div className="wave"></div>
-               <div className="wave"></div>
-               <div className="wave"></div>
+            <header className="submission-header">
+                <h1 className="submission-title">Submission Area</h1>
+                <img src={HeaderImage} alt="Code Craft" className="header-image"/>
+            </header>
+
+            <div className="wave"></div>
+            <div className="wave"></div>
+            <div className="wave"></div>
+
+            <div className="userArea">
+
+                <div className='submissionArea'>
+
+                    <div className='useCaseDropDown'>
+                        <label>Select Use Case</label>
+                            <select value={useCase} onChange={handleUseCaseChange}>
+                                <option value="code_generation">Code Generation</option>
+                                <option value="code_completion">Code Completion</option>
+                                <option value="code_analysis">Code Analysis</option>
+                            </select>
+                    </div>
+
+                    <div className='aiDropDown'>
+                        <label>Select AI Model</label>
+                            <select value={aiModel} onChange={handleAiModelChange}>
+                                <option value="watsonx.ai">WatsonX AI</option>
+                                <option value="openai">OpenAI</option>
+                            </select>
+                    </div>
+
+                    <div className='textBoxContainer'>
+                        <textarea 
+                            type='text'
+                            value={input}
+                            onChange={handleTextBoxChange}
+                            class="textbox"
+                            placeholder='Code Submission Area'
+                            onKeyDown={handleKeyDown}
+                        ></textarea>
+                        
+                    </div>
 
 
-            {/* <Link to="/">
-            <button className='backButton'>
-                Back to Home
-            </button>
-            </Link>
+                    <button onClick={handleSubmit} className="submitButton">Submit</button>
 
-            <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className="logo" /></a>
-
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-
-            <div><h1 class="Heading">Evaluation Page</h1></div> */}
+                </div> 
 
 
-            {/*<div class="languageDropdown">
-                <button onClick={dropDown} >{selectedLanguage === 'Select a Language'
-                    ? 'Select a Language Please'
-                    : `Language Selected: ${selectedLanguage}`}</button>
+                <div className='feedBackArea'>
 
-                {dropdownVisible && (
-                <div class="languages">
-                    <p className="Java" onClick={() => handleLanguageSelected("Java")}>Java</p>
-                    <p className="Python" onClick={() => handleLanguageSelected("Python")}>Python</p>
-                    <p className="C" onClick={() => handleLanguageSelected("C")}>C</p>
-                </div>
-                )}
-            </div>*/}
+                    {isLoading && <div className="loading">
+                        <div className='loading1'></div>
+                        <div className='loading2'></div>
+                        <div className='loading3'></div>
+                        </div>}
 
-
-
-            <div class="submissionArea">
-
-                <div className='useCaseDropDown'>
-                    <label>Select Use Case</label>
-                    <select value={useCase} onChange={handleUseCaseChange}>
-                        <option value="code_generation">Code Generation</option>
-                        <option value="code_completion">Code Completion</option>
-                        <option value="code_analysis">Code Analysis</option>
-                    </select>
-                </div>
-
-                <div className='aiDropDown'>
-                    <label>Select AI Model</label>
-                    <select value={aiModel} onChange={handleAiModelChange}>
-                        <option value="watsonx.ai">WatsonX AI</option>
-                        <option value="openai">OpenAI</option>
-                    
-                    </select>
-                </div>
-
-                <div className='textContainer'>
-                    <textarea 
-                        type='text'
-                        value={input}
-                        onChange={handleTextBoxChange}
-                        class="textbox"
-                        placeholder='Code Submission Area'
-                        onKeyDown={handleKeyDown}
-                    >
-                    </textarea>
-
-                    {feedback &&( 
+                    {!isLoading && feedback &&( 
                         <div class="feedBackBox">
                             <p>{feedback}</p>
                         </div>
                     )}
+
                 </div>
-
-                <button onClick={handleSubmit} class="submitButton">Submit</button>
-
-              </div>
 
             </div>
 
+        </div>
+
             
-        </>
+    </>
     ];
 };
 
