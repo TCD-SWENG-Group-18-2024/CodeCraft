@@ -19,7 +19,9 @@ gpt = ChatOpenAI()
 starcoder = HuggingFaceHub(
     repo_id='bigcode/starcoder'
 )
-
+llama = HuggingFaceHub(
+    repo_id='codellama/CodeLlama-7b-hf'
+)
 
 code_analysis_template = PromptTemplate(
     input_variables=['code'],
