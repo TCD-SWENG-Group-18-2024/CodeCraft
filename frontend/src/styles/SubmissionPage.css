@@ -36,7 +36,9 @@
   margin-top: 20px;
   margin-left: 20px;
   transform: translateX(-50%);
-  border-radius: 20px;
+  color: #0F62FE;
+  border-color: #0F62FE;
+  border: 1px #0F62FE solid;
   height: 35px;
   width: 85px;
 }
@@ -59,7 +61,8 @@
 }
 
 .submissionArea .submitButton:hover{
-    background-color: rgb(42, 199, 199);
+    color: white;
+    background-color: #0F62FE;
 }
 
 .main-content {
