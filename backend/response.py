@@ -65,6 +65,8 @@ def AIModel(user_input: str, ai_model: str) -> dict:
 
     if ai_model.lower() == 'starcoder':
         code_analysis_chain = LLMChain(llm=starcoder, prompt=general_ai_model_template)
+    elif ai_model.lower() == 'llama':
+        code_analysis_chain = LLMChain(llm=llama, prompt=general_ai_model_template)
 
     return code_analysis_chain.invoke({'explanation': user_input})  
 
