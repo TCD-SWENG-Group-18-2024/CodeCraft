@@ -6,11 +6,12 @@ import '../styles/SubmissionPage.css';
 
 const SubmissionPage = () => {
 
-    const[input, setInput] = useState('');
-    const[useCase, setUseCase] = useState('code_generation'); // set default cases
-    const[aiModel, setAIModel] = useState('watsonx.ai'); 
-    const[feedback, setFeedback] = useState('');
-    const[isLoading, setIsLoading] = useState(false);
+    const [inputType, setInputType] = useState('textbox');
+    const [input, setInput] = useState('');
+    const [useCase, setUseCase] = useState(''); // set default cases
+    const [aiModel, setAIModel] = useState('watsonx.ai'); 
+    const [feedback, setFeedback] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     // const[dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -19,13 +20,12 @@ const SubmissionPage = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
  
-
     /*Takes input */
     const handleTextBoxChange = (event) => {
         setInput(event.target.value);
     };
 
-
+    /*Handle the dropdowns */
     const handleUseCaseChange = (event) =>{
         setUseCase(event.target.value);
     };
@@ -34,8 +34,15 @@ const SubmissionPage = () => {
         setAIModel(event.target.value);
     };
 
+    const handleInputTypeChange = (event) =>{
+        setInputType(event.target.value);
+        setInput(''); // clear the input when changing between drop file and input text
+    };
 
-
+    const handleFileSubmit = (event) => {
+        const file = event.target.files[0];
+        console.log("File selected: ", file);
+    }
     /*Handle Submit, probably need to send the in take info to back end and ai */
     const handleSubmit = async () =>{
         /* Language Detector - Not Necessary for the moment
@@ -130,12 +137,25 @@ const SubmissionPage = () => {
                 <div className='submissionArea'>
 
                     <div className='dropDownContainer'>
+
+                        <div className='inputTypeDropDown'>
+                            <label>Select Input Type </label>
+                            <select value={inputType} onChange={handleInputTypeChange}>
+                                <option value="textbox">Textbox</option>
+                                <option value="files">Files</option>
+
+                            </select>
+                        </div>
+
+
+
                         <div className='useCaseDropDown'>
                             <label>Select Use Case </label>
                                 <select value={useCase} onChange={handleUseCaseChange}>
                                     <option value="code_generation">Code Generation</option>
                                     <option value="code_completion">Code Completion</option>
                                     <option value="code_analysis">Code Analysis</option>
+                                    <option value="code_translation">Code Translation</option>
                                 </select>
                         </div>
 
@@ -148,17 +168,24 @@ const SubmissionPage = () => {
                         </div>
                     </div>
 
-                    <div className='textBoxContainer'>
-                        <textarea 
-                            type='text'
-                            value={input}
-                            onChange={handleTextBoxChange}
-                            class="textbox"
-                            placeholder='Code Submission Area'
-                            onKeyDown={handleKeyDown}
-                        ></textarea>
-                        
-                    </div>
+                    {inputType === "textbox" && (
+                        <div className='textBoxContainer'>
+                            <textarea 
+                                type='text'
+                                value={input}
+                                onChange={handleTextBoxChange}
+                                class="textbox"
+                                placeholder='Code Submission Area'
+                                onKeyDown={handleKeyDown}
+                            ></textarea>
+                        </div>
+                    )}
+
+                    {inputType === "files" && (
+                        <div class='fileInputContainer'>
+                            <input type="file" onChange={handleFileSubmit}></input>
+                        </div>
+                    )}
 
 
                     <button onClick={handleSubmit} className="submitButton">Submit</button>
