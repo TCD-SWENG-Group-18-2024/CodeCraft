@@ -111,9 +111,9 @@ def code_translation(input_language: str, target_language: str, code: str, ai_mo
     # GPT by default
     code_translation_chain = LLMChain(llm=gpt, prompt=code_translation_template)
 
-    if ai_model is not None and ai_model.lower() == 'starcoder':
+    if ai_model.lower() == 'starcoder':
         code_translation_chain = LLMChain(llm=starcoder, prompt=code_translation_template)
-    elif ai_model is not None and ai_model.lower() == 'llama':
+    elif ai_model.lower() == 'llama':
         code_translation_chain = LLMChain(llm=llama, prompt=code_translation_template)
     
     return code_translation_chain.invoke({'input_language': input_language,
