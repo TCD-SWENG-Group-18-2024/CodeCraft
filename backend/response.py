@@ -59,7 +59,7 @@ general_ai_model_template = PromptTemplate (
 )
 
 
-def AIModel(user_input: str, ai_model: str) -> dict:
+def AIModel(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_analysis_chain = LLMChain(llm=gpt, prompt=general_ai_model_template)
 
@@ -71,7 +71,7 @@ def AIModel(user_input: str, ai_model: str) -> dict:
     return code_analysis_chain.invoke({'explanation': user_input})  
 
 
-def code_generation(user_input: str, ai_model: str) -> dict:
+def code_generation(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_generation_chain = LLMChain(llm=gpt, prompt=code_generation_template)
 
@@ -83,7 +83,7 @@ def code_generation(user_input: str, ai_model: str) -> dict:
     return code_generation_chain.invoke({'explanation': user_input})  
 
 
-def code_analysis(user_input: str, ai_model: str) -> dict:
+def code_analysis(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_analysis_chain = LLMChain(llm=gpt, prompt=code_analysis_template)
 
@@ -95,7 +95,7 @@ def code_analysis(user_input: str, ai_model: str) -> dict:
     return code_analysis_chain.invoke({'code': user_input})  
 
 
-def code_completion(user_input: str, ai_model: str) -> dict:
+def code_completion(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_completion_chain = LLMChain(llm=gpt, prompt=code_completion_template)
 
@@ -107,7 +107,7 @@ def code_completion(user_input: str, ai_model: str) -> dict:
     return code_completion_chain.invoke({'code': user_input})
 
 
-def code_translation(input_language: str, target_language: str, code: str, ai_model: str) -> dict:
+def code_translation(input_language: str, target_language: str, code: str, ai_model: str = '') -> dict:
     # GPT by default
     code_translation_chain = LLMChain(llm=gpt, prompt=code_translation_template)
 
