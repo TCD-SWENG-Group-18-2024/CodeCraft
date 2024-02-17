@@ -89,6 +89,8 @@ def code_analysis(user_input: str, ai_model: str) -> dict:
 
     if ai_model.lower() == 'starcoder':
         code_analysis_chain = LLMChain(llm=starcoder, prompt=code_analysis_template)
+    elif ai_model.lower() == 'llama':
+        code_analysis_chain = LLMChain(llm=llama, prompt=code_analysis_template)
 
     return code_analysis_chain.invoke({'code': user_input})  
 
