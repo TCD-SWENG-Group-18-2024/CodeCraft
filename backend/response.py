@@ -101,6 +101,8 @@ def code_completion(user_input: str, ai_model: str) -> dict:
 
     if ai_model.lower() == 'starcoder':
         code_completion_chain = LLMChain(llm=starcoder, prompt=code_completion_template)
+    elif ai_model.lower() == 'llama':
+        code_completion_chain = LLMChain(llm=llama, prompt=code_completion_template)
     
     return code_completion_chain.invoke({'code': user_input})
 
