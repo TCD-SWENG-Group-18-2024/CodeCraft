@@ -17,6 +17,12 @@
   width: calc(70% - 20px);
 }
 
+.dropDownContainer{
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+}
+
 .textBoxContainer{
   display: flex;
   flex-direction: column;
@@ -24,6 +30,7 @@
 }
 
 .submissionArea .textBoxContainer .textbox {
+  border: 1px #0F62FE solid;
   margin-left: 100px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -41,6 +48,18 @@
   border: 1px #0F62FE solid;
   height: 35px;
   width: 85px;
+}
+
+.submissionArea .useCaseDropDown, .aiDropDown{
+  margin-bottom: 20px;
+  color: white;
+}
+
+.submissionArea .useCaseDropDown select, .aiDropDown select {
+  width: 55%;
+  padding: 8px;
+  margin: 10px;
+  margin-left: 60px
 }
 
 .feedBackArea{

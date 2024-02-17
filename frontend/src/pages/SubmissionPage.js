@@ -7,8 +7,8 @@ import '../styles/SubmissionPage.css';
 const SubmissionPage = () => {
 
     const[input, setInput] = useState('');
-    const[useCase, setUseCase] = useState('');
-    const[aiModel, setAIModel] = useState('');
+    const[useCase, setUseCase] = useState('code_generation'); // set default cases
+    const[aiModel, setAIModel] = useState('watsonx.ai'); 
     const[feedback, setFeedback] = useState('');
     const[isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -129,21 +129,23 @@ const SubmissionPage = () => {
 
                 <div className='submissionArea'>
 
-                    <div className='useCaseDropDown'>
-                        <label>Select Use Case</label>
-                            <select value={useCase} onChange={handleUseCaseChange}>
-                                <option value="code_generation">Code Generation</option>
-                                <option value="code_completion">Code Completion</option>
-                                <option value="code_analysis">Code Analysis</option>
-                            </select>
-                    </div>
+                    <div className='dropDownContainer'>
+                        <div className='useCaseDropDown'>
+                            <label>Select Use Case </label>
+                                <select value={useCase} onChange={handleUseCaseChange}>
+                                    <option value="code_generation">Code Generation</option>
+                                    <option value="code_completion">Code Completion</option>
+                                    <option value="code_analysis">Code Analysis</option>
+                                </select>
+                        </div>
 
-                    <div className='aiDropDown'>
-                        <label>Select AI Model</label>
-                            <select value={aiModel} onChange={handleAiModelChange}>
-                                <option value="watsonx.ai">WatsonX AI</option>
-                                <option value="openai">OpenAI</option>
-                            </select>
+                        <div className='aiDropDown'>
+                            <label>Select AI Model </label>
+                                <select value={aiModel} onChange={handleAiModelChange}>
+                                    <option value="watsonx.ai">WatsonX AI</option>
+                                    <option value="openai">OpenAI</option>
+                                </select>
+                        </div>
                     </div>
 
                     <div className='textBoxContainer'>
