@@ -2,6 +2,7 @@ import React,{useState,useEffect}from 'react'
 import "./App.css"
 import Home from "./pages/Home"
 import SubmissionPage from './pages/SubmissionPage';
+import LoginSignUp from './pages/LoginSignUp';
 import {BrowserRouter as Router, Route,Routes} from 'react-router-dom';
 
 // move the logo to the indivdual pages
@@ -32,6 +33,7 @@ function App(){
           {/*landing page, default route path*/}
           <Route path ="/" exact element ={<Home/>}/>
           <Route path ="/SubmissionPage" exact element = {<SubmissionPage/>}/>
+          <Route path ="/LoginSignUp" exact element = {<LoginSignUp/>}/>
         </Routes>
       </Router>
       

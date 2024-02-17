@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import IBM_White from "../assets/IBM_white.PNG";
 import '../styles/Home.css';
+import './LoginSignUp';
 import './SubmissionPage';
 
 
@@ -16,7 +17,7 @@ function Home() {
             <a href="#features">Features</a>
             <a href="#team">Meet the team</a>
             <a href="#about">About</a>
-            <button className="App-sign-up">Sign up</button>
+            <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
           </div>
         </nav>
   
