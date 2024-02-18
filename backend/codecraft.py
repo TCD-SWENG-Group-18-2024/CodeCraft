@@ -38,7 +38,7 @@ def get_joke():
 @app.route('/llm', methods=['POST'])
 def llm_request():
     data = request.get_json()
-    user_input = data.get('user_input')
+    user_input = data.get('code')
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
     input_language = data.get('input_language')
