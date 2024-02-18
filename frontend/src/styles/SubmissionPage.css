@@ -196,8 +196,11 @@
   margin: 1.5em;
   width: 6em;
   height: 6em;
-  
- }
+  position: absolute; 
+  right: 5px; 
+  bottom: 5px; 
+}
+
 
  .loading .loading1,
  .loading .loading2,
