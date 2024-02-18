@@ -1,191 +1,144 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
 
-
 const SubmissionPage = () => {
+  const [inputType, setInputType] = useState('textbox');
+  const [input, setInput] = useState('');
+  const [useCase, setUseCase] = useState('');
+  const [aiModel, setAIModel] = useState('watsonx.ai');
+  const [feedback, setFeedback] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [droppedFiles, setDroppedFiles] = useState([]);
 
-    const [inputType, setInputType] = useState('textbox');
-    const [input, setInput] = useState('');
-    const [useCase, setUseCase] = useState(''); // set default cases
-    const [aiModel, setAIModel] = useState('watsonx.ai'); 
-    const [feedback, setFeedback] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [droppedFiles, setDroppedFiles] = useState([]);
-    // const[dropdownVisible, setDropdownVisible] = useState(false);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
- 
-    /*Takes input */
-    const handleTextBoxChange = (event) => {
-        setInput(event.target.value);
-    };
+  const handleTextBoxChange = (event) => {
+    setInput(event.target.value);
+  };
 
-    /*Handle the dropdowns */
-    const handleUseCaseChange = (event) =>{
-        setUseCase(event.target.value);
-    };
+  const handleUseCaseChange = (event) => {
+    setUseCase(event.target.value);
+  };
 
-    const handleAiModelChange = (event) => {
-        setAIModel(event.target.value);
-    };
+  const handleAiModelChange = (event) => {
+    setAIModel(event.target.value);
+  };
 
-    const handleInputTypeChange = (event) =>{
-        setInputType(event.target.value);
-        setInput(''); // clear the input when changing between drop file and input text
-        setDroppedFiles([]);
-    };
+  const handleInputTypeChange = (event) => {
+    setInputType(event.target.value);
+    setInput('');
+    setDroppedFiles([]);
+  };
 
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer.dropEffect = "copy";
+  };
 
-    // const handleFileSubmit = (event) => {
-    //     const file = event.target.files[0];
-    //     console.log("File selected: ", file);
-    // }
+  const handleFileDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const files = Array.from(event.dataTransfer.files);
+    setDroppedFiles(prevFiles => [...prevFiles, ...files]);
+  };
 
-// takes input - files 
-    const handleDragOver = (event) => { 
-        event.preventDefault();
-        event.stopPropagation();
-        event.dataTransfer.dropEffect = "copy";
+  const handleFileSelect = (event) => {
+    const files = Array.from(event.target.files);
+    setDroppedFiles(prevFiles => [...prevFiles, ...files]);
+  };
+
+  const formatFeedback = (responseData) => {
+   
+    const { code, text } = responseData;
+    
+    
+    const unescapedCode = code.replace(/\\n/g, '\n').replace(/\\"/g, '"');
+    const unescapedText = text.replace(/\\n/g, '\n').replace(/\\"/g, '"');
+    
+  
+    return `Submission successful.\n\nFeedback:\n${unescapedCode}\n\n${unescapedText}`;
+  };
+
+  const handleTextSubmit = async () => {
+    if (input.trim() === '') {
+      alert("Please Enter some code before submitting");
+      return;
     }
 
-    const handleFileDrop = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+    setIsLoading(true);
 
-        const droppedFiles = Array.from(event.dataTransfer.files);
-        setDroppedFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // deconstruct array into separate variables
-        console.log("Dropped Files: ", droppedFiles);
+    const data = {
+      user_input: input,
+      use_case: useCase, 
+      ai_model: aiModel
     };
 
-    // need to set max size
-    const MAX_FILE_SIZE = 3000;
+    try {
+      const response = await fetch("http://localhost:8080/llm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    const handleFileSelect = (event) => {
-        const selectFile = Array.from(event.target.files);
-        // if (selectFile){
-        //     setDroppedFiles([...droppedFiles, selectFile]);
-        // }
-        const filteredFiles = selectFile.filter((file) => file.size <= MAX_FILE_SIZE);
+      if (response.ok) {
+        const responseData = await response.json();
+        const formattedFeedback = formatFeedback(responseData);
+        setFeedback(formattedFeedback);
+      } else {
+        setFeedback(`Submission failed. Server returned ${response.status} status.`);
+      }
+    } catch(error) {
+      setFeedback(`Error occurred while submitting: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        if (filteredFiles.length > 0 ){
-            setDroppedFiles((prevFiles) => [...prevFiles, ...selectFile]);
-            console.log("Selected File: ", selectFile);
-        }
-        else {
-            alert("Selected File(s) to exceeded the size limit of 3000 bytes");
-        }
-    };
-    
+  const handleKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      const start = event.target.selectionStart;
+      const end = event.target.selectionEnd;
+      setInput(input.substring(0, start) + '\t' + input.substring(end));
+      event.target.selectionStart = event.target.selectionEnd = start + 1;
+    }
+  };
 
-    /*Handle Submit for text box */
-    const handleTextSubmit = async () =>{
-        /* Language Detector - Not Necessary for the moment
-        if (selectedLanguage === '--Select a Language--'){
-            alert("Please select a language before sumbitting");
-            return;
-        }*/
-        if(input.trim() === '' && inputType== "textbox"){
-            alert("Please Enter some code before submitting");
-            return;
-        }
+  const handleFileSubmit = async () => {
+    if (droppedFiles.length === 0) {
+      alert("Please select or drop some files before submitting");
+      return;
+    }
 
-        setIsLoading(true);
+    setIsLoading(true);
+    const formData = new FormData();
+    droppedFiles.forEach((file, index) => {
+      formData.append(`file${index + 1}`, file);
+    });
 
-        const data ={
-            user_input: input,
-            use_case: useCase, 
-            ai_model: aiModel
-        };
+    try {
+      const response = await fetch("http://localhost:8080/llm", {
+        method: "POST",
+        body: formData,
+      });
 
-        console.log(data);
-        
-        try {
-            const response = await fetch("http://localhost:8080/llm", 
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type" : "application/json",
-                },
-                body: JSON.stringify(data),
-            });
+      if (response.ok) {
+        const responseData = await response.json();
+        const formattedFeedback = formatFeedback(responseData);
+        setFeedback(formattedFeedback);
+      } else {
+        setFeedback(`File Submission failed, Server returned ${response.status} status.`);
+      }
+    }
 
-            if (response.ok){
-                const responseData = await response.json();
-                setFeedback(`Submission successful. \n Feedback: ${JSON.stringify(responseData)}`);
-            }
-            else {
-                setFeedback(`Submission failed. Server returned ${response.status} status.`)
-            }
-        } 
-        catch(error){
-            setFeedback(`Error occurred while submitting: ${error.message}`)
-        }
-        finally{
-            setIsLoading(false);
-        }
-
-        // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
-
-        console.log("Submitted: ",input);
-        console.log("Feedback", feedback);
-    };
-
-
-
-    // Allows user to key into tab in the submission box
-    const handleKeyDown = (event) => {
-        if (event.key === 'Tab'){
-            event.preventDefault();
-
-            const {selectionStart, selectionEnd} = event.target;
-
-            setInput(
-                input.substring(0, selectionStart) + '\t' + input.substring(selectionEnd)
-            );
-
-            event.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
-        }
-    };
-
-    // const dropDown = () => {
-    //     setDropdownVisible(!dropdownVisible);
-    // };
-
-    // need a function that handles submitting a file to backend.
-    // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-    
-    const handleFileSubmit = async () =>{
-        // haven't test if it works or not 
-        if (droppedFiles.length === 0){
-            alert("Please select or drop some files before submitting");
-            return;
-        }
-        setIsLoading(true);
-
-        const formData = new FormData();
-        droppedFiles.forEach((file, index) =>{
-            formData.append(`file${index + 1}`, file);
-        });
-
-        try {
-            const response = await fetch("http://localhost:8080/llm", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (response.ok){
-                const responseData = await response.json();
-                setFeedback(`File Submission successful. \n Feedback: ${JSON.stringify(responseData)}`);
-            }
-            else {
-                setFeedback(`File Submission failed, Server return ${response.status} status`);
-            }
-        }
         catch (error){
             setFeedback(`Error occurred while submitting files: ${error.message}`)
         }
