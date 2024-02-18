@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
@@ -13,8 +13,8 @@ const SubmissionPage = () => {
     const [feedback, setFeedback] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [droppedFiles, setDroppedFiles] = useState([]);
     // const[dropdownVisible, setDropdownVisible] = useState(false);
-
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -37,21 +37,59 @@ const SubmissionPage = () => {
     const handleInputTypeChange = (event) =>{
         setInputType(event.target.value);
         setInput(''); // clear the input when changing between drop file and input text
+        setDroppedFiles([]);
     };
 
-    const handleFileSubmit = (event) => {
-        const file = event.target.files[0];
-        console.log("File selected: ", file);
+
+    // const handleFileSubmit = (event) => {
+    //     const file = event.target.files[0];
+    //     console.log("File selected: ", file);
+    // }
+
+// takes input - files 
+    const handleDragOver = (event) => { 
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer.dropEffect = "copy";
     }
-    /*Handle Submit, probably need to send the in take info to back end and ai */
-    const handleSubmit = async () =>{
+
+    const handleFileDrop = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const droppedFiles = Array.from(event.dataTransfer.files);
+        setDroppedFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // deconstruct array into separate variables
+        console.log("Dropped Files: ", droppedFiles);
+    };
+
+    // need to set max size
+    const MAX_FILE_SIZE = 3000;
+
+    const handleFileSelect = (event) => {
+        const selectFile = Array.from(event.target.files);
+        // if (selectFile){
+        //     setDroppedFiles([...droppedFiles, selectFile]);
+        // }
+        const filteredFiles = selectFile.filter((file) => file.size <= MAX_FILE_SIZE);
+
+        if (filteredFiles.length > 0 ){
+            setDroppedFiles((prevFiles) => [...prevFiles, ...selectFile]);
+            console.log("Selected File: ", selectFile);
+        }
+        else {
+            alert("Selected File(s) to exceeded the size limit of 3000 bytes");
+        }
+    };
+    
+
+    /*Handle Submit for text box */
+    const handleTextSubmit = async () =>{
         /* Language Detector - Not Necessary for the moment
         if (selectedLanguage === '--Select a Language--'){
             alert("Please select a language before sumbitting");
             return;
         }*/
-
-        if(input.trim() === ''){
+        if(input.trim() === '' && inputType== "textbox"){
             alert("Please Enter some code before submitting");
             return;
         }
@@ -94,9 +132,10 @@ const SubmissionPage = () => {
         // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
 
         console.log("Submitted: ",input);
-        //console.log("Language: ", selectedLanguage);
         console.log("Feedback", feedback);
     };
+
+
 
     // Allows user to key into tab in the submission box
     const handleKeyDown = (event) => {
@@ -117,6 +156,63 @@ const SubmissionPage = () => {
     //     setDropdownVisible(!dropdownVisible);
     // };
 
+    // need a function that handles submitting a file to backend.
+    const handleFileSubmit = async () =>{
+        // haven't test if it works or not 
+        if (droppedFiles.length === 0){
+            alert("Please select or drop some files before submitting");
+            return;
+        }
+        setIsLoading(true);
+
+        const formData = new FormData();
+        droppedFiles.forEach((file, index) =>{
+            formData.append(`file${index + 1}`, file);
+        });
+
+        try {
+            const response = await fetch("http://localhost:8080/llm", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok){
+                const responseData = await response.json();
+                setFeedback(`File Submission successful. \n Feedback: ${JSON.stringify(responseData)}`);
+            }
+            else {
+                setFeedback(`File Submission failed, Server return ${response.status} status`);
+            }
+        }
+        catch (error){
+            setFeedback(`Error occurred while submitting files: ${error.message}`)
+        }
+        finally{
+            setIsLoading(false);
+        }
+
+        console.log("Submitted Files: ", droppedFiles);
+        console.log("Feedback", feedback);
+    }
+
+
+    const handleSubmit = () => {
+        if(inputType === "textbox"){
+            handleTextSubmit();
+        }
+        else if (inputType === "files"){
+            handleFileSubmit();
+        }
+    }
+
+    /* issues with {inputType === "files" && (
+                        <div className='fileInputContainer'></div>
+
+                        - the submit button does not move when inputs are added
+                        - the dragging files in is bugged, only allows one file
+                        -
+
+                        */
     return [
     <>
         
@@ -147,8 +243,6 @@ const SubmissionPage = () => {
                             </select>
                         </div>
 
-
-
                         <div className='useCaseDropDown'>
                             <label>Select Use Case </label>
                                 <select value={useCase} onChange={handleUseCaseChange}>
@@ -174,17 +268,35 @@ const SubmissionPage = () => {
                                 type='text'
                                 value={input}
                                 onChange={handleTextBoxChange}
-                                class="textbox"
+                                className="textbox"
                                 placeholder='Code Submission Area'
                                 onKeyDown={handleKeyDown}
                             ></textarea>
+                            
                         </div>
                     )}
 
+
+
                     {inputType === "files" && (
-                        <div class='fileInputContainer'>
-                            <input type="file" onChange={handleFileSubmit}></input>
+                        <div className='fileInputContainer'>
+                            <div class='fileDropZone' onDrop={handleFileDrop} onDragOver={handleDragOver} 
+                                onClick={()=> document.getElementById("fileInput").click()}>
+                                <p>Drag files here or Click to select</p>
+                                <input id="fileInput" type="file" onChange={handleFileSelect}></input>
+                            </div>
+                            {droppedFiles.length > 0 && (
+                                <div className='droppedFileContainer'>
+                                    <p>Dropped Files: </p>
+                                    <ul>
+                                        {droppedFiles.map((file, index) =>
+                                        <li key={index}>{file && file.name}</li>)}
+                                    </ul>
+                                </div>
+                            )}
+                            
                         </div>
+
                     )}
 
 
@@ -217,7 +329,5 @@ const SubmissionPage = () => {
     </>
     ];
 };
-
-
 
 export default SubmissionPage;
