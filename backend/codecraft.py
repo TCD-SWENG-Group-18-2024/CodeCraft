@@ -13,7 +13,7 @@ CORS(app)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'html','css','rb','php','kt','R','pl'}
-MAX_FILE_SIZE_BYTES = 10 * 1024  # 3KB
+MAX_FILE_SIZE_BYTES = 10 * 1024  #10KB
 
 
 @app.route('/')
