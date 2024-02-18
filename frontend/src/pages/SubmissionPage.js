@@ -157,6 +157,8 @@ const SubmissionPage = () => {
     // };
 
     // need a function that handles submitting a file to backend.
+    // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
+    
     const handleFileSubmit = async () =>{
         // haven't test if it works or not 
         if (droppedFiles.length === 0){
