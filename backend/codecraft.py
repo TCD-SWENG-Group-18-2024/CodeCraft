@@ -49,12 +49,12 @@ def llm_request():
     if user_input is None:
         return jsonify({'error': 'No user input provided'}), 400
     
-    # Throws error if file too big
-    if len(file.read()) > MAX_FILE_SIZE_BYTES:
-        return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
-    
     # Check if the provided user_input is a file path
     if os.path.exists(user_input):
+        # Throws error if file too big
+        if os.path.getsize(user_input) > MAX_FILE_SIZE_BYTES:
+            return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
+ 
         # If user_input is a file path, read the file and use its contents as input
         with open(user_input, 'r') as file:
             user_input = file.read()
