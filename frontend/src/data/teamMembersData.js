@@ -89,7 +89,7 @@ const teamMembersData = [
       role: 'Backend Team',
       year: '2nd',
       image: Patrick,
-      description: 'Text'
+      description: 'I’m Patrick in 2nd year Integrated Computer Science at TCD working with the backend team. I have experience in java, c, assembly language and python. I was involved in programming project where I represented data related to different flights and airports using processing.'
     },
     {
       id: 11,
