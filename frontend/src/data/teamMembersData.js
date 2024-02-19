@@ -1,11 +1,15 @@
+import Abdullah from '../assets/Abdullah.png';
+import Ben from '../assets/Ben.jpg';
 import Fionn from '../assets/Fionn.jpg';
 import Gerard from '../assets/Gerard.png';
 import Leah from '../assets/Leah.png';
 import Lucia from '../assets/Lucia.jpg';
 import Mariam from '../assets/Mariam.jpg';
+import Patrick from '../assets/Patrick.jpg';
 import Roy from '../assets/Roy.png';
 import Wang from '../assets/Wang.jpg';
 import Yuchen from '../assets/Yuchen.jpg';
+
 const teamMembersData = [
     {
       id: 1,
@@ -52,8 +56,8 @@ const teamMembersData = [
       name: 'Ben Feeney',
       role: 'Backend Team',
       year: '3rd',
-      image: 'path-to-your-image.jpg',
-      description: 'Text'
+      image: Ben,
+      description: 'I’m Ben and I’m a third year working as part of the backend team. I have coding experience mainly in Java, python and C . I have also worked on software development projects before for example last year I worked as part of a team on an application that provided  similarity matching scores for different texts.'
     },
     {
       id: 7,
@@ -84,7 +88,7 @@ const teamMembersData = [
       name: 'Patrick Archbold',
       role: 'Backend Team',
       year: '2nd',
-      image: 'path-to-your-image.jpg',
+      image: Patrick,
       description: 'Text'
     },
     {
@@ -92,7 +96,7 @@ const teamMembersData = [
       name: 'Abdullah Khan',
       role: 'API/AI Team',
       year: '2nd',
-      image: 'path-to-your-image.jpg',
+      image: Abdullah,
       description: 'Text'
     },
   ];
