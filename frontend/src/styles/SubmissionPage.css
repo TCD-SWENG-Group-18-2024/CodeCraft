@@ -100,7 +100,7 @@
 
 .submissionArea .submitButton{
   margin-top: 20px;
-  margin-left: 15%;
+  margin-left: 5%;
   color: #0F62FE;
   border-color: #0F62FE;
   border: 1px #0F62FE solid;
@@ -120,22 +120,34 @@
   margin-left: 60px
 }
 
-.feedBackArea{
-  position: absolute;
-  left: calc(70% - 20px);
-  width: auto;
+
+.feedBackArea {
+  width: calc(66vh - 40px); 
+  height: 25vw; 
+  position: fixed; 
+  right: 66px; 
+  top: 265px; 
+  padding: 1rem; 
+  overflow-y: auto; 
+  background-color: #edf2f7; 
+  border-radius: 5px;
+  z-index: 1000; 
 }
 
-.feedBackBox{
-    background-color: lightblue;
-    border: 1px solid black;
-    color: black;
-    padding: 15px;
-    margin-top: 20px;
-    margin-right: 200px;
-    border-radius: 5px;
-    max-width: 100%;
+
+.feedBackBox {
+  white-space: pre-wrap; 
+  overflow-wrap: break-word; 
+  font-family: 'Courier New', Courier, monospace; 
+  font-size: 0.9em; 
+  line-height: 1.4; 
+  background: #f5f5f5; 
+  border: 1px solid #ddd; 
+  border-radius: 4px; 
+  padding: 1em; 
+  margin-top: 1em; 
 }
+
 
 .submissionArea .submitButton:hover{
     color: white;
@@ -184,8 +196,11 @@
   margin: 1.5em;
   width: 6em;
   height: 6em;
-  
- }
+  position: absolute; 
+  right: 5px; 
+  bottom: 5px; 
+}
+
 
  .loading .loading1,
  .loading .loading2,
