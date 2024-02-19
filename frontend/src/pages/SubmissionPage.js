@@ -41,12 +41,6 @@ const SubmissionPage = () => {
         setDroppedFiles([]);
     };
 
-
-    // const handleFileSubmit = (event) => {
-    //     const file = event.target.files[0];
-    //     console.log("File selected: ", file);
-    // }
-
 // takes input - files 
     const handleDragOver = (event) => { 
         event.preventDefault();
@@ -67,7 +61,7 @@ const SubmissionPage = () => {
     };
 
     // need to set max size
-    const MAX_FILE_SIZE = 3000;
+    const MAX_FILE_SIZE = 10000;
 
     const handleFileSelect = (event) => {
         const selectFile = Array.from(event.target.files);
@@ -81,10 +75,9 @@ const SubmissionPage = () => {
             console.log("Selected File: ", selectFile);
         }
         else {
-            alert("Selected File(s) to exceeded the size limit of 3000 bytes");
+            alert("Selected File(s) to exceeded the size limit of 10000 bytes");
         }
     };
-    
 
     /*Handle Submit for text box */
     const handleTextSubmit = async () =>{
@@ -123,6 +116,7 @@ const SubmissionPage = () => {
             if (response.ok) {
                 const responseData = await response.json();
                 setFeedback(formatFeedback(responseData));
+                console.log(responseData);
             }
             else {
                 setFeedback(`Submission failed. Server returned ${response.status} status.`)
@@ -158,38 +152,41 @@ const SubmissionPage = () => {
         }
     };
 
-    const formatFeedback = (responseData, useCase) => {
+    const formatFeedback = (responseData) => {
+
         let formattedFeedback = ''; 
        
         if (useCase === "code_generation") {
-          const formattedCode = responseData.code ? `Generated Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+
+            const formattedText = responseData.text ? `\n${responseData.text.replace(/\\n/g, '\n')}` : '';
         
-          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
-          formattedFeedback = [formattedCode, formattedTips].filter(Boolean).join('\n\n');
+            formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
        
         } else if (useCase === "code_completion") {
-          const formattedCode = responseData.code ? `Completed Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
 
-          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
-          formattedFeedback = [formattedCode, formattedTips].filter(Boolean).join('\n\n');
+            const formattedCode = responseData.code ? `Completed Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+        
+            formattedFeedback = [formattedCode].filter(Boolean).join('\n\n');
         
         } else if (useCase === "code_analysis") {
-          const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
-          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
-          formattedFeedback = [formattedText, formattedTips].filter(Boolean).join('\n\n');
+
+            const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+            const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
+
+            formattedFeedback = [formattedCode, formattedText].filter(Boolean).join('\n\n');
         
         } else if (useCase === "code_translation") {
-          const formattedCode = responseData.code ? `Translated Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
-         
-          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
-          formattedFeedback = [formattedCode, formattedTips].filter(Boolean).join('\n\n');
-        } else {
         
-          const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
-          const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
-          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
-          formattedFeedback = [formattedCode, formattedText, formattedTips].filter(Boolean).join('\n\n');
+            const formattedText = responseData.text ? `Translated Code: \n${responseData.text.replace(/\\n/g, '\n')}` : '';
+
+            formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
+        } else {
+            // empty use case: just generic LLM repsonse
+            const formattedText = responseData.text ? `${responseData.text.replace(/\\n/g, '\n')}` : '';
+
+            formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
         }
+        
         return formattedFeedback;
       };
       
@@ -290,6 +287,7 @@ const SubmissionPage = () => {
                         <div className='useCaseDropDown'>
                             <label>Select Use Case </label>
                                 <select value={useCase} onChange={handleUseCaseChange}>
+                                    <option value="">Generic AI response</option>
                                     <option value="code_generation">Code Generation</option>
                                     <option value="code_completion">Code Completion</option>
                                     <option value="code_analysis">Code Analysis</option>
