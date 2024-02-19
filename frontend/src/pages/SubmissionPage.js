@@ -14,7 +14,8 @@ const SubmissionPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState([]);
-    // const[dropdownVisible, setDropdownVisible] = useState(false);
+    const [inputLanguage, setInputLanguage] = useState('');
+    const [outputLanguage, setOutputLanguage] = useState('');
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -49,6 +50,9 @@ const SubmissionPage = () => {
 // takes input - files 
     const handleDragOver = (event) => { 
         event.preventDefault();
+        //When stopPropagation is called inside an event handler, 
+        // it prevents the event from traveling any further up 
+        // (or down) the DOM tree.
         event.stopPropagation();
         event.dataTransfer.dropEffect = "copy";
     }
@@ -99,7 +103,9 @@ const SubmissionPage = () => {
         const data ={
             user_input: input,
             use_case: useCase, 
-            ai_model: aiModel
+            ai_model: aiModel,
+            input_language: inputLanguage,
+            output_language: outputLanguage
         };
 
         console.log(data);
