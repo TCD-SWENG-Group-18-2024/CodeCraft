@@ -158,16 +158,41 @@ const SubmissionPage = () => {
         }
     };
 
-    const formatFeedback = (responseData) => {
+    const formatFeedback = (responseData, useCase) => {
+        let formattedFeedback = ''; 
        
-        const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
-        const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
-        const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
-      
-      
-        return [formattedCode, formattedText, formattedTips].filter(Boolean).join('\n\n');
-      };
+        if (useCase === "code_generation") {
+          const formattedCode = responseData.code ? `Generated Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+        
+          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
+          formattedFeedback = [formattedCode, formattedTips].filter(Boolean).join('\n\n');
+       
+        } else if (useCase === "code_completion") {
+          const formattedCode = responseData.code ? `Completed Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
 
+          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
+          formattedFeedback = [formattedCode, formattedTips].filter(Boolean).join('\n\n');
+        
+        } else if (useCase === "code_analysis") {
+          const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
+          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
+          formattedFeedback = [formattedText, formattedTips].filter(Boolean).join('\n\n');
+        
+        } else if (useCase === "code_translation") {
+          const formattedCode = responseData.code ? `Translated Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+         
+          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
+          formattedFeedback = [formattedCode, formattedTips].filter(Boolean).join('\n\n');
+        } else {
+        
+          const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+          const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
+          const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
+          formattedFeedback = [formattedCode, formattedText, formattedTips].filter(Boolean).join('\n\n');
+        }
+        return formattedFeedback;
+      };
+      
 
     // const dropDown = () => {
     //     setDropdownVisible(!dropdownVisible);
