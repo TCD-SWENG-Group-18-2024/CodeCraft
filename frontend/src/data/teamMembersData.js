@@ -1,12 +1,17 @@
+import Fionn from '../assets/Fionn.jpg';
 import Gerard from '../assets/Gerard.png';
+import Leah from '../assets/Leah.png';
 import Lucia from '../assets/Lucia.jpg';
+import Mariam from '../assets/Mariam.jpg';
+import Roy from '../assets/Roy.png';
+import Yuchen from '../assets/Yuchen.jpg';
 const teamMembersData = [
     {
       id: 1,
       name: 'Fionn Murphy',
       role: 'Backend Team',
       year: '3rd',
-      image: 'path-to-your-image.jpg',
+      image: Fionn,
       description: 'Text'
     },
     {
@@ -14,7 +19,7 @@ const teamMembersData = [
       name: 'Mariam María Quesada Ojeda',
       role: 'API/AI Team',
       year: '3rd',
-      image: 'path-to-your-image.jpg',
+      image: Mariam,
       description: 'Text'
       },
     {
@@ -22,7 +27,7 @@ const teamMembersData = [
       name: 'Leah Weldon',
       role: 'Frontend Team',
       year: '3rd',
-      image: 'path-to-your-image.jpg',
+      image: Leah,
       description: 'Text'
     },
     {
@@ -38,8 +43,8 @@ const teamMembersData = [
       name: 'Roy Zheng',
       role: 'Frontend Team',
       year: '3rd',
-      image: 'path-to-your-image.jpg',
-      description: 'Text'
+      image: Roy,
+      description: 'Im Roy, currently in third year ics, im proficient in programming languages such as java, c, python, javascript, i have participated in projects such as developing an AI chessgame with Microsoft Hololens, i also contributed to the creation of a Spring boot weather application integrated with ReactJS'
     },
     {
       id: 6,
@@ -62,7 +67,7 @@ const teamMembersData = [
       name: 'Yuchen Zhuang',
       role: 'Frontend Team',
       year: '2nd',
-      image: 'path-to-your-image.jpg',
+      image: Yuchen,
       description: 'Text'
     },
     {
