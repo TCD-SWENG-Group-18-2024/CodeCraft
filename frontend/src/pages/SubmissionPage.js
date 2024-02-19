@@ -114,9 +114,9 @@ const SubmissionPage = () => {
                 body: JSON.stringify(data),
             });
 
-            if (response.ok){
+            if (response.ok) {
                 const responseData = await response.json();
-                setFeedback(`Submission successful. \n Feedback: ${JSON.stringify(responseData)}`);
+                setFeedback(formatFeedback(responseData));
             }
             else {
                 setFeedback(`Submission failed. Server returned ${response.status} status.`)
@@ -152,6 +152,17 @@ const SubmissionPage = () => {
         }
     };
 
+    const formatFeedback = (responseData) => {
+       
+        const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+        const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
+        const formattedTips = responseData.tips ? `Tips:\n${responseData.tips.replace(/\\n/g, '\n')}` : '';
+      
+      
+        return [formattedCode, formattedText, formattedTips].filter(Boolean).join('\n\n');
+      };
+
+
     // const dropDown = () => {
     //     setDropdownVisible(!dropdownVisible);
     // };
@@ -178,9 +189,9 @@ const SubmissionPage = () => {
                 body: formData,
             });
 
-            if (response.ok){
+            if (response.ok) {
                 const responseData = await response.json();
-                setFeedback(`File Submission successful. \n Feedback: ${JSON.stringify(responseData)}`);
+                setFeedback(formatFeedback(responseData));
             }
             else {
                 setFeedback(`File Submission failed, Server return ${response.status} status`);
