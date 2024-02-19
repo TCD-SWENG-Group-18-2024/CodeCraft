@@ -4,6 +4,7 @@ import Leah from '../assets/Leah.png';
 import Lucia from '../assets/Lucia.jpg';
 import Mariam from '../assets/Mariam.jpg';
 import Roy from '../assets/Roy.png';
+import Wang from '../assets/Wang.jpg';
 import Yuchen from '../assets/Yuchen.jpg';
 const teamMembersData = [
     {
@@ -75,7 +76,7 @@ const teamMembersData = [
       name: 'Wang Yinghao',
       role: 'Frontend Team',
       year: '2nd',
-      image: 'path-to-your-image.jpg',
+      image: Wang,
       description: 'Text'
     },
     {
