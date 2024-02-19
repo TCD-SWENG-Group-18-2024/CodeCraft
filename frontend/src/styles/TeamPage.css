@@ -1,0 +1,41 @@
+/* src/pages/TeamPage.css */
+.team-page-container {
+  padding: 4rem 2rem;
+  background-color: #bcd7ff;
+  position: relative;
+}
+
+.team-page-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.team-page-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem; 
+}
+
+.team-page-description {
+  font-size: 1rem;
+  color: #666;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.back-home-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-home-button:hover {
+    background-color: #0056b3;
+}

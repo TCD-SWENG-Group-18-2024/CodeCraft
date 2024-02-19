@@ -15,7 +15,7 @@ function Home() {
         <nav className="App-nav">
           <div className="App-nav-links">
             <a href="#features">Features</a>
-            <a href="#team">Meet the team</a>
+            <Link to="/team">Meet the Team</Link>
             <a href="#about">About</a>
             <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
           </div>
