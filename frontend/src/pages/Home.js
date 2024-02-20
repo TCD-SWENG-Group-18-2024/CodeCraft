@@ -1,6 +1,6 @@
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IBM_White from "../assets/IBM_white.PNG";
 import '../styles/Home.css';
@@ -9,6 +9,13 @@ import './SubmissionPage';
 
 
 function Home() {
+    const [isLogoLoaded, setLogoLoaded] = useState(false);
+
+    useEffect(() =>{
+      setLogoLoaded(true);
+    },[]);
+
+
     return (
       <div className="App">
         {/* <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className="logo" /></a> */}
@@ -21,12 +28,13 @@ function Home() {
           </div>
         </nav>
   
-        <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className="logo" /></a>
-        <h1 className="welcome-message"> Hello, SwEng Project Group 18</h1>
+        <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className={`logo ${isLogoLoaded ? `loaded`: ''}`} /></a>
+        <h1 className="welcome-message">CodeCraft by: SwEng Project Group 18</h1>
   
         <div className="tab">
           <Link to="/SubmissionPage" className="tab-link">
-            Start Analysis <div className="circleRight"><FontAwesomeIcon icon={faCircleRight} /></div>
+            Start Analysis 
+            <div className="circleRight"><FontAwesomeIcon icon={faCircleRight} /></div>
           </Link>
         </div>
   

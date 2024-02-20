@@ -12,6 +12,7 @@ body, h1, h2, p, a, button {
 
 .welcome-message{
     color: #fefefe;
+    font-weight: 200;
 }
 
 .App-nav {
@@ -108,13 +109,27 @@ body, h1, h2, p, a, button {
         transform: translateX(-50%) translateY(0);
     }
     50% {
-        transform: translateX(-50%) translateY(-10px);
+        transform: translateX(-50%) translateY(-20px);
     }
 }
 
 .logo{
-    width: 250px;
+    width: 200px;
     margin-top: 50px;
     font-weight: bold;
-  }
- 
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.logo.loaded{
+    animation: fadeIn 2s ease-in-out;
+}
