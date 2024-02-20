@@ -2,7 +2,6 @@ import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
-import os
 
 app = Flask(__name__)
 CORS(app)
