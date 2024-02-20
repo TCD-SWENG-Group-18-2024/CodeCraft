@@ -15,25 +15,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'html','css','rb','php','kt','R','pl'}
 MAX_FILE_SIZE_BYTES = 10 * 1024  #10KB
 
-
 @app.route('/')
 def homepage():
     return{"message": "Hello SwEng Project Group 18"}
-
-
-@app.route('/joke', methods=['GET'])
-def get_joke():
-    # Make a request to the model
-    response = requests.get('https://official-joke-api.appspot.com/random_joke')
-    # Check if response was successful
-    if response.status_code == 200:
-        # Parse the JSON response
-        joke_data = response.json()
-        return jsonify({'setup': joke_data['setup'], 'punchline': joke_data['punchline']})
-    else:
-        # Return an error message if request failed
-        return jsonify({'error': 'Failed to fetch joke'}), 500
-
 
 @app.route('/llm', methods=['POST'])
 def llm_request():
