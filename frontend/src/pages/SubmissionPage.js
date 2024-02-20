@@ -298,7 +298,7 @@ const SubmissionPage = () => {
                         <div className='aiDropDown'>
                             <label>Select AI Model </label>
                                 <select value={aiModel} onChange={handleAiModelChange}>
-                                    <option value="watsonx.ai">WatsonX AI</option>
+                                    <option value="watsonx.ai">watsonx</option>
                                     <option value="openai">OpenAI</option>
                                 </select>
                         </div>
