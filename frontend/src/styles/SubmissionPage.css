@@ -41,7 +41,7 @@
 }
 
 .fileInputContainer{
-  width: calc(60vh - 40px);
+  width: calc(60vh - 190px);
   height: 20vw;
   position: relative;
   margin-bottom: 20px;

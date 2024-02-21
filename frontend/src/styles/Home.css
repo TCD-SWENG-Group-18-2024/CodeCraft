@@ -10,7 +10,15 @@ body, h1, h2, p, a, button {
     sans-serif;
 }
 
+.ProjectName{
+    margin-top: 50px;
+    color: #fefefe;
+    font-size: 45px;
+    font-weight: 200;
+}
+
 .welcome-message{
+    margin-top: 45px;
     color: #fefefe;
     font-weight: 200;
 }
@@ -68,7 +76,7 @@ body, h1, h2, p, a, button {
 }
 
 .StartAnalysisButton{
-    margin-top: 125px;
+    margin-top: 50px;
     width: 350px;
     height: 86px;
     padding: 1em 2em;
@@ -170,10 +178,6 @@ body, h1, h2, p, a, button {
 }
 
 
-.welcome-message {
-    margin-top: 68px; 
-}
-
 .wave {
     position: fixed;
     bottom: 0;
@@ -230,6 +234,30 @@ body, h1, h2, p, a, button {
     animation: fadeIn 1.5s ease-in-out;
 }
 
+.typing-animation{
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid #fff;
+    animation: typing 2s steps(20, end), blink-caret 0.5 step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0 
+    }
+    to { 
+        width: 100% 
+    }
+}
+
+@keyframes blink-caret {
+    from, to {
+        border-color: transparent 
+    }
+    50% { 
+        border-color: #fff 
+    }
+}
 /*
 @keyframes glitch {
   0% {
