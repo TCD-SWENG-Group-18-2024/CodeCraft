@@ -24,7 +24,8 @@ class TestFileUpload(unittest.TestCase):
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-        response = self.app.post('/llm/file', data=json_payload, environ_base={'wsgi.input': file_content, 'CONTENT_LENGTH': len(file_content), 'CONTENT_TYPE': 'multipart/form-data; boundary=test_boundary'}, content_type='multipart/form-data')
+        response = self.app.post('/llm/file', data={'file': ('someComplexCode.py', file_content)}, query_string=json_payload)
+
         print("Response received.")
         
         # Check if the response is successful (status code 200)

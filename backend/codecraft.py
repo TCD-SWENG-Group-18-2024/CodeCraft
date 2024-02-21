@@ -15,7 +15,7 @@ MAX_FILE_SIZE_BYTES = 10 * 1024  #10KB
 def homepage():
     return{"message": "Hello SwEng Project Group 18"}
 
-@app.route('/llm/text', methods=['POST'])
+@app.route('/dc/text', methods=['POST'])
 def llm_text_request():
     # Extract parameters from the request JSON
     data = request.get_json()
