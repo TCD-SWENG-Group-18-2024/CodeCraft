@@ -24,7 +24,6 @@
   margin: 10px;
 }
 
-
 .submissionArea{
   width: calc(70% - 20px);
 }
@@ -95,7 +94,7 @@
   margin-top: 20px;
   margin-bottom: 10px;
   height: 20vw;
-  width: calc(60vh - 40px);
+  width: calc(60vh - 150px);
 }
 
 .submissionArea .submitButton{
@@ -145,7 +144,7 @@
   margin: 15px;
 }
 
-@media (max-width: 1396px){
+@media (max-width: 1410px){
   .feedBackArea {
     position: relative; 
     right: 0; 

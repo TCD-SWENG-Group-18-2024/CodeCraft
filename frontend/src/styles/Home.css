@@ -64,7 +64,101 @@ body, h1, h2, p, a, button {
 
 .tab-link {
     text-decoration: none;
-    color: black;
+    color: #006699;
+}
+
+.StartAnalysisButton{
+    margin-top: 125px;
+    width: 350px;
+    height: 86px;
+    padding: 1em 2em;
+    letter-spacing: 2px;
+    line-height: 20px;
+    border: 0;
+    border-radius: 5px;
+    position: relative;
+    font-size: 2em;
+    font-weight: 200;
+    color: #006699;
+    cursor: pointer;
+    transition: 0.01s .23s ease-out all;
+    overflow: hidden;
+    z-index: 2;
+
+    &:before{
+        content: "";
+        position: relative;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 55%;
+        background: #202020;
+        z-index: -1;
+        transition: .3s ease-in all;
+    }
+    &:after{
+        content: "";
+        position: relative;
+        left: -5%;
+        top: 5%;
+        height: 90%;
+        width: 5%;
+        background: blue;
+        z-index: -1;
+        transition: .4s .02s ease-in all;
+    }
+    &:hover{
+        cursor: pointer;
+        color: transparent;
+        &:before {
+            left: 100%;
+            width: 25%;
+        }
+        &:after{
+            left: 100%;
+            width: 70%;
+        }
+		.icon-right.after:after {
+			left: -145px;
+			color: #006699;
+			transition: .2s .2s ease all;
+		}
+		.icon-right.after:before {
+			left: -220px;
+    	    top: 18px;
+			opacity: 0.2;
+			color: #006699;
+		}
+    }
+}
+
+.icon-right {
+	position: absolute;
+	top: 15px;
+	right: 20px;
+	&:after {
+		font-family: "FontAwesome";
+		content: '\2192';
+		font-size: 25px;
+		display: inline-block;
+		position: relative;
+		top: 26px;
+		transform: translate3D(0, -50%, 0);
+        
+	}
+	&.after:after {
+		left: -350px;
+		color: #006699;
+		transition: .15s .25s ease left, .5s .05s ease color;
+	}
+	&.after:before {
+		content: 'Start Analysis';
+		position: absolute;
+		left: -320px;
+		top: 14px;
+		opacity: 0;
+		transition: .2s ease-in all;
+	}
 }
 
 .tab:hover {
@@ -75,15 +169,17 @@ body, h1, h2, p, a, button {
     transform: scale(0.95);
 }
 
+
 .welcome-message {
     margin-top: 68px; 
 }
+
 .wave {
     position: fixed;
     bottom: 0;
     left: 50%;
     width: 200%;
-    height: 100px;
+    height: 15vh;
     background: rgba(255, 255, 255, 0.25);
     z-index: -1;
     opacity: 0.5;
@@ -131,5 +227,54 @@ body, h1, h2, p, a, button {
 }
 
 .logo.loaded{
-    animation: fadeIn 2s ease-in-out;
+    animation: fadeIn 1.5s ease-in-out;
 }
+
+/*
+@keyframes glitch {
+  0% {
+    clip-path: inset(50% 50% 50% 50%);
+    transform: translate(-2px, -2px);
+  }
+  10% {
+    clip-path: inset(80% -6px 0 0);
+    transform: translate(4px, 2px);
+  }
+  20% {
+    clip-path: inset(50% -6px 30% 0);
+    transform: translate(-3px, 1px);
+  }
+  30% {
+    clip-path: inset(10% -6px 85% 0);
+    transform: translate(0px, 0px);
+  }
+  40% {
+    clip-path: inset(40% -6px 43% 0);
+    transform: translate(-1px, -1px);
+  }
+  50% {
+    clip-path: inset(80% -6px 5% 0);
+    transform: translate(1px, 1px);
+  }
+  60% {
+    clip-path: inset(50% 50% 50% 50%);
+    transform: translate(2px, 2px);
+  }
+  70% {
+    clip-path: inset(80% -6px 0 0);
+    transform: translate(-4px, -2px);
+  }
+  80% {
+    clip-path: inset(40% -6px 43% 0);
+    transform: translate(3px, -1px);
+  }
+  90% {
+    clip-path: inset(10% -6px 85% 0);
+    transform: translate(0px, 0px);
+  }
+  100% {
+    clip-path: inset(50% 50% 50% 50%);
+    transform: translate(0);
+  }
+}
+*/

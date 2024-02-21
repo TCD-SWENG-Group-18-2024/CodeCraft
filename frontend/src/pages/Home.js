@@ -31,12 +31,17 @@ function Home() {
         <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className={`logo ${isLogoLoaded ? `loaded`: ''}`} /></a>
         <h1 className="welcome-message">CodeCraft by: SwEng Project Group 18</h1>
   
-        <div className="tab">
+
+    
+        
           <Link to="/SubmissionPage" className="tab-link">
-            Start Analysis 
-            <div className="circleRight"><FontAwesomeIcon icon={faCircleRight} /></div>
+            <button className="StartAnalysisButton" >
+              Start Analysis
+              <span className='icon-right'></span>
+              <span className='icon-right after'></span>
+            </button>
           </Link>
-        </div>
+        
   
       
         <div className="wave"></div>

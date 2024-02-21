@@ -34,20 +34,22 @@
 }
 
 body{
-  /*background: radial-gradient(circle at 85.4% 50.8%, rgb(14, 72, 222) -10%, rgb(3, 22, 65) 100%);
-  */
-    background: linear-gradient(315deg, #2f62c2 3%, #0F62FE 38%, rgb(83, 168, 234) 68%, #689cfa 98%);
+
+    background: linear-gradient(315deg, #006699 3%, #0F62FE 38%, rgb(83, 168, 234) 68%, #689cfa 98%);
     animation: gradient 15s ease infinite;
     background-size: 400% 400%;    background-attachment: fixed;
+}
 
-}.App {
+.App {
   text-align: center;
 }
+
 .home {
   font-size: 60px;
   font-family: 'Courier New', Courier, monospace;
   margin-top: 200px;
 } 
+
 .logo{
   margin-top: 50px;
   font-weight: bold;
