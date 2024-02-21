@@ -1,8 +1,10 @@
-import React,{useState,useEffect}from 'react'
-import "./App.css"
-import Home from "./pages/Home"
+import React, { useEffect, useState } from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import "./App.css";
+import Home from "./pages/Home";
+import LoginSignUp from './pages/LoginSignUp';
 import SubmissionPage from './pages/SubmissionPage';
-import {BrowserRouter as Router, Route,Routes} from 'react-router-dom';
+import TeamPage from './pages/TeamPage';
 
 // move the logo to the indivdual pages
 // import IBM from "./assets/IBM.PNG"
@@ -32,6 +34,9 @@ function App(){
           {/*landing page, default route path*/}
           <Route path ="/" exact element ={<Home/>}/>
           <Route path ="/SubmissionPage" exact element = {<SubmissionPage/>}/>
+          <Route path ="/LoginSignUp" exact element = {<LoginSignUp/>}/>
+
+          <Route path="/team" element={<TeamPage />} /> 
         </Routes>
       </Router>
       
