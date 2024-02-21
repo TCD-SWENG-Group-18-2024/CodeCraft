@@ -1,9 +1,9 @@
 name: Docker Workflow
 
 on:
-  push:
+  pull_request:
     branches:
-      - docker
+      - main
 
 jobs:
   build_frontend:
