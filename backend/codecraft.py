@@ -45,9 +45,15 @@ def llm_file_request():
     # Check if file is too large
     if uploaded_file.content_length > MAX_FILE_SIZE_BYTES:
         return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
+    
+    # Log the file name
+    app.logger.info(f"Received file: {uploaded_file.filename}")
 
     # Read the contents of the file
     user_input = uploaded_file.read().decode("utf-8")
+
+    # Log the first few characters of the file content
+    app.logger.info(f"File content: {user_input[:100]}")
 
     # Extract other parameters from the request JSON
     data = request.get_json()

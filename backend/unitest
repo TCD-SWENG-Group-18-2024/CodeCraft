@@ -1,0 +1,36 @@
+import unittest
+from codecraft import app
+
+class TestFileUpload(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+
+    def test_file_upload(self):
+        # Define a sample JSON payload
+        json_payload = {
+            "use_case": "code_analysis",
+            "ai_model": "OpenAI",
+            "input_language": "",
+            "output_language": ""
+        }
+
+        # Open the file from the specified path
+        file_path = "C:\\Users\\lucia\\Downloads\\someComplexCode.py"
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
+
+        # Log the first few characters of the file content
+        print(f"File content: {file_content[:100]}")
+
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        response = self.app.post('/llm/file', data=json_payload, environ_base={'wsgi.input': file_content, 'CONTENT_LENGTH': len(file_content), 'CONTENT_TYPE': 'multipart/form-data; boundary=test_boundary'}, content_type='multipart/form-data')
+        print("Response received.")
+        
+        # Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+
+        # Optionally, you can check the response content as well
+
+if __name__ == '__main__':
+    unittest.main()
