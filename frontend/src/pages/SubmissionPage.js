@@ -104,7 +104,7 @@ const SubmissionPage = () => {
         console.log(data);
         
         try {
-            const response = await fetch("http://localhost:8080/llm", 
+            const response = await fetch("http://localhost:8080/llm/text", 
             {
                 method: "POST",
                 headers: {
@@ -212,7 +212,7 @@ const SubmissionPage = () => {
         });
 
         try {
-            const response = await fetch("http://localhost:8080/llm", {
+            const response = await fetch("http://localhost:8080/llm/file", {
                 method: "POST",
                 body: formData,
             });
