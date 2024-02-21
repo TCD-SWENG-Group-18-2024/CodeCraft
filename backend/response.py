@@ -101,8 +101,8 @@ def code_completion(user_input: str, ai_model: str = '') -> dict:
 
     if ai_model.lower() == 'starcoder':
         code_completion_chain = LLMChain(llm=starcoder, prompt=code_completion_template)
-    elif ai_model.lower() == 'llama':
-        code_completion_chain = LLMChain(llm=llama, prompt=code_completion_template)
+    elif ai_model.lower() == 'gpt':
+        code_completion_chain = LLMChain(llm=gpt, prompt=code_completion_template)
     
     return code_completion_chain.invoke({'code': user_input})
 
@@ -111,8 +111,8 @@ def code_translation(input_language: str, target_language: str, code: str, ai_mo
     # starcoder by default
     code_translation_chain = LLMChain(llm=starcoder, prompt=code_translation_template)
 
-    if ai_model is not None and  ai_model.lower() == 'starcoder':
-        code_translation_chain = LLMChain(llm=starcoder, prompt=code_translation_template)
+    if ai_model is not None and ai_model.lower() == 'gpt':
+        code_translation_chain = LLMChain(llm=gpt, prompt=code_translation_template)
     elif ai_model is not None and ai_model.lower() == 'llama':
         code_translation_chain = LLMChain(llm=llama, prompt=code_translation_template)
     
@@ -123,4 +123,12 @@ def code_translation(input_language: str, target_language: str, code: str, ai_mo
 
 if __name__ == "__main__":
     # Enter code here to debug
+    '''
+    res = code_translation(input_language='c', target_language='java', ai_model='gpt', code=)
+    for line in res['code'].split(r'\n'):
+        print(line)
+    print('response is: ')
+    for line in res['text'].split(r'\n'):
+        print(line)
+    '''
     pass
