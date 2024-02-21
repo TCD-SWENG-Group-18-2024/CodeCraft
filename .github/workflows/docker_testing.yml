@@ -39,7 +39,9 @@ jobs:
           context: ./docker/frontend
           file: ./docker/frontend/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: | 
+            tcdswenggroup18/codecraft:frontend-1
+            tcdswenggroup18/codecraft:latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Image digest
