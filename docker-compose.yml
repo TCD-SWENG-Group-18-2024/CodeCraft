@@ -1,0 +1,20 @@
+services:
+  backend:
+    image: tcdswenggroup18/codecraft:backend-1
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    env_file:
+      - ./backend/.env #This will need to be replaced with githhub secret
+
+  frontend:
+    image: tcdswenggroup18/codecraft:frontend-1
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
