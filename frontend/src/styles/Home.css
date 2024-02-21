@@ -52,7 +52,7 @@ body, h1, h2, p, a, button {
 }
 
 .App-sign-up {
-    background: #0062ff; 
+    /*background: #0062ff; */
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 5px;
