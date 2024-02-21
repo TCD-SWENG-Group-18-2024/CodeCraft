@@ -11,7 +11,7 @@ class TestFileUpload(unittest.TestCase):
             "use_case": "code_analysis",
             "ai_model": "OpenAI",
             "input_language": "",
-            "output_language": ""
+            "target_language": ""
         }
 
         # Open the file from the specified path
