@@ -22,7 +22,7 @@ def llm_text_request():
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
     input_language = data.get('input_language')
-    target_language = data.get('target_language')
+    output_language = data.get('output_language')
     user_input = data.get('user_input')
 
     # Throws error if empty request
@@ -30,7 +30,7 @@ def llm_text_request():
         return jsonify({'error': 'No user input provided'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model, input_language, target_language)
+    result = process_data(user_input, use_case, ai_model, input_language, output_language)
 
     return jsonify(result)
 
@@ -64,14 +64,14 @@ def llm_file_request():
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
     input_language = data.get('input_language')
-    target_language = data.get('target_language')
+    output_language = data.get('output_language')
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model, input_language, target_language)
+    result = process_data(user_input, use_case, ai_model, input_language, output_language)
 
     return jsonify(result)
 
-def process_data(user_input, use_case, ai_model, input_language, target_language):
+def process_data(user_input, use_case, ai_model, input_language, output_language):
     use_case = use_case.lower()
 
     if use_case == 'code_analysis':
@@ -81,7 +81,7 @@ def process_data(user_input, use_case, ai_model, input_language, target_language
     elif use_case == 'code_completion':
         result = code_completion(user_input, ai_model)
     elif use_case == 'code_translation':
-        result = code_translation(user_input, ai_model, input_language, target_language)
+        result = code_translation(user_input, ai_model, input_language, output_language)
     elif use_case == '':    # general model for no specified operation
         result = AIModel(user_input, ai_model)
     # Add more conditions for other AI models
