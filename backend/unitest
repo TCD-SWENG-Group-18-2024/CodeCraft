@@ -14,7 +14,6 @@ from codecraft import app
 #         "ai_model": ""
 #     }
 #         print("Sending text upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
 #         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
 #         print("Response received.")
@@ -26,6 +25,7 @@ class TestFileUpload(unittest.TestCase):
         self.app = app.test_client()
 
     def test_file_upload(self):
+        from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
         json_file_payload = {
             "use_case": "code_analysis",
@@ -42,13 +42,18 @@ class TestFileUpload(unittest.TestCase):
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'someComplexCode.py')),
+        ('use_case', 'code_analysis'),
+        ('ai_model', 'OpenAI'),
+        ('input_language', ''),
+        ('output_language', '')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
         response = self.app.post('/llm/file',
                              content_type='multipart/form-data',
-                             data={'file': (BytesIO(file_content), 'someComplexCode.py'),
-                               'use_case': 'code_analysis',
-                               'ai_model': 'OpenAI',
-                               'input_language': '',
-                               'output_language': ''})
+                             data=data)
  
 
         print("Response received.")
