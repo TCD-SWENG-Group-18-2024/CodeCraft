@@ -208,13 +208,27 @@ const SubmissionPage = () => {
 
         const formData = new FormData();
         droppedFiles.forEach((file, index) =>{
-            formData.append(`file${index + 1}`, file);
+            formData.append(`file`, file);
         });
+
+        const data ={
+            use_case: useCase, 
+            ai_model: aiModel,
+            input_language: inputLanguage,
+            output_language: outputLanguage
+        };
+
+        formData.append('data', JSON.stringify(data));
+
+        console.log([...formData.entries()]);
 
         try {
             const response = await fetch("http://localhost:8080/llm/file", {
                 method: "POST",
-                body: formData,
+                body: formData, 
+                headers: {
+                    "Content-Type" : "multipart/form-data",
+                },
             });
 
             if (response.ok) {
@@ -232,7 +246,9 @@ const SubmissionPage = () => {
             setIsLoading(false);
         }
 
+
         console.log("Submitted Files: ", droppedFiles);
+        console.log("Parameters: ",data);
         console.log("Feedback", feedback);
     }
 
