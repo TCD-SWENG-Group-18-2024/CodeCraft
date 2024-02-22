@@ -81,7 +81,7 @@ def process_data(user_input, use_case, ai_model, input_language, target_language
     elif use_case == 'code_completion':
         result = code_completion(user_input, ai_model)
     elif use_case == 'code_translation':
-        result = code_translation(user_input, ai_model, input_language, target_language)
+        result = code_translation(input_language, target_language, user_input, ai_model)
     elif use_case == '':    # general model for no specified operation
         result = AIModel(user_input, ai_model)
     # Add more conditions for other AI models
