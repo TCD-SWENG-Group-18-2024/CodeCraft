@@ -36,15 +36,12 @@ def llm_text_request():
 
 @app.route('/llm/file', methods=['POST'])
 def llm_file_request():
-
-    # Get JSON data from request payload
-    json_data = request.json
     
     # Extract parameters from JSON payload
-    use_case = json_data.get('use_case')
-    ai_model = json_data.get('ai_model')
-    input_language = json_data.get('input_language')
-    output_language = json_data.get('output_language')
+    use_case = request.form.get('use_case')
+    ai_model = request.form.get('ai_model')
+    input_language = request.form.get('input_language')
+    output_language = request.form.get('output_language')
 
     # Check if 'file' is in the request files
     if 'file' not in request.files:
