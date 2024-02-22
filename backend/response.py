@@ -124,7 +124,7 @@ def code_translation(input_language: str, output_language: str, code: str, ai_mo
 if __name__ == "__main__":
     # Enter code here to debug
     '''
-    res = code_translation(input_language='c', output_language='java', ai_model='gpt', code=)
+    res = code_translation(input_language='c', target_language='java', ai_model='gpt', code=)
     for line in res['code'].split(r'\n'):
         print(line)
     print('response is: ')
