@@ -1,9 +1,9 @@
 name: Docker Workflow
 
 on:
-  push:
+  pull_request:
     branches:
-      - docker
+      - main
 
 jobs:
   build_frontend:
@@ -34,12 +34,12 @@ jobs:
           
       - name: Build and Push frontend
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
-          context: ./docker/frontend
+          context: .
           file: ./docker/frontend/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: tcdswenggroup18/codecraft:frontend-1
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Image digest
@@ -73,12 +73,12 @@ jobs:
           
       - name: Build and Push frontend
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
-          context: ./docker/backend
+          context: .
           file: ./docker/backend/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: tcdswenggroup18/codecraft:backend-1
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Image digest
