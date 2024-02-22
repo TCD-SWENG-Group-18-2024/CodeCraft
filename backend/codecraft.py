@@ -47,12 +47,14 @@ def llm_file_request():
         return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
     
     # Log the file name
-    app.logger.info(f"Received file: {uploaded_file.filename}")
+    #app.logger.info(f"Received file: {uploaded_file.filename}")
 
     # Try read the contents of the file
     try:
         # Read and decode the contents of the file
         user_input = uploaded_file.read().decode("utf-8")
+
+        print(user_input[:100])
 
         # Log the first few characters of the file content
         app.logger.info(f"File content: {user_input[:100]}")

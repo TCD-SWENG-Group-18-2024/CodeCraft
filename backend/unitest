@@ -1,17 +1,34 @@
 import unittest
 from codecraft import app
 
+
+# class TestTextUpload(unittest.TestCase):
+#     def setUp(self):
+#         self.app = app.test_client()
+
+#     def test_text_upload(self):
+#         json_text_payload = {
+#         "user_input":"import math def quadratic_roots(a, b, c):  discriminant = b**2 - 4*a*c  if discriminant < 0:     return None  # No real roots  elif discriminant == 0:    root = -b / (2*a)   return rootelse:root1 = (-b + math.sqrt(discriminant)) / (2*a)root2 = (-b - math.sqrt(discriminant)) / (2*a)return root1, root2",
+#         "use_case": "code_analysis",
+#         "ai_model": ""
+#     }
+#         print("Sending text upload request...")
+#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+#         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
+
+#         print("Response received.")
+#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+
+
 class TestFileUpload(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
     def test_file_upload(self):
-        # Define a sample JSON payload
-        json_payload = {
+         #Define a sample JSON payload
+        json_file_payload = {
             "use_case": "code_analysis",
             "ai_model": "OpenAI",
-            "input_language": "",
-            "target_language": ""
         }
 
         # Open the file from the specified path
@@ -20,18 +37,18 @@ class TestFileUpload(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content[:100]}")
+        print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-        response = self.app.post('/llm/file', data={'file': ('someComplexCode.py', file_content)}, query_string=json_payload)
+        data={'file': ('someComplexCode.py', file_content)}
+        response = self.app.post('/llm/file', data={'file': ('someComplexCode.py', file_content)}, json=json_file_payload, content_type='application/json')
+        print(data)
 
         print("Response received.")
         
-        # Check if the response is successful (status code 200)
+       #  Check if the response is successful (status code 200)
         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
-
-        # Optionally, you can check the response content as well
 
 if __name__ == '__main__':
     unittest.main()
