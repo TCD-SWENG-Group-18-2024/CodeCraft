@@ -1,4 +1,5 @@
 import unittest
+from io import BytesIO
 from codecraft import app
 
 
@@ -41,9 +42,14 @@ class TestFileUpload(unittest.TestCase):
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-        data={'file': ('someComplexCode.py', file_content)}
-        response = self.app.post('/llm/file', data={'file': ('someComplexCode.py', file_content)}, json=json_file_payload, content_type='application/json')
-        print(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data={'file': (BytesIO(file_content), 'someComplexCode.py'),
+                               'use_case': 'code_analysis',
+                               'ai_model': 'OpenAI',
+                               'input_language': '',
+                               'output_language': ''})
+ 
 
         print("Response received.")
         

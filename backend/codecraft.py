@@ -36,37 +36,35 @@ def llm_text_request():
 
 @app.route('/llm/file', methods=['POST'])
 def llm_file_request():
+
+    # Get JSON data from request payload
+    json_data = request.json
+    
+    # Extract parameters from JSON payload
+    use_case = json_data.get('use_case')
+    ai_model = json_data.get('ai_model')
+    input_language = json_data.get('input_language')
+    output_language = json_data.get('output_language')
+
     # Check if 'file' is in the request files
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 
-    uploaded_file = request.files['file']
+    file_data = request.files['file']
 
     # Check if file is too large
-    if uploaded_file.content_length > MAX_FILE_SIZE_BYTES:
+    if file_data.content_length > MAX_FILE_SIZE_BYTES:
         return jsonify({'error': 'File size exceeds the limit of 10KB'}), 400
-    
-    # Log the file name
-    #app.logger.info(f"Received file: {uploaded_file.filename}")
 
     # Try read the contents of the file
     try:
         # Read and decode the contents of the file
-        user_input = uploaded_file.read().decode("utf-8")
-
-        print(user_input[:100])
-
+        user_input = file_data.read().decode("utf-8")
         # Log the first few characters of the file content
         app.logger.info(f"File content: {user_input[:100]}")
+
     except UnicodeDecodeError:
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
-
-    # Extract other parameters from the request JSON
-    data = request.get_json()
-    use_case = data.get('use_case')
-    ai_model = data.get('ai_model')
-    input_language = data.get('input_language')
-    output_language = data.get('output_language')
 
     # Call the appropriate function based on use_case and ai_model
     result = process_data(user_input, use_case, ai_model, input_language, output_language)
