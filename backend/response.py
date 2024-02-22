@@ -24,23 +24,23 @@ llama = HuggingFaceHub(
 )
 
 code_analysis_template = PromptTemplate(
-    input_variables=['code'],
+    input_variables=['input'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell me what my code does and give  \
-        give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {code}'
+        give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {input}'
 )
 
 code_generation_template = PromptTemplate(
-   input_variables=['explanation'],
-   template= 'You are a code generation tool. Please generate code based on the explanation being given {explanation}.'
+   input_variables=['input'],
+   template= 'You are a code generation tool. Please generate code based on the explanation being given {input}.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
              ' Be as specific as possible'
 )
 
 code_completion_template = PromptTemplate(
-    input_variables=['code'],
+    input_variables=['input'],
     template='You are a code completion tool. Please complete my code, this includes adding semicolons where needed.'
              ' Please ensure that the completed code is correct and follows best practices. My code is given as'
-             ' follows: {code}'
+             ' follows: {input}'
 )
 
 code_translation_template = PromptTemplate(
@@ -51,9 +51,9 @@ code_translation_template = PromptTemplate(
 )
 
 general_ai_model_template = PromptTemplate (
-   input_variables=['explanation'],
+   input_variables=['input'],
    template = 'You are a coding assistant tool designed to help users with various coding tasks.'
-              ' Please assist the user with their request {explanation} by providing relevant information,'
+              ' Please assist the user with their request {input} by providing relevant information,'
               ' generating code snippets, analyzing code, completing code segments, or offering advice.'
               ' Please be as specific and helpful as possible.'
 )
@@ -63,48 +63,48 @@ def AIModel(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_analysis_chain = LLMChain(llm=gpt, prompt=general_ai_model_template)
 
-    if ai_model.lower() == 'starcoder':
+    if ai_model is not None and ai_model.lower() == 'starcoder':
         code_analysis_chain = LLMChain(llm=starcoder, prompt=general_ai_model_template)
-    elif ai_model.lower() == 'llama':
+    elif ai_model is not None and ai_model.lower() == 'llama':
         code_analysis_chain = LLMChain(llm=llama, prompt=general_ai_model_template)
 
-    return code_analysis_chain.invoke({'explanation': user_input})  
+    return code_analysis_chain.invoke({'input': user_input})  
 
 
 def code_generation(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_generation_chain = LLMChain(llm=gpt, prompt=code_generation_template)
 
-    if ai_model.lower() == 'starcoder':
+    if ai_model is not None and ai_model.lower() == 'starcoder':
         code_generation_chain = LLMChain(llm=starcoder, prompt=code_generation_template)
-    elif ai_model.lower() == 'llama':
+    elif ai_model is not None and ai_model.lower() == 'llama':
         code_generation_chain = LLMChain(llm=llama, prompt=code_generation_template)
 
-    return code_generation_chain.invoke({'explanation': user_input})  
+    return code_generation_chain.invoke({'input': user_input})  
 
 
 def code_analysis(user_input: str, ai_model: str = '') -> dict:
     # GPT by default
     code_analysis_chain = LLMChain(llm=gpt, prompt=code_analysis_template)
 
-    if ai_model.lower() == 'starcoder':
+    if ai_model is not None and ai_model.lower() == 'starcoder':
         code_analysis_chain = LLMChain(llm=starcoder, prompt=code_analysis_template)
-    elif ai_model.lower() == 'llama':
+    elif ai_model is not None and ai_model.lower() == 'llama':
         code_analysis_chain = LLMChain(llm=llama, prompt=code_analysis_template)
 
-    return code_analysis_chain.invoke({'code': user_input})  
+    return code_analysis_chain.invoke({'input': user_input})  
 
 
 def code_completion(user_input: str, ai_model: str = '') -> dict:
     # llama by default
     code_completion_chain = LLMChain(llm=llama, prompt=code_completion_template)
 
-    if ai_model.lower() == 'starcoder':
+    if ai_model is not None and ai_model.lower() == 'starcoder':
         code_completion_chain = LLMChain(llm=starcoder, prompt=code_completion_template)
-    elif ai_model.lower() == 'gpt':
+    elif ai_model is not None and ai_model.lower() == 'gpt':
         code_completion_chain = LLMChain(llm=gpt, prompt=code_completion_template)
     
-    return code_completion_chain.invoke({'code': user_input})
+    return code_completion_chain.invoke({'input': user_input})
 
 
 def code_translation(input_language: str, output_language: str, code: str, ai_model: str = '') -> dict:
