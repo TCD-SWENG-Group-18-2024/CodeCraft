@@ -22,7 +22,7 @@ def llm_text_request():
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
     input_language = data.get('input_language')
-    target_language = data.get('output_language')
+    target_language = data.get('target_language')
     user_input = data.get('user_input')
 
     # Throws error if empty request
@@ -64,7 +64,7 @@ def llm_file_request():
     use_case = data.get('use_case')
     ai_model = data.get('ai_model')
     input_language = data.get('input_language')
-    target_language = data.get('output_language')
+    target_language = data.get('target_language')
 
     # Call the appropriate function based on use_case and ai_model
     result = process_data(user_input, use_case, ai_model, input_language, target_language)
