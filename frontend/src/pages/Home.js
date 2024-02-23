@@ -33,9 +33,9 @@ function Home() {
   
         <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className={`logo ${isLogoLoaded ? `loaded`: ''}`} /></a>
         <h1 className="ProjectName">CodeCraft</h1>
-
+        
         <h3 className="welcome-message">Brought to you by Group 18</h3>
-
+        
           <Link to="/SubmissionPage" className="tab-link">
             <button className="StartAnalysisButton" >
               Start Analysis
