@@ -93,16 +93,21 @@ def code_generation(user_input: str, ai_model: str) -> dict:
     return code_generation_chain.invoke({'input': user_input})  
 
 
-def code_analysis(user_input: str, ai_model: str = '') -> dict:
+def code_analysis(user_input: str, ai_model: str) -> dict:
     # GPT by default
-    code_analysis_chain = LLMChain(llm=gpt, prompt=code_analysis_template)
+    llm = gpt
 
-    if ai_model is not None and ai_model.lower() == 'starcoder':
-        code_analysis_chain = LLMChain(llm=starcoder, prompt=code_analysis_template)
-    elif ai_model is not None and ai_model.lower() == 'llama':
-        code_analysis_chain = LLMChain(llm=llama, prompt=code_analysis_template)
+    if ai_model:
+        ai_model = ai_model.lower()
 
-    return code_analysis_chain.invoke({'input': user_input})  
+        if ai_model == 'starcoder':
+            llm = starcoder
+        elif ai_model == 'llama':
+            llm = llama
+    
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_chain)
+
+    return code_analysis_chain.invoke({'input': user_input})
 
 
 def code_completion(user_input: str, ai_model: str = '') -> dict:
