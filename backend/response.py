@@ -122,7 +122,7 @@ def code_completion(user_input: str, ai_model: str = '') -> dict:
         elif ai_model == 'gpt':
             llm = gpt
     
-    code_completion_chain = LLMChain(llm=llm, prompt=code_analysis_template)
+    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
     
     return code_completion_chain.invoke({'input': user_input})
 
