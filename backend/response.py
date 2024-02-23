@@ -110,7 +110,7 @@ def code_analysis(user_input: str, ai_model: str) -> dict:
     return code_analysis_chain.invoke({'input': user_input})
 
 
-def code_completion(user_input: str, ai_model: str = '') -> dict:
+def code_completion(user_input: str, ai_model: str) -> dict:
     # llama by default
     llm = llama
 
