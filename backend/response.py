@@ -105,19 +105,24 @@ def code_analysis(user_input: str, ai_model: str) -> dict:
         elif ai_model == 'llama':
             llm = llama
     
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_chain)
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
 
     return code_analysis_chain.invoke({'input': user_input})
 
 
 def code_completion(user_input: str, ai_model: str = '') -> dict:
     # llama by default
-    code_completion_chain = LLMChain(llm=llama, prompt=code_completion_template)
+    llm = llama
 
-    if ai_model is not None and ai_model.lower() == 'starcoder':
-        code_completion_chain = LLMChain(llm=starcoder, prompt=code_completion_template)
-    elif ai_model is not None and ai_model.lower() == 'gpt':
-        code_completion_chain = LLMChain(llm=gpt, prompt=code_completion_template)
+    if ai_model:
+        ai_model = ai_model.lower()
+
+        if ai_model == 'starcoder':
+            llm = starcoder
+        elif ai_model == 'gpt':
+            llm = gpt
+    
+    code_completion_chain = LLMChain(llm=llm, prompt=code_analysis_template)
     
     return code_completion_chain.invoke({'input': user_input})
 
