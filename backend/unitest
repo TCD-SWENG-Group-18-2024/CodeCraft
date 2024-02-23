@@ -48,7 +48,7 @@ class TestFileUpload(unittest.TestCase):
         }
 
         # Open the file from the specified path
-        file_path = "C:\\Users\\lucia\\Downloads\\someComplexCode.py"
+        file_path = "/Users/patrickarchbold/Postman/files/cloudFiles/_UKm-lr1I/TriangleArea.java"
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -58,7 +58,7 @@ class TestFileUpload(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'someComplexCode.py')),
+        ('file', (BytesIO(file_content), 'TriangleArea.java')),
         ('use_case', 'code_analysis'),
         ('ai_model', 'OpenAI'),
         ('input_language', ''),
@@ -85,7 +85,7 @@ class TestFileUpload(unittest.TestCase):
         }
 
         # Open the file from the specified path
-        file_path = "C:\\Users\\lucia\\Downloads\\someSimpleCode.c"
+        file_path = "/Users/patrickarchbold/Postman/files/cloudFiles/_UKm-lr1I/TriangleArea.java"
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -95,7 +95,7 @@ class TestFileUpload(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'someComplexCode.py')),
+        ('file', (BytesIO(file_content), 'TriangleArea.java')),
         ('use_case', 'code_analysis'),
         ('ai_model', 'OpenAI'),
         ('input_language', ''),
@@ -111,14 +111,6 @@ class TestFileUpload(unittest.TestCase):
         
        #  Check if the response is successful (status code 200)
         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     unittest.main()

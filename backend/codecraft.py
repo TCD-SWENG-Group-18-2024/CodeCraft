@@ -12,6 +12,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'js', 'html','css','rb','php','kt','R','pl'}
 MAX_FILE_SIZE_BYTES = 10 * 1024  #10KB
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/')
 def homepage():
     return{"message": "Hello SwEng Project Group 18"}
@@ -49,6 +52,11 @@ def llm_file_request():
         return jsonify({'error': 'No file uploaded'}), 400
 
     file_data = request.files['file']
+    
+    # Check if the file has an allowed extension
+    if not allowed_file(file_data.filename):
+        return jsonify({'error': 'Invalid file extension'}), 400
+
 
     # Check if file is too large    
     if file_data.content_length > MAX_FILE_SIZE_BYTES:
@@ -70,7 +78,8 @@ def llm_file_request():
     return jsonify(result)
 
 def process_data(user_input, use_case, ai_model, input_language, output_language):
-    use_case = use_case.lower()
+    if use_case is not None:
+        use_case = use_case.lower()
 
     if use_case == 'code_analysis':
         result = code_analysis(user_input, ai_model)
@@ -79,7 +88,7 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     elif use_case == 'code_completion':
         result = code_completion(user_input, ai_model)
     elif use_case == 'code_translation':
-        result = code_translation(user_input, ai_model, input_language, output_language)
+        result = code_translation( input_language, output_language, user_input, ai_model)
     elif use_case == '':    # general model for no specified operation
         result = AIModel(user_input, ai_model)
     # Add more conditions for other AI models
