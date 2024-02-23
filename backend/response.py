@@ -127,18 +127,21 @@ def code_completion(user_input: str, ai_model: str = '') -> dict:
     return code_completion_chain.invoke({'input': user_input})
 
 
-def code_translation(input_language: str, output_language: str, code: str, ai_model: str = '') -> dict:
+def code_translation(input_language: str, output_language: str, code: str, ai_model: str) -> dict:
     # starcoder by default
-    code_translation_chain = LLMChain(llm=starcoder, prompt=code_translation_template)
+    llm = starcoder
 
-    if ai_model is not None and ai_model.lower() == 'gpt':
-        code_translation_chain = LLMChain(llm=gpt, prompt=code_translation_template)
-    elif ai_model is not None and ai_model.lower() == 'llama':
-        code_translation_chain = LLMChain(llm=llama, prompt=code_translation_template)
+    if ai_model:
+        ai_model = ai_model.lower()
+
+        if ai_model == 'llama':
+            llm = llama
+        elif ai_model == 'gpt':
+            llm = gpt
     
-    return code_translation_chain.invoke({'input_language': input_language,
-                                          'output_language': output_language,
-                                          'code': code})
+    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
+    
+    return code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'code': code})
 
 
 if __name__ == "__main__":
