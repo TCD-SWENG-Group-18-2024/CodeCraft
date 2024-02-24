@@ -1,10 +1,10 @@
+import os
 import dotenv
-from langchain_openai import ChatOpenAI, OpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.llms import HuggingFaceHub
 from langchain.schema import HumanMessage, SystemMessage
-import os
 
 
 # For this to work, you need to create a file called '.env' and input the following:
@@ -23,6 +23,7 @@ llama = HuggingFaceHub(
     repo_id='codellama/CodeLlama-7b-hf'
 )
 
+# Templates
 code_analysis_template = PromptTemplate(
     input_variables=['input'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell me what my code does and give  \
@@ -37,10 +38,13 @@ code_generation_template = PromptTemplate(
 )
 
 code_completion_template = PromptTemplate(
-    input_variables=['input'],
-    template='You are a code completion tool. Please complete my code, this includes adding semicolons where needed.'
-             ' Please ensure that the completed code is correct and follows best practices. My code is given as'
-             ' follows: {input}'
+    input_variables=['input_language', 'input'],
+    template='You are a code completion tool. The input will be incompleted code in {input_language}. \
+            Your job is to correct the code so that it is working and complete. Add in semicolons, \
+            parenthesis, curly braces, etc. where needed. Please ensure that the code is correct \
+            and follows best practices or standards set in programming language mentioned above. \
+            The output should only be a completed version of the inputted code. My code is given \
+            as follows: {input}'
 )
 
 code_translation_template = PromptTemplate(
@@ -58,7 +62,7 @@ general_ai_model_template = PromptTemplate (
               ' Please be as specific and helpful as possible.'
 )
 
-
+# AI Model Functions
 def AIModel(user_input: str, ai_model: str) -> dict:
     # GPT by default
     llm = gpt
@@ -110,7 +114,7 @@ def code_analysis(user_input: str, ai_model: str) -> dict:
     return code_analysis_chain.invoke({'input': user_input})
 
 
-def code_completion(user_input: str, ai_model: str) -> dict:
+def code_completion(user_input: str, ai_model: str, input_language: str) -> dict:
     # llama by default
     llm = llama
 
@@ -124,7 +128,7 @@ def code_completion(user_input: str, ai_model: str) -> dict:
     
     code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
     
-    return code_completion_chain.invoke({'input': user_input})
+    return code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
 
 def code_translation(input_language: str, output_language: str, code: str, ai_model: str) -> dict:
