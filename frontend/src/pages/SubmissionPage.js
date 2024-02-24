@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
@@ -96,7 +96,7 @@ const SubmissionPage = () => {
             alert("Please select a language before sumbitting");
             return;
         }*/
-        if(input.trim() === '' && inputType== "textbox"){
+        if(input.trim() === '' && inputType === "textbox"){
             alert("Please Enter some code before submitting");
             return;
         }

@@ -1,6 +1,6 @@
 import Abdullah from '../assets/Abdullah.png';
 import Ben from '../assets/Ben.jpg';
-import Fionn from '../assets/Fionn.jpg';
+import FionnNew from '../assets/FionnNew.jpg';
 import Gerard from '../assets/Gerard.png';
 import Leah from '../assets/Leah.png';
 import Lucia from '../assets/Lucia.jpg';
@@ -16,7 +16,7 @@ const teamMembersData = [
       name: 'Fionn Murphy',
       role: 'Backend Team',
       year: '3rd',
-      image: Fionn,
+      image: FionnNew,
       description: 'Text'
     },
     {
