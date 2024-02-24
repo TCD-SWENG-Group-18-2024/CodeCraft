@@ -21,7 +21,7 @@ function Home() {
 
     return (
       <div className="App">
-        {/* <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className="logo" /></a> */}
+        
         <nav className="App-nav">
           <div className="App-nav-links">
             <a href="#features">Features</a>

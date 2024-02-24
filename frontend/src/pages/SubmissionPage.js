@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
+import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
-
+import './LoginSignUp';
+import './Home';
 
 const SubmissionPage = () => {
 
@@ -280,13 +282,24 @@ const SubmissionPage = () => {
                         */
     return [
     <>
-        
+
+
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
         <div className={`main-content ${isSidebarOpen ? 'with-sidebar' : ''}`}>
             <header className="submission-header">
                 <h1 className="submission-title">Submission Area</h1>
-                <img src={HeaderImage} alt="Code Craft" className="header-image"/>
+
+                <nav className="App-nav">
+                    <div className="App-nav-links">
+                        <Link to="/"><img src={HeaderImage} alt="Code Craft" className="header-image"/></Link>
+                        <a href="#features">Features</a>
+                        <Link to="/team">Meet the Team</Link>
+                        <a href="#about">About</a>
+                        <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
+                    </div>
+                </nav>
+
             </header>
 
             <div className="wave"></div>
@@ -327,7 +340,7 @@ const SubmissionPage = () => {
                                 </select>
                         </div>
 
-                        <div className='inputLanguageDropDown'>
+                        <div className='inputLanguageDropDown' style={{display: (useCase === 'code_completion' || useCase === 'code_translation') ? 'block' : 'none'}}>
                             <label>Select Input Language</label>
                                 <select value={inputLanguage} onChange={handleInputLanguageChange}>
                                     <option value="java">Java</option>
@@ -335,7 +348,7 @@ const SubmissionPage = () => {
                                 </select>
                         </div>
 
-                        <div className='outputLanguageDropDown'>
+                        <div className='outputLanguageDropDown'style={{ display: (useCase === 'code_translation') ? 'block' : 'none' }}>
                             <label>Select Output Language </label>
                                 <select value={outputLanguage} onChange={handleOutputLanguageChange}>
                                     <option value="python">Python</option>
@@ -344,6 +357,10 @@ const SubmissionPage = () => {
                         </div>
 
                     </div>
+
+                    
+
+
 
                     {inputType === "textbox" && (
                         <div className='textBoxContainer'>
@@ -358,8 +375,6 @@ const SubmissionPage = () => {
                             
                         </div>
                     )}
-
-
 
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
