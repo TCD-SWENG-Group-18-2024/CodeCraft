@@ -152,8 +152,6 @@
 .inputLanguageDropDown select:hover,
 .outputLanguageDropDown select:hover
 {
-  background-color: #0F62FE;
-  color: white;
   cursor: pointer;
 }
 
