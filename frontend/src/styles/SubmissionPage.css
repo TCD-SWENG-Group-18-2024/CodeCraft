@@ -4,7 +4,6 @@
   font-weight: 500;
 }
 
-
 .userArea{
   margin: 20px;
   height: auto;
@@ -39,6 +38,7 @@
   display: flex;
   flex-direction: column;
   height:100%;
+  width: calc(60vh - 150px);
 }
 
 .fileInputContainer{
@@ -83,7 +83,7 @@
   margin: auto;
 }
 
-.droppedFileContainer ul{
+.droppedFileContainer ol{
   list-style: none;
   padding: 0;
 }
@@ -97,8 +97,10 @@
   margin-left: 100px;
   margin-top: 20px;
   margin-bottom: 10px;
+  border-radius: 15px;
   height: 20vw;
-  width: calc(60vh - 150px);
+  width: 100%;
+  resize: vertical;
 }
 
 .submissionArea .submitButton{

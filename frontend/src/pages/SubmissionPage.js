@@ -16,7 +16,7 @@ const SubmissionPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState([]);
-    const [inputLanguage, setInputLanguage] = useState('');
+    const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
 
     const toggleSidebar = () => {
