@@ -41,6 +41,14 @@ const SubmissionPage = () => {
         setDroppedFiles([]);
     };
 
+    const handleInputLanguageChange = (event) =>{
+        setInputLanguage(event.target.value);
+    };
+
+    const handleOutputLanguageChange = (event) =>{
+        setOutputLanguage(event.target.value);
+    };
+
 // takes input - files 
     const handleDragOver = (event) => { 
         event.preventDefault();
@@ -318,6 +326,23 @@ const SubmissionPage = () => {
                                     <option value="openai">OpenAI</option>
                                 </select>
                         </div>
+
+                        <div className='inputLanguageDropDown'>
+                            <label>Select Input Language</label>
+                                <select value={inputLanguage} onChange={handleInputLanguageChange}>
+                                    <option value="java">Java</option>
+                                    <option value="python">Python</option>
+                                </select>
+                        </div>
+
+                        <div className='outputLanguageDropDown'>
+                            <label>Select Output Language </label>
+                                <select value={outputLanguage} onChange={handleOutputLanguageChange}>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                </select>
+                        </div>
+
                     </div>
 
                     {inputType === "textbox" && (

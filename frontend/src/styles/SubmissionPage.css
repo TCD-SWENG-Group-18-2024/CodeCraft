@@ -107,12 +107,21 @@
   width: 85px;
 }
 
-.submissionArea .useCaseDropDown, .aiDropDown{
+.submissionArea 
+.useCaseDropDown, 
+.aiDropDown, 
+.inputLanguageDropDown, 
+.outputLanguageDropDown{
   margin-bottom: 20px;
   color: white;
 }
 
-.submissionArea .useCaseDropDown select, .aiDropDown select {
+.submissionArea 
+.useCaseDropDown select, 
+.aiDropDown select, 
+.inputLanguageDropDown select,
+.outputLanguageDropDown select
+{
   width: 55%;
   padding: 8px;
   margin: 10px;
