@@ -123,7 +123,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
 
         if ai_model == 'starcoder':
             llm = starcoder
-        elif ai_model == 'gpt':
+        elif ai_model == 'openai':
             llm = gpt
     
     code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
@@ -140,7 +140,7 @@ def code_translation(input_language: str, output_language: str, code: str, ai_mo
 
         if ai_model == 'llama':
             llm = llama
-        elif ai_model == 'gpt':
+        elif ai_model == 'openai':
             llm = gpt
     
     code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
