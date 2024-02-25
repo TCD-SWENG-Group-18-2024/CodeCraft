@@ -201,10 +201,6 @@ const SubmissionPage = () => {
       };
       
 
-    // const dropDown = () => {
-    //     setDropdownVisible(!dropdownVisible);
-    // };
-
     // need a function that handles submitting a file to backend.
     // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
     
@@ -270,16 +266,26 @@ const SubmissionPage = () => {
         else if (inputType === "files"){
             handleFileSubmit();
         }
-    }
+    };
 
-    /* issues with {inputType === "files" && (
-                        <div className='fileInputContainer'></div>
+    const capitaliseFirstLetter = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+ 
+    const formatUseCase = (str) => {
+        const words = str.split('_');
+        const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+        return capitalizedWords.join(' ');
+    };
 
-                        - the submit button does not move when inputs are added
-                        - the dragging files in is bugged, only allows one file
-                        -
+    const formatAIModel = (str) => {
+        if (str === "watsonx.ai"){
+            return "watsonx";
+        }
 
-                        */
+        else return "OpenAI";
+    };
+
     return [
     <>
 
@@ -311,51 +317,143 @@ const SubmissionPage = () => {
                 <div className='submissionArea'>
 
                     <div className='dropDownContainer'>
+ 
+                        <nav className='dropdownMenu'>
+                            <ol>
 
-                        <div className='inputTypeDropDown'>
-                            <label>Select Input Type </label>
-                            <select value={inputType} onChange={handleInputTypeChange}>
-                                <option value="textbox">Textbox</option>
-                                <option value="files">Files</option>
+                                <li className="menu-item">
+                                    <a href=''>
+                                        {inputType === "textbox" || inputType === "files" 
+                                        ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
+                                    </a>
+                                    <ol className='sub-menu'>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setInputType("textbox")}>
+                                                Texbox
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setInputType("files")}>
+                                                File
+                                            </a>
+                                        </li>
+                                    </ol>   
+                                </li>
 
-                            </select>
-                        </div>
+                                <li className="menu-item">
+                                    <a href=''>
+                                        {useCase === "code_generation" || useCase === "code_completion"
+                                        || useCase === "code_analysis" || useCase === "code_translation"
+                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
+                                    </a>
+                                    <ol className='sub-menu'>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("")}>
+                                                Generic AI repsonse
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_generation")}>
+                                                Code Generation
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_completion")}>
+                                                Code Completion
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_analysis")}>
+                                                Code Analysis
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_translation")}>
+                                                Code Translation
+                                            </a>
+                                        </li>
 
-                        <div className='useCaseDropDown'>
-                            <label>Select Use Case </label>
-                                <select value={useCase} onChange={handleUseCaseChange}>
-                                    <option value="">Generic AI response</option>
-                                    <option value="code_generation">Code Generation</option>
-                                    <option value="code_completion">Code Completion</option>
-                                    <option value="code_analysis">Code Analysis</option>
-                                    <option value="code_translation">Code Translation</option>
-                                </select>
-                        </div>
+                                    </ol>   
+                                </li>
 
-                        <div className='aiDropDown'>
-                            <label>Select AI Model </label>
-                                <select value={aiModel} onChange={handleAiModelChange}>
-                                    <option value="watsonx.ai">watsonx</option>
-                                    <option value="openai">OpenAI</option>
-                                </select>
-                        </div>
+                                <li className="menu-item">
+                                    <a href='#0'>
+                                        {aiModel === "watsonx.ai" || aiModel === "openai"
+                                        ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
+                                    </a>
+                                    <ol className='sub-menu'>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setAIModel("watsonx.ai")}>
+                                                watsonx
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setAIModel("openai")}>
+                                                OpenAI
+                                            </a>
+                                        </li>
+                                    </ol>   
+                                </li>
 
-                        <div className='inputLanguageDropDown' style={{display: (useCase === 'code_completion' || useCase === 'code_translation') ? 'block' : 'none'}}>
-                            <label>Select Input Language</label>
-                                <select value={inputLanguage} onChange={handleInputLanguageChange}>
-                                    <option value="java">Java</option>
-                                    <option value="python">Python</option>
-                                </select>
-                        </div>
+                                {useCase === "code_completion" || useCase === "code_translation" ? (<>
+                                    <li className="menu-item">
+                                        <a href='#0'>
+                                            {inputLanguage !== " " 
+                                        ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
+                                            
+                                        </a>
+                                        <ol className='sub-menu'>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setInputLanguage("java")}>
+                                                    Java
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setInputLanguage("python")}>
+                                                    Python
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setInputLanguage("c")}>
+                                                    C
+                                                </a>
+                                            </li>
+                                        </ol>   
+                                    </li>
+                                </>): null}
 
-                        <div className='outputLanguageDropDown'style={{ display: (useCase === 'code_translation') ? 'block' : 'none' }}>
-                            <label>Select Output Language </label>
-                                <select value={outputLanguage} onChange={handleOutputLanguageChange}>
-                                    <option value="python">Python</option>
-                                    <option value="java">Java</option>
-                                </select>
-                        </div>
+                                {useCase === "code_translation" ? (<>
+                                    <li className="menu-item">
+                                        <a href='#0'>
+                                            {outputLanguage !== " " 
+                                        ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
+                                            
+                                        
+                                        </a>
+                                        <ol className='sub-menu'>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setOutputLanguage("java")}>
+                                                    Java
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setOutputLanguage("python")}>
+                                                    Python
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setOutputLanguage("c")}>
+                                                    C
+                                                </a>
+                                            </li>
+                                        </ol>   
+                                    </li>
+                                </>):null}
 
+
+                            </ol>
+
+                        </nav>
                     </div>
 
                     
