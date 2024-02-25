@@ -125,8 +125,7 @@ const SubmissionPage = () => {
 
             if (response.ok) {
                 const responseData = await response.json();
-                setFeedback(formatFeedback(responseData));
-                console.log(responseData);
+                setFeedback(responseData.text);
             }
             else {
                 setFeedback(`Submission failed. Server returned ${response.status} status.`)
@@ -174,16 +173,15 @@ const SubmissionPage = () => {
        
         } else if (useCase === "code_completion") {
 
-            const formattedCode = responseData.code ? `Completed Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+            const formattedCode = responseData.text ? `Completed Code:\n${JSON.stringify(responseData.text, null, 2)}` : '';
         
             formattedFeedback = [formattedCode].filter(Boolean).join('\n\n');
         
         } else if (useCase === "code_analysis") {
 
-            const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
             const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
 
-            formattedFeedback = [formattedCode, formattedText].filter(Boolean).join('\n\n');
+            formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
         
         } else if (useCase === "code_translation") {
         
@@ -200,7 +198,7 @@ const SubmissionPage = () => {
         return formattedFeedback;
       };
       
-
+    
     // need a function that handles submitting a file to backend.
     // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
     

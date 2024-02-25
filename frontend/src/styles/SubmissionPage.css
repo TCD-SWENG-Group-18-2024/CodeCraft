@@ -113,63 +113,11 @@
   width: 85px;
 }
 
-
-.inputTypeDropDown,
-.useCaseDropDown, 
-.aiDropDown, 
-.inputLanguageDropDown, 
-.outputLanguageDropDown{
-  width: 250px;
-  margin-bottom: 20px;
-  margin-right: 20px;
-  color: white;
-}
-
-
-.inputTypeDropDown label
-.useCaseDropDown label, 
-.aiDropDown label, 
-.inputLanguageDropDown label, 
-.outputLanguageDropDown label{
-  margin-bottom: 5px;
-}
-
-
-.inputTypeDropDown select,
-.useCaseDropDown select, 
-.aiDropDown select, 
-.inputLanguageDropDown select,
-.outputLanguageDropDown select
-{
-  width: 150px;
-  padding: 8px;
-  margin: 10px;
-  margin-left: 60px
-}
-
-
-.inputTypeDropDown select:hover,
-.useCaseDropDown select:hover, 
-.aiDropDown select:hover, 
-.inputLanguageDropDown select:hover,
-.outputLanguageDropDown select:hover
-{
-  cursor: pointer;
-}
-
-.inputTypeDropDown select:focus,
-.useCaseDropDown select:focus,
-.aiDropDown select:focus,
-.inputLanguageDropDown select:focus,
-.outputLanguageDropDown select:focus {
-  outline: none;
-  box-shadow: 0 0 5px rgba(15, 98, 254, 0.7);
-}
-
 .dropdownMenu {
   margin-left: 65px;
   margin-bottom: 15px;
   position: relative;
+  z-index: 1001;
   >ol{
     width: 1000px;
     list-style: none;
@@ -199,7 +147,7 @@
 
       &:hover{
         background-color: var(--accent-color);
-        transform: scale(1.1);
+        transform: scale(1.01);
       }
 
       &:hover .sub-menu{
@@ -237,10 +185,9 @@
             font-size:.75em;
             line-height:50px;
             position:absolute;
-            right:25px;
+            right:10px;
             top:0;
             bottom:0;
-            margin:auto;
             border-color: transparent transparent transparent #000; /* Adjust color as needed */
             transition:.5s;
           }
@@ -249,7 +196,7 @@
 
       &:hover {
             a:before{
-              transform:rotate(-360deg);
+              transform:rotate(-180deg);
             }
       }
 
