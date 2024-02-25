@@ -322,7 +322,8 @@ const SubmissionPage = () => {
                             <ol>
 
                                 <li className="menu-item">
-                                    <a href=''>
+                                    <a href='#0'>
+                                        
                                         {inputType === "textbox" || inputType === "files" 
                                         ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
                                     </a>
@@ -341,7 +342,7 @@ const SubmissionPage = () => {
                                 </li>
 
                                 <li className="menu-item">
-                                    <a href=''>
+                                    <a href='#0'>
                                         {useCase === "code_generation" || useCase === "code_completion"
                                         || useCase === "code_analysis" || useCase === "code_translation"
                                         ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
@@ -455,9 +456,6 @@ const SubmissionPage = () => {
 
                         </nav>
                     </div>
-
-                    
-
 
 
                     {inputType === "textbox" && (

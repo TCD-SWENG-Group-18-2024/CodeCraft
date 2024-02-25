@@ -166,14 +166,12 @@
   box-shadow: 0 0 5px rgba(15, 98, 254, 0.7);
 }
 
-
-
 .dropdownMenu {
   margin-left: 65px;
   margin-bottom: 15px;
   position: relative;
   >ol{
-    width: 750px;
+    width: 1000px;
     list-style: none;
     margin: 30px;
     padding: 0;
@@ -232,6 +230,34 @@
         position: relative;
         text-decoration: none;
         z-index: 1;
+        &:not(:last-child){
+          &:before{
+            content:"\f078";
+            font-family:fontAwesome;
+            font-size:.75em;
+            line-height:50px;
+            position:absolute;
+            right:25px;
+            top:0;
+            bottom:0;
+            margin:auto;
+            border-color: transparent transparent transparent #000; /* Adjust color as needed */
+            transition:.5s;
+          }
+        }
+      }
+
+      &:hover {
+            a:before{
+              transform:rotate(-360deg);
+            }
+      }
+
+      &:focus,&:focus-within{
+        .sub-menu{
+          max-height:500px;
+        }
+
       }
 
       .sub-menu{
