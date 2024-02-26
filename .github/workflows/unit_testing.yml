@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  OPENAI_API_KEY: ${{ secrets.OPENAI_KEY }}
+  HUGGINGFACE_TOKEN: ${{ HUGGINGFACE_KEY }}
+
 jobs:
   unit_tests:
     runs-on: ubuntu-latest
