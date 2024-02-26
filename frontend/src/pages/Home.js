@@ -1,5 +1,3 @@
-import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IBM_White from "../assets/IBM_white.PNG";
@@ -26,7 +24,7 @@ function Home() {
           <div className="App-nav-links">
             <a href="#features">Features</a>
             <Link to="/team">Meet the Team</Link>
-            <a href="#about">About</a>
+            <Link to="/about">About</Link>
             <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
           </div>
         </nav>

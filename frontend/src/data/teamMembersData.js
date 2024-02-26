@@ -73,7 +73,7 @@ const teamMembersData = [
       role: 'Frontend Team',
       year: '2nd',
       image: Yuchen,
-      description: 'Text'
+      description: 'I am Yuchen / Paddy in 2nd ICS, and I am on the frontend team for this project. I had experience with Java, C, html, css prior to this project. Last year I also worked with a team to develop an application using Processing.'
     },
     {
       id: 9,

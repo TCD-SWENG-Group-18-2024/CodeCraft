@@ -1,0 +1,226 @@
+
+.back-to-home {
+  position: absolute;
+  top: 20px; /* Adjust as per your layout */
+  right: 20px; /* Adjust as per your layout */
+  z-index: 10; /* Higher than other elements to be clickable */
+}
+
+.ibm-logo {
+  height: 50px; /* Adjust the size as needed */
+  width: auto;
+  cursor: pointer; /* Changes the cursor to indicate it's clickable */
+}
+
+/* Hide the close button */
+.close-button-class-name {
+  display: none;
+}
+
+/* Or if it's within a container, you can target it specifically */
+.container-class-name .close-button-class-name {
+  display: none;
+}
+/* AboutPage.css */
+
+/* Assuming the 'X' button has a class named 'close-button' */
+.close-button {
+  display: none !important;
+}
+
+/* If the 'X' is within a specific section or has a unique ID */
+#closeButtonId {
+  display: none !important;
+}
+
+/* If the 'X' is part of a modal or popup that should not be displayed on the About page */
+.modal,
+.popup,
+.overlay {
+  display: none !important;
+}
+
+/* Add this to the top of your AboutPage.css file to ensure it takes precedence */
+
+
+.about-page-container {
+  text-align: center;
+}
+
+.hero-section {
+  position: relative;
+  color: white; /* Adjust based on your hero image */
+}
+
+.hero-image {
+  width: 100%;
+  height: 500px; /* Adjust based on your hero image */
+  background-attachment: fixed;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 1rem;
+  border-radius: 10px;
+
+}
+
+/* Updated styles for alternating sections */
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 50px 5%;
+  overflow: hidden; /* Hide overflow for animation */
+}
+
+.alt-section {
+  background-color: #e6f4ff; /* Alternate background for sections */
+}
+
+.section .text p {
+  font-size: 1.5rem; /* This targets all <p> tags within the .text class */
+}
+
+.section .text h2 {
+  color: black; /* Replace with the new color code you want for your headings */
+}
+
+
+.section-content {
+  width: 45%;
+}
+
+.image-container {
+  width: 45%;
+  perspective: 1000px; /* Perspective for 3D transforms */
+}
+
+.image-left, .image-right {
+  width: 100%;
+  border-radius: 10px; /* Soften edges with a border radius */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  transition: transform 0.5s ease-in-out; /* Smooth transform transition */
+}
+
+.section:hover .image-left, .section:hover .image-right {
+  transform: translateY(-10px) scale(1.02); /* Slight lift and scale on hover */
+}
+
+.text {
+  flex: 1;
+  margin: 20px;
+}
+
+@media (max-width: 768px) {
+  .section, .alt-section {
+    flex-direction: column;
+  }
+  
+  .image-container, .text {
+    width: 90%;
+    margin: 0 auto; /* Center content */
+  }
+  
+  .image-left, .image-right {
+    order: -1; /* Images above text on small screens */
+  }
+  
+  .section .text, .section .image-container {
+    width: 90%;
+  }
+
+  .section img, .alt-section img {
+    width: 80%;
+    margin: 0 auto; /* Center align the image */
+  }
+
+  .text {
+    order: 2; /* Text comes after the image on small screens */
+  }
+}
+
+/* Smooth scrolling effect */
+html {
+  scroll-behavior: smooth;
+}
+
+.reverse-section {
+  flex-direction: row-reverse;
+}
+
+/* Ensure the .section-image class is applied to your images */
+.section-image {
+  /* Your existing styles for images */
+  width: 100%;
+  max-width: 500px; /* Adjust as needed */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Subtle animation for text and images */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text, .image-container img {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+/* Enhance text readability */
+.text {
+  /* ... existing styles ... */
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Shadow for text */
+}
+
+/* Hover effect for images */
+.section img:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+/* Ensure your design is responsive */
+@media (max-width: 1024px) {
+  .section-content {
+    flex-direction: column;
+  }
+  .image-container, .text {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 768px) {
+  .text, .image-container img {
+    animation: none;
+  }
+}
+
+/* AboutPage.css - Add this at the end */
+/* Override global styles for the About page */
+.about-page-container .modal-class-name,
+.about-page-container .overlay-class-name {
+  display: none !important;
+}
+
+
+
+
+
