@@ -18,7 +18,7 @@ const SubmissionPage = () => {
     const [droppedFiles, setDroppedFiles] = useState([]);
     const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
-
+    const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
@@ -145,7 +145,6 @@ const SubmissionPage = () => {
     };
 
 
-
     // Allows user to key into tab in the submission box
     const handleKeyDown = (event) => {
         if (event.key === 'Tab'){
@@ -160,6 +159,12 @@ const SubmissionPage = () => {
             event.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
         }
     };
+    const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
+    return `<pre class="code-block"><code>${code}</code></pre>`;
+    });
+    const modifiedTranslation = () =>{
+        return `<pre class="code-block"><code>${feedback}</code></pre>`;
+    }
 
     const formatFeedback = (responseData) => {
 
@@ -508,7 +513,10 @@ const SubmissionPage = () => {
 
                     {!isLoading && feedback &&( 
                         <div class="feedBackBox">
-                            <p>{feedback}</p>
+                            {useCase ==='code_translation'? 
+                            <pre className = "code-block"><code>{feedback}</code></pre>:
+                            <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
+                            }
                         </div>
                     )}
 
