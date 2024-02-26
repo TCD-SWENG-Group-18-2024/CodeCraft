@@ -26,8 +26,6 @@ function Home() {
       <div className="App">
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           
-          {/* Optional: Button to toggle sidebar */}
-          <button onClick={toggleSidebar} className="toggle-sidebar-button">Menu</button>
           
         <nav className="App-nav">
           <div className="App-nav-links">
