@@ -162,9 +162,6 @@ const SubmissionPage = () => {
     const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
     return `<pre class="code-block"><code>${code}</code></pre>`;
     });
-    const modifiedTranslation = () =>{
-        return `<pre class="code-block"><code>${feedback}</code></pre>`;
-    }
 
     const formatFeedback = (responseData) => {
 
@@ -284,10 +281,10 @@ const SubmissionPage = () => {
 
     const formatAIModel = (str) => {
         if (str === "watsonx.ai"){
-            return "watsonx";
+            return "StarCoder";
         }
 
-        else return "OpenAI";
+        else return "GPT3.5";
     };
 
     return [
@@ -389,12 +386,12 @@ const SubmissionPage = () => {
                                     <ol className='sub-menu'>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setAIModel("watsonx.ai")}>
-                                                watsonx
+                                                StarCoder
                                             </a>
                                         </li>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setAIModel("openai")}>
-                                                OpenAI
+                                                GPT3.5
                                             </a>
                                         </li>
                                     </ol>   
