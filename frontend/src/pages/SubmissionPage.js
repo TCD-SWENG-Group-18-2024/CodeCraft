@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
+import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
-
+import './LoginSignUp';
+import './Home';
 
 const SubmissionPage = () => {
 
@@ -14,9 +16,9 @@ const SubmissionPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState([]);
-    const [inputLanguage, setInputLanguage] = useState('');
+    const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
-
+    const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
@@ -123,8 +125,7 @@ const SubmissionPage = () => {
 
             if (response.ok) {
                 const responseData = await response.json();
-                setFeedback(formatFeedback(responseData));
-                console.log(responseData);
+                setFeedback(responseData.text);
             }
             else {
                 setFeedback(`Submission failed. Server returned ${response.status} status.`)
@@ -144,7 +145,6 @@ const SubmissionPage = () => {
     };
 
 
-
     // Allows user to key into tab in the submission box
     const handleKeyDown = (event) => {
         if (event.key === 'Tab'){
@@ -159,6 +159,9 @@ const SubmissionPage = () => {
             event.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
         }
     };
+    const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
+    return `<pre class="code-block"><code>${code}</code></pre>`;
+    });
 
     const formatFeedback = (responseData) => {
 
@@ -172,16 +175,15 @@ const SubmissionPage = () => {
        
         } else if (useCase === "code_completion") {
 
-            const formattedCode = responseData.code ? `Completed Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
+            const formattedCode = responseData.text ? `Completed Code:\n${JSON.stringify(responseData.text, null, 2)}` : '';
         
             formattedFeedback = [formattedCode].filter(Boolean).join('\n\n');
         
         } else if (useCase === "code_analysis") {
 
-            const formattedCode = responseData.code ? `Code:\n${JSON.stringify(responseData.code, null, 2)}` : '';
             const formattedText = responseData.text ? `Analysis:\n${responseData.text.replace(/\\n/g, '\n')}` : '';
 
-            formattedFeedback = [formattedCode, formattedText].filter(Boolean).join('\n\n');
+            formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
         
         } else if (useCase === "code_translation") {
         
@@ -198,11 +200,7 @@ const SubmissionPage = () => {
         return formattedFeedback;
       };
       
-
-    // const dropDown = () => {
-    //     setDropdownVisible(!dropdownVisible);
-    // };
-
+    
     // need a function that handles submitting a file to backend.
     // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
     
@@ -215,37 +213,42 @@ const SubmissionPage = () => {
         setIsLoading(true);
 
         const formData = new FormData();
-        droppedFiles.forEach((file, index) =>{
+        droppedFiles.forEach((file) =>{
             formData.append(`file`, file);
         });
 
-        const data ={
-            use_case: useCase, 
-            ai_model: aiModel,
-            input_language: inputLanguage,
-            output_language: outputLanguage
-        };
+        formData.append("use_case", useCase);
+        formData.append("ai_model", aiModel);
+        formData.append("input_language", inputLanguage);
+        formData.append("output_language", outputLanguage);
 
-        formData.append('data', JSON.stringify(data));
-
-        console.log([...formData.entries()]);
+        const fileContent = "Hello, this is the content of the file.";
+        const testFile = new File([fileContent], "testFile.txt", { type: "text/plain" });
+        const formDataTest = new FormData();
+        formDataTest.append("file", testFile);
+        formDataTest.append("use_case", 'code_analysis');
+        formDataTest.append("ai_model", "openAI");
+    
+        // console.log(...formDataTest);
 
         try {
             const response = await fetch("http://localhost:8080/llm/file", {
                 method: "POST",
                 body: formData, 
-                headers: {
-                    "Content-Type" : "multipart/form-data",
-                },
+                // headers: {
+                //     "Content-Type" : "multipart/form-data",
+                // },
             });
 
+            const responseData = await response.json();
+
             if (response.ok) {
-                const responseData = await response.json();
-                setFeedback(formatFeedback(responseData));
+                setFeedback(responseData.text);
             }
             else {
                 setFeedback(`File Submission failed, Server return ${response.status} status`);
             }
+
         }
         catch (error){
             setFeedback(`Error occurred while submitting files: ${error.message}`)
@@ -253,10 +256,6 @@ const SubmissionPage = () => {
         finally{
             setIsLoading(false);
         }
-
-
-        console.log("Submitted Files: ", droppedFiles);
-        console.log("Parameters: ",data);
         console.log("Feedback", feedback);
     }
 
@@ -268,25 +267,46 @@ const SubmissionPage = () => {
         else if (inputType === "files"){
             handleFileSubmit();
         }
-    }
+    };
 
-    /* issues with {inputType === "files" && (
-                        <div className='fileInputContainer'></div>
+    const capitaliseFirstLetter = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+ 
+    const formatUseCase = (str) => {
+        const words = str.split('_');
+        const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+        return capitalizedWords.join(' ');
+    };
 
-                        - the submit button does not move when inputs are added
-                        - the dragging files in is bugged, only allows one file
-                        -
+    const formatAIModel = (str) => {
+        if (str === "watsonx.ai"){
+            return "StarCoder";
+        }
 
-                        */
+        else return "GPT3.5";
+    };
+
     return [
     <>
-        
+
+
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
         <div className={`main-content ${isSidebarOpen ? 'with-sidebar' : ''}`}>
             <header className="submission-header">
                 <h1 className="submission-title">Submission Area</h1>
-                <img src={HeaderImage} alt="Code Craft" className="header-image"/>
+
+                <nav className="App-nav">
+                    <div className="App-nav-links">
+                        <Link to="/"><img src={HeaderImage} alt="Code Craft" className="header-image"/></Link>
+                        <a href="#features">Features</a>
+                        <Link to="/team">Meet the Team</Link>
+                        <a href="#about">About</a>
+                        <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
+                    </div>
+                </nav>
+
             </header>
 
             <div className="wave"></div>
@@ -298,52 +318,146 @@ const SubmissionPage = () => {
                 <div className='submissionArea'>
 
                     <div className='dropDownContainer'>
+ 
+                        <nav className='dropdownMenu'>
+                            <ol>
 
-                        <div className='inputTypeDropDown'>
-                            <label>Select Input Type </label>
-                            <select value={inputType} onChange={handleInputTypeChange}>
-                                <option value="textbox">Textbox</option>
-                                <option value="files">Files</option>
+                                <li className="menu-item">
+                                    <a href='#0'>
+                                        
+                                        {inputType === "textbox" || inputType === "files" 
+                                        ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
+                                    </a>
+                                    <ol className='sub-menu'>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setInputType("textbox")}>
+                                                Texbox
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setInputType("files")}>
+                                                File
+                                            </a>
+                                        </li>
+                                    </ol>   
+                                </li>
 
-                            </select>
-                        </div>
+                                <li className="menu-item">
+                                    <a href='#0'>
+                                        {useCase === "code_generation" || useCase === "code_completion"
+                                        || useCase === "code_analysis" || useCase === "code_translation"
+                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
+                                    </a>
+                                    <ol className='sub-menu'>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("")}>
+                                                Generic AI repsonse
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_generation")}>
+                                                Code Generation
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_completion")}>
+                                                Code Completion
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_analysis")}>
+                                                Code Analysis
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setUseCase("code_translation")}>
+                                                Code Translation
+                                            </a>
+                                        </li>
 
-                        <div className='useCaseDropDown'>
-                            <label>Select Use Case </label>
-                                <select value={useCase} onChange={handleUseCaseChange}>
-                                    <option value="">Generic AI response</option>
-                                    <option value="code_generation">Code Generation</option>
-                                    <option value="code_completion">Code Completion</option>
-                                    <option value="code_analysis">Code Analysis</option>
-                                    <option value="code_translation">Code Translation</option>
-                                </select>
-                        </div>
+                                    </ol>   
+                                </li>
 
-                        <div className='aiDropDown'>
-                            <label>Select AI Model </label>
-                                <select value={aiModel} onChange={handleAiModelChange}>
-                                    <option value="watsonx.ai">watsonx</option>
-                                    <option value="openai">OpenAI</option>
-                                </select>
-                        </div>
+                                <li className="menu-item">
+                                    <a href='#0'>
+                                        {aiModel === "watsonx.ai" || aiModel === "openai"
+                                        ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
+                                    </a>
+                                    <ol className='sub-menu'>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setAIModel("watsonx.ai")}>
+                                                StarCoder
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setAIModel("openai")}>
+                                                GPT3.5
+                                            </a>
+                                        </li>
+                                    </ol>   
+                                </li>
 
-                        <div className='inputLanguageDropDown'>
-                            <label>Select Input Language</label>
-                                <select value={inputLanguage} onChange={handleInputLanguageChange}>
-                                    <option value="java">Java</option>
-                                    <option value="python">Python</option>
-                                </select>
-                        </div>
+                                {useCase === "code_completion" || useCase === "code_translation" ? (<>
+                                    <li className="menu-item">
+                                        <a href='#0'>
+                                            {inputLanguage !== " " 
+                                        ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
+                                            
+                                        </a>
+                                        <ol className='sub-menu'>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setInputLanguage("java")}>
+                                                    Java
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setInputLanguage("python")}>
+                                                    Python
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setInputLanguage("c")}>
+                                                    C
+                                                </a>
+                                            </li>
+                                        </ol>   
+                                    </li>
+                                </>): null}
 
-                        <div className='outputLanguageDropDown'>
-                            <label>Select Output Language </label>
-                                <select value={outputLanguage} onChange={handleOutputLanguageChange}>
-                                    <option value="python">Python</option>
-                                    <option value="java">Java</option>
-                                </select>
-                        </div>
+                                {useCase === "code_translation" ? (<>
+                                    <li className="menu-item">
+                                        <a href='#0'>
+                                            {outputLanguage !== " " 
+                                        ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
+                                            
+                                        
+                                        </a>
+                                        <ol className='sub-menu'>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setOutputLanguage("java")}>
+                                                    Java
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setOutputLanguage("python")}>
+                                                    Python
+                                                </a>
+                                            </li>
+                                            <li className="menu-item">
+                                                <a href="#0" onClick={()=>setOutputLanguage("c")}>
+                                                    C
+                                                </a>
+                                            </li>
+                                        </ol>   
+                                    </li>
+                                </>):null}
 
+
+                            </ol>
+
+                        </nav>
                     </div>
+
 
                     {inputType === "textbox" && (
                         <div className='textBoxContainer'>
@@ -358,8 +472,6 @@ const SubmissionPage = () => {
                             
                         </div>
                     )}
-
-
 
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
@@ -398,7 +510,10 @@ const SubmissionPage = () => {
 
                     {!isLoading && feedback &&( 
                         <div class="feedBackBox">
-                            <p>{feedback}</p>
+                            {useCase ==='code_translation'? 
+                            <pre className = "code-block"><code>{feedback}</code></pre>:
+                            <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
+                            }
                         </div>
                     )}
 
