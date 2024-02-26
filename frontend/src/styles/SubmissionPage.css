@@ -376,10 +376,13 @@
   margin: 1.5em;
   width: 6em;
   height: 6em;
-  position: relative; 
   margin-left: 250px;
   right: 5px; 
   bottom: 5px; 
+  position: fixed;
+    bottom: 0;
+    width: 100%;
+    pointer-events: none
 }
 
 
