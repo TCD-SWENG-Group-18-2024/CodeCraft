@@ -23,6 +23,7 @@ function Home() {
   };
 
   return (
+    <>
       <div className="App">
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           
@@ -51,12 +52,16 @@ function Home() {
             </button>
           </Link>
         
-  
-      
-        <div className="wave"></div>
-        <div className="wave"></div>
-        <div className="wave"></div>
+
+        
       </div>
+        <div className='wave_container'>
+          <div className="wave"></div>
+          <div className="wave"></div>
+          <div className="wave"></div>
+        </div>
+
+      </>
     );
   }
 

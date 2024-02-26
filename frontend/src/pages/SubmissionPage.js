@@ -309,9 +309,6 @@ const SubmissionPage = () => {
 
             </header>
 
-            <div className="wave"></div>
-            <div className="wave"></div>
-            <div className="wave"></div>
 
             <div className="userArea">
 
@@ -521,6 +518,12 @@ const SubmissionPage = () => {
 
             </div>
 
+        </div>
+
+        <div className='wave_container'>
+                <div className="wave"></div>
+                <div className="wave"></div>
+                <div className="wave"></div>
         </div>
 
             
