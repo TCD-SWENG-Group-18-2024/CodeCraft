@@ -28,10 +28,17 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r backend/requirements.txt
-        
+
+    - name: Change to backend directory
+      run: cd backend
+
+    - name: Set PYTHONPATH
+      run: export PYTHONPATH=$(pwd)
+
     - name: Run codecraft.py
-      run: python backend/codecraft.py &
+      run: python $GITHUB_WORKSPACE/backend/codecraft.py
+
 
     - name: Run unit tests
       run: |
-        python -m unittest backend.junittest
+        python -m unittest junittest
