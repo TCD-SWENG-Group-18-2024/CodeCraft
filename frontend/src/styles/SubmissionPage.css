@@ -43,13 +43,14 @@
 }
 
 .fileInputContainer{
-  width: calc(60vh - 190px);
-  height: 20vw;
+  width: 85%; 
+  height: 20vw; 
   position: relative;
   margin-bottom: 20px;
   margin-top: 20px;
-  margin-left: 100px;
+  margin-left: 100px; 
 }
+
 
 .fileDropZone{
   width: 100%;
