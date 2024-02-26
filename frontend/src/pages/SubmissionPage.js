@@ -11,7 +11,7 @@ const SubmissionPage = () => {
     const [inputType, setInputType] = useState('textbox');
     const [input, setInput] = useState('');
     const [useCase, setUseCase] = useState(''); // set default cases
-    const [aiModel, setAIModel] = useState('watsonx.ai'); 
+    const [aiModel, setAIModel] = useState('openai'); 
     const [feedback, setFeedback] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
