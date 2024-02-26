@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Clients from '../assets/Clients.png';
 import HeroImage from '../assets/HeroImage.png';
 import IBMWatson from '../assets/IBMWatson.jpg';
@@ -6,10 +6,12 @@ import IBM_white from '../assets/IBM_white.PNG';
 import Team from '../assets/Team.png';
 import '../styles/AboutPage.css';
 
+
+
 const AboutPage = () => {
   return (
     <div className="about-page-container">
-      x<div className="back-to-home">
+      <div className="back-to-home">
         <a href="/">
           <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
         </a>

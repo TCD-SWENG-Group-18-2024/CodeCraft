@@ -1,15 +1,15 @@
 
 .back-to-home {
   position: absolute;
-  top: 20px; /* Adjust as per your layout */
-  right: 20px; /* Adjust as per your layout */
+  top: 20px; 
+  right: 20px;
   z-index: 10; /* Higher than other elements to be clickable */
 }
 
 .ibm-logo {
-  height: 50px; /* Adjust the size as needed */
+  height: 50px;
   width: auto;
-  cursor: pointer; /* Changes the cursor to indicate it's clickable */
+  cursor: pointer;
 }
 
 /* Hide the close button */
@@ -17,31 +17,23 @@
   display: none;
 }
 
-/* Or if it's within a container, you can target it specifically */
 .container-class-name .close-button-class-name {
   display: none;
 }
-/* AboutPage.css */
 
-/* Assuming the 'X' button has a class named 'close-button' */
 .close-button {
   display: none !important;
 }
 
-/* If the 'X' is within a specific section or has a unique ID */
 #closeButtonId {
   display: none !important;
 }
 
-/* If the 'X' is part of a modal or popup that should not be displayed on the About page */
 .modal,
 .popup,
 .overlay {
   display: none !important;
 }
-
-/* Add this to the top of your AboutPage.css file to ensure it takes precedence */
-
 
 .about-page-container {
   text-align: center;
@@ -49,12 +41,12 @@
 
 .hero-section {
   position: relative;
-  color: white; /* Adjust based on your hero image */
+  color: white;
 }
 
 .hero-image {
   width: 100%;
-  height: 500px; /* Adjust based on your hero image */
+  height: 500px;
   background-attachment: fixed;
 }
 
@@ -76,11 +68,11 @@
   align-items: center;
   justify-content: space-around;
   padding: 50px 5%;
-  overflow: hidden; /* Hide overflow for animation */
+  overflow: hidden;
 }
 
 .alt-section {
-  background-color: #e6f4ff; /* Alternate background for sections */
+  background-color: #e6f4ff;
 }
 
 .section .text p {
@@ -88,7 +80,7 @@
 }
 
 .section .text h2 {
-  color: black; /* Replace with the new color code you want for your headings */
+  color: black; 
 }
 
 
@@ -98,18 +90,18 @@
 
 .image-container {
   width: 45%;
-  perspective: 1000px; /* Perspective for 3D transforms */
+  perspective: 1000px;
 }
 
 .image-left, .image-right {
   width: 100%;
-  border-radius: 10px; /* Soften edges with a border radius */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  transition: transform 0.5s ease-in-out; /* Smooth transform transition */
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-in-out;
 }
 
 .section:hover .image-left, .section:hover .image-right {
-  transform: translateY(-10px) scale(1.02); /* Slight lift and scale on hover */
+  transform: translateY(-10px) scale(1.02);
 }
 
 .text {
@@ -124,11 +116,11 @@
   
   .image-container, .text {
     width: 90%;
-    margin: 0 auto; /* Center content */
+    margin: 0 auto;
   }
   
   .image-left, .image-right {
-    order: -1; /* Images above text on small screens */
+    order: -1;
   }
   
   .section .text, .section .image-container {
@@ -137,11 +129,11 @@
 
   .section img, .alt-section img {
     width: 80%;
-    margin: 0 auto; /* Center align the image */
+    margin: 0 auto;
   }
 
   .text {
-    order: 2; /* Text comes after the image on small screens */
+    order: 2;
   }
 }
 
@@ -154,18 +146,16 @@ html {
   flex-direction: row-reverse;
 }
 
-/* Ensure the .section-image class is applied to your images */
+
 .section-image {
-  /* Your existing styles for images */
   width: 100%;
-  max-width: 500px; /* Adjust as needed */
+  max-width: 500px;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   transition: transform 0.5s ease-in-out;
 }
 
-/* Subtle animation for text and images */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -182,11 +172,10 @@ html {
   opacity: 0;
 }
 
-/* Enhance text readability */
+
 .text {
-  /* ... existing styles ... */
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Shadow for text */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 /* Hover effect for images */
@@ -195,7 +184,6 @@ html {
   cursor: pointer;
 }
 
-/* Ensure your design is responsive */
 @media (max-width: 1024px) {
   .section-content {
     flex-direction: column;
@@ -206,15 +194,12 @@ html {
   }
 }
 
-/* Additional responsive adjustments */
 @media (max-width: 768px) {
   .text, .image-container img {
     animation: none;
   }
 }
 
-/* AboutPage.css - Add this at the end */
-/* Override global styles for the About page */
 .about-page-container .modal-class-name,
 .about-page-container .overlay-class-name {
   display: none !important;

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IBM_White from "../assets/IBM_white.PNG";
+import Sidebar from '../components/Sidebar';
 import '../styles/Home.css';
 import './LoginSignUp';
 import './SubmissionPage';
-import Sidebar from '../components/Sidebar';
 
 
 function Home() {
@@ -27,7 +27,7 @@ function Home() {
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           
           {/* Optional: Button to toggle sidebar */}
-          <button onClick={toggleSidebar} className="toggle-sidebar-button">Menu</button>
+          {/* <button onClick={toggleSidebar} className="toggle-sidebar-button">Menu</button> */}
           
         <nav className="App-nav">
           <div className="App-nav-links">
