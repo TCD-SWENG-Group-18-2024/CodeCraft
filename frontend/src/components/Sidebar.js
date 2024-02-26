@@ -1,10 +1,13 @@
-import { faArrowCircleLeft, faBars, faDashboard } from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleLeft, faBars, faDashboard, faChartBar} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import '../styles/Sidebar.css';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+
   return (
     <div className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
       <div className="sidebar__title">CodeCraft</div>
@@ -17,9 +20,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <FontAwesomeIcon icon={isOpen ? faArrowCircleLeft : faBars} />
       </div>
       <nav className="sidebar__nav">
-        <Link to="/" className="sidebar__link">
-          <FontAwesomeIcon icon={faDashboard} /> Dashboard
-        </Link>
+        
+       {isHomePage && (
+        <Link to="/SubmissionPage">
+         <FontAwesomeIcon icon={faChartBar} />Submission Page
+         </Link>
+  )}
+         {!isHomePage && (
+        <Link to="/"className="sidebar_link">
+         <FontAwesomeIcon icon={faDashboard} />Dashboard
+         </Link>
+  )}
        
       </nav>
     </div>
