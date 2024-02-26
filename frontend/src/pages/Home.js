@@ -6,22 +6,31 @@ import IBM_White from "../assets/IBM_white.PNG";
 import '../styles/Home.css';
 import './LoginSignUp';
 import './SubmissionPage';
+import Sidebar from '../components/Sidebar';
 
 
 function Home() {
-    const [isLogoLoaded, setLogoLoaded] = useState(false);
+  const [isLogoLoaded, setLogoLoaded] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    useEffect(() =>{
+  useEffect(() => {
       setLogoLoaded(true);
 
       const welcomeMessage = document.querySelector('.welcome-message');
       welcomeMessage.classList.add('typing-animation');
-    },[]);
+  }, []);
 
+  const toggleSidebar = () => {
+      setIsSidebarOpen(!isSidebarOpen);
+  };
 
-    return (
+  return (
       <div className="App">
-        
+          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+          
+          {/* Optional: Button to toggle sidebar */}
+          <button onClick={toggleSidebar} className="toggle-sidebar-button">Menu</button>
+          
         <nav className="App-nav">
           <div className="App-nav-links">
             <a href="#features">Features</a>
