@@ -211,37 +211,42 @@ const SubmissionPage = () => {
         setIsLoading(true);
 
         const formData = new FormData();
-        droppedFiles.forEach((file, index) =>{
+        droppedFiles.forEach((file) =>{
             formData.append(`file`, file);
         });
 
-        const data ={
-            use_case: useCase, 
-            ai_model: aiModel,
-            input_language: inputLanguage,
-            output_language: outputLanguage
-        };
+        formData.append("use_case", useCase);
+        formData.append("ai_model", aiModel);
+        formData.append("input_language", inputLanguage);
+        formData.append("output_language", outputLanguage);
 
-        formData.append('data', JSON.stringify(data));
-
-        console.log([...formData.entries()]);
+        const fileContent = "Hello, this is the content of the file.";
+        const testFile = new File([fileContent], "testFile.txt", { type: "text/plain" });
+        const formDataTest = new FormData();
+        formDataTest.append("file", testFile);
+        formDataTest.append("use_case", 'code_analysis');
+        formDataTest.append("ai_model", "openAI");
+    
+        // console.log(...formDataTest);
 
         try {
             const response = await fetch("http://localhost:8080/llm/file", {
                 method: "POST",
                 body: formData, 
-                headers: {
-                    "Content-Type" : "multipart/form-data",
-                },
+                // headers: {
+                //     "Content-Type" : "multipart/form-data",
+                // },
             });
 
+            const responseData = await response.json();
+
             if (response.ok) {
-                const responseData = await response.json();
-                setFeedback(formatFeedback(responseData));
+                setFeedback(responseData.text);
             }
             else {
                 setFeedback(`File Submission failed, Server return ${response.status} status`);
             }
+
         }
         catch (error){
             setFeedback(`Error occurred while submitting files: ${error.message}`)
@@ -249,10 +254,6 @@ const SubmissionPage = () => {
         finally{
             setIsLoading(false);
         }
-
-
-        console.log("Submitted Files: ", droppedFiles);
-        console.log("Parameters: ",data);
         console.log("Feedback", feedback);
     }
 
