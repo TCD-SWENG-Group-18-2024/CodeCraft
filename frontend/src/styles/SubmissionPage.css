@@ -43,7 +43,7 @@
 }
 
 .fileInputContainer{
-  width: 85%; 
+  width: 50%; 
   height: 20vw; 
   position: relative;
   margin-bottom: 20px;
@@ -408,18 +408,18 @@
   background: rgb(92, 183, 213);
   animation-delay: 0.2s;
  }
-
+ 
 @keyframes bounce {
   from, to {
     transform: translateY(0) scale(1,1);
     animation-timing-function: ease-in;
   }
   45%{
-    transform: translateY(5em) scale(1,1);
+    transform: translateY(18em) scale(1,1);
     animation-timing-function: linear;
   }
   50%{
-    transform: translateY(5em) scale(1.5,0.5);
+    transform: translateY(18em) scale(1.5,0.5);
     animation-timing-function: linear;
   }
   55%{
