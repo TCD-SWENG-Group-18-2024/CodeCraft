@@ -12,7 +12,9 @@ __pycache__/
 venv/
 env/
 .venv/
+
 # Ignore npm dependencies
+node_modules/
 /frontend/node_modules/
 
 # Ignore build artifacts for React
@@ -28,5 +30,3 @@ env/
 
 # Ignore any local development files
 .vscode/
-
-/codecraft/node_modules/
