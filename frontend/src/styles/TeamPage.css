@@ -1,8 +1,24 @@
 /* src/pages/TeamPage.css */
 .team-page-container {
-  padding: 4rem 2rem;
-  background-color: #bcd7ff;
-  position: relative;
+  background: linear-gradient(315deg, #006699 3%, #0F62FE 38%, rgb(83, 168, 234) 68%, #689cfa 98%);
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%;
+  background-attachment: fixed;
+}
+
+.wave {
+  background: rgb(255 255 255 / 25%);
+  border-radius: 1000% 1000% 0 0;
+  position: absolute;
+  width: 200%;
+  height: 12em;
+  animation: wave 10s -3s linear infinite;
+  transform: translate3d(0, 0, 0);
+  opacity: 0.8;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -2;
 }
 
 .team-page-header {
@@ -13,12 +29,12 @@
 .team-page-title {
   font-size: 3rem;
   font-weight: bold;
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 }
 
 .team-page-description {
   font-size: 1rem;
-  color: #666;
+  color: #242424;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;

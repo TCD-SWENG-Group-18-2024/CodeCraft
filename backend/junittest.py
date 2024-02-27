@@ -3,6 +3,7 @@ from unittest.mock import patch
 from codecraft import app, process_data
 from io import BytesIO
 from codecraft import app
+import os
 class TestCodeAnalysisWatsonxAi(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
@@ -169,6 +170,8 @@ class TestTextUpload(unittest.TestCase):
 
          print("Response received.")
          self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+
+### These tests make use of absolute paths specific to one team member's machine. These paths must be generalized to run on all machines before these tests can be used in workflows.
          
 class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
     def setUp(self):
@@ -182,9 +185,13 @@ class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
             "use_case": "code_completion",
             "ai_model": "OpenAI",
         }
+        # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # Open the file from the specified path
-        file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\codecompletion.py"
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "codecompletion.py")
+                # Open the file from the specified path
+        file_path = test_file_path
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -194,7 +201,7 @@ class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'InsertionSort.py')),
+        ('file', (BytesIO(file_content), 'codecompletion.py')),
         ('use_case', 'code_completion'),
         ('ai_model', 'OpenAI'),
         ('input_language', ''),
@@ -223,9 +230,13 @@ class TestFileUploadCodeCompletionWatsonX(unittest.TestCase):
             "use_case": "code_completion",
             "ai_model": "watsonx_ai",
         }
+       # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # Open the file from the specified path
-        file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\codecompletion.py"
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "codecompletion.py")
+                # Open the file from the specified path
+        file_path = test_file_path
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -235,7 +246,7 @@ class TestFileUploadCodeCompletionWatsonX(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'InsertionSort.py')),
+        ('file', (BytesIO(file_content), 'codecompletion.py')),
         ('use_case', 'code_completion'),
         ('ai_model', 'watsonx_ai'),
         ('input_language', ''),
@@ -265,8 +276,13 @@ class TestFileUploadCodeTranslationOpenAi(unittest.TestCase):
             "ai_model": "OpenAI",
         }
 
-        # Open the file from the specified path
-        file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
+         # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -276,7 +292,7 @@ class TestFileUploadCodeTranslationOpenAi(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'TriangleArea.java')),
+        ('file', (BytesIO(file_content), 'Triangle.java')),
         ('use_case', 'code_translation'),
         ('ai_model', 'OpenAI'),
         ('input_language', 'java'),
@@ -306,8 +322,13 @@ class TestFileUploadCodeTranslationWatsonX(unittest.TestCase):
             "ai_model": "watsonx_ai",
         }
 
-        # Open the file from the specified path
-        file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
+          # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -317,7 +338,7 @@ class TestFileUploadCodeTranslationWatsonX(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'TriangleArea.java')),
+        ('file', (BytesIO(file_content), 'Triangle.java')),
         ('use_case', 'code_translation'),
         ('ai_model', 'watsonx_ai'),
         ('input_language', 'java'),
@@ -347,8 +368,13 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
             "ai_model": "OpenAI",
         }
 
-        # Open the file from the specified path
-        file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
+        # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -358,7 +384,7 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'TriangleArea.java')),
+        ('file', (BytesIO(file_content), 'Triangle.java')),
         ('use_case', 'code_analsis'),
         ('ai_model', 'OpenAI'),
         ('input_language', ''),
@@ -384,8 +410,13 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
             "ai_model": "OpenAI",
         }
 
-        # Open the file from the specified path
-        file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
+         # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
         with open(file_path, 'rb') as file:
             file_content = file.read()
 
@@ -395,7 +426,7 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
         data = MultiDict([
-        ('file', (BytesIO(file_content), 'TriangleArea.java')),
+        ('file', (BytesIO(file_content), 'Triangle.java')),
         ('use_case', 'code_analysis'),
         ('ai_model', 'OpenAI'),
         ('input_language', ''),
@@ -411,5 +442,6 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
         
        #  Check if the response is successful (status code 200)
         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")     
+
 if __name__ == '__main__':
     unittest.main()
