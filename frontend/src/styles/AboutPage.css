@@ -1,0 +1,211 @@
+
+.back-to-home {
+  position: absolute;
+  top: 20px; 
+  right: 20px;
+  z-index: 10; /* Higher than other elements to be clickable */
+}
+
+.ibm-logo {
+  height: 50px;
+  width: auto;
+  cursor: pointer;
+}
+
+/* Hide the close button */
+.close-button-class-name {
+  display: none;
+}
+
+.container-class-name .close-button-class-name {
+  display: none;
+}
+
+.close-button {
+  display: none !important;
+}
+
+#closeButtonId {
+  display: none !important;
+}
+
+.modal,
+.popup,
+.overlay {
+  display: none !important;
+}
+
+.about-page-container {
+  text-align: center;
+}
+
+.hero-section {
+  position: relative;
+  color: white;
+}
+
+.hero-image {
+  width: 100%;
+  height: 500px;
+  background-attachment: fixed;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 1rem;
+  border-radius: 10px;
+
+}
+
+/* Updated styles for alternating sections */
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 50px 5%;
+  overflow: hidden;
+}
+
+.alt-section {
+  background-color: #e6f4ff;
+}
+
+.section .text p {
+  font-size: 1.5rem; /* This targets all <p> tags within the .text class */
+}
+
+.section .text h2 {
+  color: black; 
+}
+
+
+.section-content {
+  width: 45%;
+}
+
+.image-container {
+  width: 45%;
+  perspective: 1000px;
+}
+
+.image-left, .image-right {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-in-out;
+}
+
+.section:hover .image-left, .section:hover .image-right {
+  transform: translateY(-10px) scale(1.02);
+}
+
+.text {
+  flex: 1;
+  margin: 20px;
+}
+
+@media (max-width: 768px) {
+  .section, .alt-section {
+    flex-direction: column;
+  }
+  
+  .image-container, .text {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .image-left, .image-right {
+    order: -1;
+  }
+  
+  .section .text, .section .image-container {
+    width: 90%;
+  }
+
+  .section img, .alt-section img {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .text {
+    order: 2;
+  }
+}
+
+/* Smooth scrolling effect */
+html {
+  scroll-behavior: smooth;
+}
+
+.reverse-section {
+  flex-direction: row-reverse;
+}
+
+
+.section-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text, .image-container img {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+
+.text {
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Hover effect for images */
+.section img:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .section-content {
+    flex-direction: column;
+  }
+  .image-container, .text {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .text, .image-container img {
+    animation: none;
+  }
+}
+
+.about-page-container .modal-class-name,
+.about-page-container .overlay-class-name {
+  display: none !important;
+}
+
+
+
+
+
