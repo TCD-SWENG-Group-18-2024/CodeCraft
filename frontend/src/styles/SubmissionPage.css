@@ -221,6 +221,11 @@
         z-index:1;
         display: flex;
         flex-direction: column;
+
+          /* New class to hide dropdown when button is clicked  LUCIA CODE*/
+        &.hide-dropdown {
+          display: none; 
+        }
       
         li{
           margin: 0;
@@ -228,7 +233,7 @@
 
         &:hover, a:focus{ 
           background-color: #0F62FE;
-        }
+          }
         }
       }
   }

@@ -326,14 +326,14 @@ const SubmissionPage = () => {
  
                         <nav className='dropdownMenu'>
                             <ol>
-
+                              {!buttonClicked && ( //LUCIA CODE
                                 <li className="menu-item">
                                     <a href='#0'>
                                         
                                         {inputType === "textbox" || inputType === "files" 
                                         ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
                                     </a>
-                                    <ol className='sub-menu'>
+                                    <ol className={`sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setInputType("textbox")}>
                                                 Texbox
@@ -346,14 +346,15 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
-
+                            )}    
+                            {!buttonClicked && ( //LUCIA CODE      
                                 <li className="menu-item">
                                     <a href='#0'>
                                         {useCase === "code_generation" || useCase === "code_completion"
                                         || useCase === "code_analysis" || useCase === "code_translation"
                                         ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
                                     </a>
-                                    <ol className='sub-menu'>
+                                    <ol className={`sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setUseCase("")}>
                                                 Generic AI repsonse
@@ -379,10 +380,10 @@ const SubmissionPage = () => {
                                                 Code Translation
                                             </a>
                                         </li>
-
                                     </ol>   
                                 </li>
-
+                                )}
+                                {!buttonClicked && ( //LUCIA CODE
                                 <li className="menu-item">
                                     <a href='#0'>
                                         {aiModel === "watsonx.ai" || aiModel === "openai"
@@ -401,7 +402,7 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
-
+                                )}
                                 {useCase === "code_completion" || useCase === "code_translation" ? (<>
                                     <li className="menu-item">
                                         <a href='#0'>
