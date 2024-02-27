@@ -32,22 +32,25 @@
   display: flex;
   flex-direction: row;
   margin: auto;
+  width: 70%;
 }
 
 .textBoxContainer{
   display: flex;
   flex-direction: column;
   height:100%;
+  width: calc(60vh - 150px);
 }
 
 .fileInputContainer{
-  width: calc(60vh - 190px);
-  height: 20vw;
+  width: 50%; 
+  height: 20vw; 
   position: relative;
   margin-bottom: 20px;
   margin-top: 20px;
-  margin-left: 100px;
+  margin-left: 100px; 
 }
+
 
 .fileDropZone{
   width: 100%;
@@ -77,9 +80,12 @@
 
 .droppedFileContainer{
   margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  margin: auto;
 }
 
-.droppedFileContainer ul{
+.droppedFileContainer ol{
   list-style: none;
   padding: 0;
 }
@@ -93,8 +99,10 @@
   margin-left: 100px;
   margin-top: 20px;
   margin-bottom: 10px;
+  border-radius: 15px;
   height: 20vw;
-  width: calc(60vh - 150px);
+  width: 100%;
+  resize: vertical;
 }
 
 .submissionArea .submitButton{
@@ -107,18 +115,125 @@
   width: 85px;
 }
 
-.submissionArea .useCaseDropDown, .aiDropDown{
-  margin-bottom: 20px;
-  color: white;
-}
+.dropdownMenu {
+  margin-left: 65px;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 1001;
+  >ol{
+    width: 1000px;
+    list-style: none;
+    margin: 30px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
 
-.submissionArea .useCaseDropDown select, .aiDropDown select {
-  width: 55%;
-  padding: 8px;
-  margin: 10px;
-  margin-left: 60px
-}
+    >li{
+      background:none;
+      border-left: 5px;
+      position: relative;
+      transition: .5s;
+      flex: 1;
 
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 5px; /* Adjust the height of the line */
+        width: 100%;
+        background-color: var(--accent-color); /* Set the line color */
+        display: block; 
+        transition: transform 0.3s ease;
+      }
+
+      &:hover{
+        background-color: var(--accent-color);
+        transform: scale(1.01);
+      }
+
+      &:hover .sub-menu{
+        max-height: 500px;
+        cursor: pointer;
+      }
+
+      &:nth-child(1){
+        --accent-color: rgb(253, 253, 253);
+      }
+      &:nth-child(2){
+        --accent-color: rgb(253, 253, 253);
+      }
+      &:nth-child(3){
+       --accent-color: rgb(253, 253, 253);
+      }
+      &:nth-child(4){
+        --accent-color: rgb(252, 252, 252);
+      }
+      &:nth-child(5){
+        --accent-color: rgb(253, 253, 253);
+      }
+      
+      a{
+        color: rgb(0, 0, 0);
+        display: block;
+        padding: 15px;
+        position: relative;
+        text-decoration: none;
+        z-index: 1;
+        &:not(:last-child){
+          &:before{
+            content: '⮟';
+            font-family:fontAwesome;
+            font-size:.75em;
+            line-height:50px;
+            position:absolute;
+            right:10px;
+            top:0;
+            bottom:0;
+            border-color: transparent transparent transparent #000; /* Adjust color as needed */
+            transition:.5s;
+          }
+        }
+      }
+
+      &:hover {
+            a:before{
+              transform:rotate(-180deg);
+            }
+      }
+
+      &:focus,&:focus-within{
+        .sub-menu{
+          max-height:500px;
+        }
+
+      }
+
+      .sub-menu{
+        border-left:1px solid #0F62FE;
+        margin-left:22.5px;
+        list-style:none;
+        max-height:0px;
+        overflow:hidden;
+        padding-left:7.5px;
+        position:relative;
+        transition:.5s;
+        z-index:1;
+        display: flex;
+        flex-direction: column;
+      
+        li{
+          margin: 0;
+          cursor: pointer;
+
+        &:hover, a:focus{ 
+          background-color: #0F62FE;
+        }
+        }
+      }
+  }
+  }
+}
 
 .feedBackArea {
   width: calc(66vh - 40px); 
@@ -137,14 +252,31 @@
 .feedBackBox {
   font-family: 'Courier New', Courier, monospace; 
   font-size: 0.9em; 
+  text-align: left;
   background: white; 
   border: 1px solid #0F62FE; 
   padding: 1em; 
   margin-top: 1em; 
   margin: 15px;
 }
-
+.code-block {
+  font-size: 11px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  line-height: 1.5;
+  color:#6F8FAF;
+  margin: 0;
+  padding: 10px;
+  background-color: #f4f4f4;
+  text-align: left;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  overflow: auto;
+}
+.code-block:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 @media (max-width: 1410px){
+
   .feedBackArea {
     position: relative; 
     right: 0; 
@@ -155,7 +287,46 @@
     margin-left: 150px;
     background-color: none; 
   }
+  
+  .textBoxContainer{
+    margin-left: 45%;
+    transform: translateX(-30%);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 
+  .submissionArea .textBoxContainer .textbox {
+    border: 1px #0F62FE solid;
+    margin-left: 100px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 20vw;
+    width: 85%;
+}
+
+  .submissionArea .submitButton{
+    margin-top: 20px;
+    margin-left: 45%;
+    color: #0F62FE;
+    border-color: #0F62FE;
+    border: 1px #0F62FE solid;
+    height: 35px;
+    width: 85px;
+  }
+
+    .feedBackArea {
+    width: calc(66vh - 40px); 
+    height: 25vw; 
+    
+    margin-right: 150px;
+    margin-left: 200px;
+    padding: 1rem; 
+    overflow-y: auto; 
+    background-color: none; 
+    border-radius: 5px;
+    z-index: 1000; 
+  }
 }
 
 .submissionArea .submitButton:hover{
@@ -177,14 +348,14 @@
   align-items: center;
   justify-content: space-between;
   background-color: none; /* Replace with actual color */
-  padding: 20px;
-  margin: 10px;
+  padding: 15px;
+  margin: 7.5px;
+  margin-top: 5px
 }
  
 .submission-header .submission-title {
   margin-left: 60px;
-  color: #FFF; /* Replace with actual color */
-  /* Style your title as needed */
+  color: #FFF; 
   font-weight: 200;
   align-items: center;
   justify-content: center;
@@ -192,9 +363,9 @@
  
  
 .header-image {
-  height: 50px;
-  width: 100px;
-  margin-right: 140px;
+  height: 25px;
+  width: 50px;
+  margin-right: 9px;
  }
  
  /* https://codepen.io/jkantner/pen/VwbLajq
@@ -237,7 +408,7 @@
   background: rgb(92, 183, 213);
   animation-delay: 0.2s;
  }
-
+ 
 @keyframes bounce {
   from, to {
     transform: translateY(0) scale(1,1);
