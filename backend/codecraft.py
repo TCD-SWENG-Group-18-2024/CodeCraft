@@ -100,4 +100,4 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     return result
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(host='0.0.0.0', port=8080)

@@ -1,5 +1,5 @@
 # Define variables
-PYTHON := python3
+PYTHON := python3  
 PIP := pip3
 NPM := npm
 
