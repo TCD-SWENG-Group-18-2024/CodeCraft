@@ -48,10 +48,10 @@ code_completion_template = PromptTemplate(
 )
 
 code_translation_template = PromptTemplate(
-    input_variables=['input_language', 'output_language', 'code'],
+    input_variables=['input_language', 'output_language', 'input'],
     template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
              ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
-             ' indentation where needed. My code is given as follows: {code}'
+             ' indentation where needed. My code is given as follows: {input}'
 )
 
 general_ai_model_template = PromptTemplate (
@@ -131,7 +131,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
     return code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
 
-def code_translation(input_language: str, output_language: str, code: str, ai_model: str) -> dict:
+def code_translation(input_language: str, output_language: str, input: str, ai_model: str) -> dict:
     # starcoder by default
     llm = starcoder
 
@@ -146,11 +146,7 @@ def code_translation(input_language: str, output_language: str, code: str, ai_mo
     code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
     output = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'code': code})
     
-    # Remove the prompt from the output
-    if llm == starcoder:
-        output['text'] = output['text'][230:]
-
-    return output
+    return code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': input})
 
 
 if __name__ == "__main__":
