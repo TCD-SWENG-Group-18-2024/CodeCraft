@@ -15,7 +15,7 @@ class TestCodeAnalysisWatsonxAi(unittest.TestCase):
         "ai_model": "watsonx_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -31,7 +31,7 @@ class TestCodeAnalysisOpenAi(unittest.TestCase):
         "ai_model": "open_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -48,7 +48,7 @@ class TestCodeGenerationWatsonxAi(unittest.TestCase):
         "ai_model": "watsonx_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -65,7 +65,7 @@ class TestCodeGenerationOpenAi(unittest.TestCase):
         "ai_model": "open_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -81,7 +81,7 @@ class TestCodeCompletionWatsonxAi(unittest.TestCase):
         "ai_model": "watsonx_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -97,7 +97,7 @@ class TestCodeCompletionOpenAi(unittest.TestCase):
         "ai_model": "open_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -116,7 +116,7 @@ class TestCodeTranslationOpenAi(unittest.TestCase):
         "output_language": "javascript"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -134,7 +134,7 @@ class TestCodeTranslationWatsonxAi(unittest.TestCase):
         "output_language": "javascript"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -150,6 +150,7 @@ class TestTextUpload(unittest.TestCase):
          json_text_payload = {
          "user_input":"import math def quadratic_roots(a, b, c):  discriminant = b**2 - 4*a*c  if discriminant < 0:     return None  # No real roots  elif discriminant == 0:    root = -b / (2*a)   return rootelse:root1 = (-b + math.sqrt(discriminant)) / (2*a)root2 = (-b - math.sqrt(discriminant)) / (2*a)return root1, root2",
          "use_case": "code_analysis",
+         #select the default AI model by not providing a specified model
          "ai_model": ""
      }
          print("Sending text upload request...")
@@ -163,7 +164,7 @@ class TestTextUpload(unittest.TestCase):
          json_text_payload = {
          "user_input":"int main() { for (int i = 0; i <= 9; ++i) {std::cout << i << ' ';}std::cout << std::endl;return 0;}",
          "use_case": "code_analysis",
-         "ai_model": ""
+         "ai_model": ""#select the default AI model by not providing a specified model
      }
          print("Sending text upload request...")
          response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
@@ -177,7 +178,6 @@ class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    #FILE INPUT: python code which calculates the roots of a quadratic equation
     def test_file_upload_complex_code(self):
         from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
