@@ -222,7 +222,6 @@ class TestFileUploadCodeCompletionWatsonX(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    #FILE INPUT: python code which calculates the roots of a quadratic equation
     def test_file_upload_complex_code(self):
         from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
@@ -267,7 +266,6 @@ class TestFileUploadCodeTranslationOpenAi(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    #FILE INPUT: python code which calculates the roots of a quadratic equation
     def test_file_upload_complex_code(self):
         from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
@@ -313,7 +311,6 @@ class TestFileUploadCodeTranslationWatsonX(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    #FILE INPUT: python code which calculates the roots of a quadratic equation
     def test_file_upload_complex_code(self):
         from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
@@ -359,7 +356,6 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    #FILE INPUT: python code which calculates the roots of a quadratic equation
     def test_file_upload_complex_code(self):
         from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
@@ -401,7 +397,6 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
        #  Check if the response is successful (status code 200)
         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
 
-    #FILE INPUT: C code which prints the numbers 0-9 inclusive
     def test_file_upload_simple_code(self):
         from werkzeug.datastructures import MultiDict
          #Define a sample JSON payload
