@@ -20,22 +20,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <FontAwesomeIcon icon={isOpen ? faArrowCircleLeft : faBars} />
       </div>
       <nav className="sidebar__nav">
-        
-       {isHomePage && (
-        <Link to="/SubmissionPage">
-         <FontAwesomeIcon icon={faChartBar} />Submission Page
-         </Link>
-  )}
-         {!isHomePage && (
-        <Link to="/"className="sidebar_link">
-         <FontAwesomeIcon icon={faDashboard} />Dashboard
-         </Link>
-  )}
-       
+        {isHomePage && (
+          <Link to="/SubmissionPage">
+            <FontAwesomeIcon icon={faChartBar} /> Submission Page
+          </Link>
+        )}
+        {!isHomePage && (
+          <Link to="/" className="sidebar_link">
+            <FontAwesomeIcon icon={faDashboard} /> Dashboard
+          </Link>
+        )}
       </nav>
     </div>
   );
 };
-
 
 export default Sidebar;

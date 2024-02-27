@@ -86,7 +86,8 @@ body, h1, h2, p, a, button {
 }
 
 .StartAnalysisButton{
-    margin-top: 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     width: 350px;
     height: 86px;
     padding: 1em 2em;

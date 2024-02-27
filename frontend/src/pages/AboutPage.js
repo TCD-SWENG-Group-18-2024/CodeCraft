@@ -1,4 +1,3 @@
-
 import Clients from '../assets/Clients.png';
 import HeroImage from '../assets/HeroImage.png';
 import IBMWatson from '../assets/IBMWatson.jpg';
