@@ -428,3 +428,9 @@
   }
     
 }
+
+.submission-page .wave_container {
+  position: fixed;
+  bottom: 0;
+  z-index: -1;
+}
