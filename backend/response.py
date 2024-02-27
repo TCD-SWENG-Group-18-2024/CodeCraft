@@ -144,7 +144,7 @@ def code_translation(input_language: str, output_language: str, input: str, ai_m
             llm = gpt
     
     code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
-    output = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'code': code})
+    #output = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'code': code})
     
     return code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': input})
 
