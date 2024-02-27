@@ -18,6 +18,7 @@ const SubmissionPage = () => {
     const [droppedFiles, setDroppedFiles] = useState([]);
     const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
+    const [buttonClicked, setButtonClicked] = useState(false); //LUCIA CODE
     const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -286,6 +287,13 @@ const SubmissionPage = () => {
 
         else return "GPT3.5";
     };
+    const handleButtonClick = () => {
+        // Check if the use case is valid
+        if (useCase !== "" && (useCase === "code_completion" || useCase === "code_translation" || useCase === "code_generation"|| useCase === "code_analysis") ) {
+            // Set the button clicked state to true
+            setButtonClicked(true);
+        }
+    };
 
     return [
     <>
@@ -491,8 +499,7 @@ const SubmissionPage = () => {
 
                     )}
 
-
-                    <button onClick={handleSubmit} className="submitButton">Submit</button>
+                    <button onClick={() => { handleButtonClick(); handleSubmit(); }} className="submitButton">Submit</button>
 
                 </div> 
 
