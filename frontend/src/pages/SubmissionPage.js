@@ -287,6 +287,7 @@ const SubmissionPage = () => {
 
         else return "GPT3.5";
     };
+    //LUCIA CODE
     const handleButtonClick = () => {
         // Check if the use case is valid
         if (useCase !== "" && (useCase === "code_completion" || useCase === "code_translation" || useCase === "code_generation"|| useCase === "code_analysis") ) {
@@ -294,7 +295,7 @@ const SubmissionPage = () => {
             setButtonClicked(true);
         }
     };
-
+    //LUCIA CODE ENDS
     return [
     <>
 
@@ -333,7 +334,8 @@ const SubmissionPage = () => {
                                         {inputType === "textbox" || inputType === "files" 
                                         ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
                                     </a>
-                                    <ol className={`sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}>
+                                    <ol className={//LUCIA CODE  
+                                        `sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setInputType("textbox")}>
                                                 Texbox
@@ -346,6 +348,7 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
+                            //LUCIA CODE
                             )}    
                             {!buttonClicked && ( //LUCIA CODE      
                                 <li className="menu-item">
@@ -354,7 +357,10 @@ const SubmissionPage = () => {
                                         || useCase === "code_analysis" || useCase === "code_translation"
                                         ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
                                     </a>
-                                    <ol className={`sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}>
+                                    
+                                    <ol className={//LUCIA CODE  
+                                        `sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}> 
+                                    
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setUseCase("")}>
                                                 Generic AI repsonse
@@ -382,7 +388,8 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
-                                )}
+                               //LUCIA CODE 
+                               )}
                                 {!buttonClicked && ( //LUCIA CODE
                                 <li className="menu-item">
                                     <a href='#0'>
@@ -402,6 +409,7 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
+                                //LUCIA CODE ENDS
                                 )}
                                 {useCase === "code_completion" || useCase === "code_translation" ? (<>
                                     <li className="menu-item">

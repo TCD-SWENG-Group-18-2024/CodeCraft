@@ -222,11 +222,11 @@
         display: flex;
         flex-direction: column;
 
-          /* New class to hide dropdown when button is clicked  LUCIA CODE*/
+          /*LUCIA CODE*/
         &.hide-dropdown {
           display: none; 
         }
-      
+      /*LUCIA CODE ENDS*/
         li{
           margin: 0;
           cursor: pointer;
