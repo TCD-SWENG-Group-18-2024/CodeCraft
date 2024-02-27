@@ -11,7 +11,7 @@ __pycache__/
 # Ignore virtual environment directories
 venv/
 env/
-
+.venv/
 # Ignore npm dependencies
 /frontend/node_modules/
 

@@ -40,7 +40,8 @@
     /* Style your sidebar links here */
   }
    .sidebar__nav a:hover {
-    background-color: #444;
+    color: #0F62FE;
+    background-color: white;
   }
  
  

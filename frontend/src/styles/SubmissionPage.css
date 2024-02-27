@@ -1,64 +1,166 @@
 .Heading{
   color:white;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   font-weight: 500;
 }
 
-/* .backButton {
-  background: none;
-  border: none;
-  color: white;
-  padding: 16px;
-  cursor: pointer;
-  font-size: large;
+.userArea{
   margin: 20px;
-  position: absolute;
-  left: 10px
-} */
-
-.submissionArea{
-  margin: 20px;
-  height: 500px;
+  height: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
   position: relative;
 }
 
-.submissionArea .textbox {
-  margin-left: 50px;
-  margin: 20px;
-  height: 18vw;
-  width: 60vh;
+.inputTypeDropDown{
+  color: white;
+  margin-bottom: 20px;
+}
+
+.inputTypeDropDown select{
+  width: 55%;
+  padding: 8px;
+  margin: 10px;
+}
+
+.submissionArea{
+  width: calc(70% - 20px);
+}
+
+.dropDownContainer{
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+}
+
+.textBoxContainer{
+  display: flex;
+  flex-direction: column;
+  height:100%;
+}
+
+.fileInputContainer{
+  width: calc(60vh - 190px);
+  height: 20vw;
+  position: relative;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-left: 100px;
+}
+
+.fileDropZone{
+  width: 100%;
+  border: 2px dashed black;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.fileDropZone:hover{
+  color:#0F62FE;
+  background-color: #FFF;
+}
+
+
+.fileDropZone p {
+  margin: 85px;
+}
+
+.fileInputContainer .fileDropZone input{
+  display: none;
+}
+
+.fileDropZone.drag-over{
+  background-color: white;
+}
+
+.droppedFileContainer{
+  margin-top: 10px;
+}
+
+.droppedFileContainer ul{
+  list-style: none;
+  padding: 0;
+}
+
+.droppedFileContainer li{
+  margin-bottom: 5px;
+}
+
+.submissionArea .textBoxContainer .textbox {
+  border: 1px #0F62FE solid;
+  margin-left: 100px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  height: 20vw;
+  width: calc(60vh - 150px);
 }
 
 .submissionArea .submitButton{
   margin-top: 20px;
-  margin-left: 20px;
-  border-radius: 20px;
+  margin-left: 5%;
+  color: #0F62FE;
+  border-color: #0F62FE;
+  border: 1px #0F62FE solid;
   height: 35px;
   width: 85px;
-  bottom: 0;
-  left: 0;
 }
 
-.submissionArea .textContainer{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+.submissionArea .useCaseDropDown, .aiDropDown{
+  margin-bottom: 20px;
+  color: white;
 }
 
-.submissionArea .textContainer .feedBackBox{
-    background-color: lightblue;
-    border: 1px solid black;
-    color: black;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 5px;
+.submissionArea .useCaseDropDown select, .aiDropDown select {
+  width: 55%;
+  padding: 8px;
+  margin: 10px;
+  margin-left: 60px
+}
+
+
+.feedBackArea {
+  width: calc(66vh - 40px); 
+  height: 25vw; 
+  position: fixed; 
+  right: 66px; 
+  top: 265px; 
+  margin-right: 150px;
+  padding: 1rem; 
+  overflow-y: auto; 
+  background-color: none; 
+  border-radius: 5px;
+  z-index: 1000; 
+}
+
+.feedBackBox {
+  font-family: 'Courier New', Courier, monospace; 
+  font-size: 0.9em; 
+  background: white; 
+  border: 1px solid #0F62FE; 
+  padding: 1em; 
+  margin-top: 1em; 
+  margin: 15px;
+}
+
+@media (max-width: 1410px){
+  .feedBackArea {
+    position: relative; 
+    right: 0; 
+    top: 0; 
+    width: auto;
+    height: auto;
+    margin-top: 50px;
+    margin-left: 150px;
+    background-color: none; 
+  }
+
 }
 
 .submissionArea .submitButton:hover{
-    background-color: rgb(42, 199, 199);
+    color: white;
+    background-color: #0F62FE;
 }
 
 .main-content {
@@ -77,9 +179,9 @@
   background-color: none; /* Replace with actual color */
   padding: 20px;
   margin: 10px;
- }
+}
  
- .submission-header .submission-title {
+.submission-header .submission-title {
   margin-left: 60px;
   color: #FFF; /* Replace with actual color */
   /* Style your title as needed */
@@ -89,9 +191,69 @@
  }
  
  
- .header-image {
-  height: 100px; /* Adjust size as needed */
+.header-image {
+  height: 50px;
   width: 100px;
   margin-right: 140px;
  }
  
+ /* https://codepen.io/jkantner/pen/VwbLajq
+ */
+ .loading{
+  justify-content: space-around;
+  display: flex;
+  margin: 1.5em;
+  width: 6em;
+  height: 6em;
+  position: relative; 
+  margin-left: 250px;
+  right: 5px; 
+  bottom: 5px; 
+}
+
+
+ .loading .loading1,
+ .loading .loading2,
+ .loading .loading3{
+
+  position: relative;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  transform-origin: 50%, 100%;
+  animation: bounce 1s linear infinite;
+ }
+
+ .loading .loading1{
+  background: rgb(92, 183, 213);
+ }
+
+ .loading .loading2{
+  background: white;
+  animation-delay: 0.1s;
+ }
+
+ .loading .loading3{
+  background: rgb(92, 183, 213);
+  animation-delay: 0.2s;
+ }
+
+@keyframes bounce {
+  from, to {
+    transform: translateY(0) scale(1,1);
+    animation-timing-function: ease-in;
+  }
+  45%{
+    transform: translateY(5em) scale(1,1);
+    animation-timing-function: linear;
+  }
+  50%{
+    transform: translateY(5em) scale(1.5,0.5);
+    animation-timing-function: linear;
+  }
+  55%{
+    transform: translateY(5em) scale(1,1);
+    animation-timing-function: ease-out;
+  }
+    
+}
