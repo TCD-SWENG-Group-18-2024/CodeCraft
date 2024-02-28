@@ -14,42 +14,42 @@ const teamMembersData = [
     {
       id: 1,
       name: 'Fionn Murphy',
-      role: 'Backend Team',
+      role: 'Team Lead',
       year: '3rd',
       image: FionnNew,
-      description: 'Text'
+      description: 'I\'m Fionn and I am the Team Leader for this project! I am a Third Year Computer Science student and I have extensive experience in programming with languages such as Java, Python, C, Assembly, JavaScript, HTML and CSS, as well as a lot of experience on software engineering projects! I\'ve participated in several game jams and hackathons, and my most recent project was building an AI-Powered Task Management Application with a group of friends for Hack Trinity. I\'m very excited to be working on this project with such an excellent team, and I can\'t wait to see where it goes in the future!'
     },
     {
       id: 2,
       name: 'Mariam María Quesada Ojeda',
-      role: 'API/AI Team',
+      role: 'Integration Team Lead',
       year: '3rd',
       image: Mariam,
-      description: 'Text'
+      description: ''
       },
     {
       id: 3,
       name: 'Leah Weldon',
-      role: 'Frontend Team',
+      role: 'Styling Team Lead',
       year: '3rd',
       image: Leah,
-      description: 'Text'
+      description: ''
     },
     {
       id: 4,
       name: 'Gerard Moylan',
-      role: 'API/AI Team',
+      role: 'Backend Team Lead',
       year: '3rd',
       image: Gerard,
-      description: 'Text'
+      description: ''
     },
     {
       id: 5,
       name: 'Roy Zheng',
-      role: 'Frontend Team',
+      role: 'Styling Team',
       year: '3rd',
       image: Roy,
-      description: 'Im Roy, currently in third year ics, im proficient in programming languages such as java, c, python, javascript, i have participated in projects such as developing an AI chessgame with Microsoft Hololens, i also contributed to the creation of a Spring boot weather application integrated with ReactJS'
+      description: 'I\'m Roy, currently in Third Year ICS. I\'m proficient in programming languages such as Java, C, Python and Javascript. I have participated in projects such as developing an AI chess game with Microsoft Hololens, and I also contributed to the creation of a SpringBoot weather application integrated with ReactJS.'
     },
     {
       id: 6,
@@ -57,7 +57,7 @@ const teamMembersData = [
       role: 'Backend Team',
       year: '3rd',
       image: Ben,
-      description: 'I’m Ben and I’m a third year working as part of the backend team. I have coding experience mainly in Java, python and C . I have also worked on software development projects before for example last year I worked as part of a team on an application that provided  similarity matching scores for different texts.'
+      description: 'I\'m Ben and I\'m a third year working as part of the Backend team. I have coding experience mainly in Java, Python and C. I have also worked on software development projects before - for example, last year I worked as part of a team on an application that provided similarity matching scores for different texts.'
     },
     {
       id: 7,
@@ -65,39 +65,39 @@ const teamMembersData = [
       role: 'Backend Team',
       year: '2nd',
       image: Lucia,
-      description: 'I’m Lucia in 2nd year ICS and on the backend team for this project. My experience includes languages such as Python, C, Java, SQL, etc. Previous projects I’ve worked on include my Leaving Certificate project where I used the BBC Microbit and Python to create an automated system for watering plants, and my group project from first year in ICS where we processed and displayed data and took user input to demonstrate which data to display.'
+      description: 'I\'m Lucia in 2nd Year ICS and am on the Backend team for this project. My experience includes languages such as Python, C, Java, SQL, etc. Previous projects I\'ve worked on include my Leaving Certificate project where I used the BBC Microbit and Python to create an automated system for watering plants, and my group project from first year in ICS where we processed and displayed data and took user input to demonstrate which data to display.'
     },
     {
       id: 8,
       name: 'Yuchen Zhuang',
-      role: 'Frontend Team',
+      role: 'Integration Team',
       year: '2nd',
       image: Yuchen,
-      description: 'I am Yuchen / Paddy in 2nd ICS, and I am on the frontend team for this project. I had experience with Java, C, html, css prior to this project. Last year I also worked with a team to develop an application using Processing.'
+      description: 'I am Yuchen/Paddy in 2nd Year ICS, and I am on the Frontend team for this project. I had experience with Java, C, HTML and CSS prior to this project. Last year I also worked with a team to develop an application using Processing.'
     },
     {
       id: 9,
       name: 'Wang Yinghao',
-      role: 'Frontend Team',
+      role: 'Styling Team',
       year: '2nd',
       image: Wang,
-      description: 'Text'
+      description: ''
     },
     {
       id: 10,
       name: 'Patrick Archbold',
-      role: 'Backend Team',
+      role: 'Integration Team',
       year: '2nd',
       image: Patrick,
-      description: 'I’m Patrick in 2nd year Integrated Computer Science at TCD working with the backend team. I have experience in java, c, assembly language and python. I was involved in programming project where I represented data related to different flights and airports using processing.'
+      description: 'I\'m Patrick in 2nd Year Integrated Computer Science at TCD working with the Backend team. I have experience in Java, C, Assembly language and Python. I was involved in a programming project where I represented data related to different flights and airports using Processing.'
     },
     {
       id: 11,
       name: 'Abdullah Khan',
-      role: 'API/AI Team',
+      role: 'Backend Team',
       year: '2nd',
       image: Abdullah,
-      description: 'Text'
+      description: ''
     },
   ];
   

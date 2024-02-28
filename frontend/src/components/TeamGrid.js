@@ -34,7 +34,7 @@ const TeamGrid = () => {
 
         {Object.entries(groupedMembers).map(([year, members]) => (
           <div key={year}>
-            <h2>{`${year} Year Students`}</h2>
+            <h2 style={{color: '#F5F5F5'}}>{`${year} Year Students`}</h2>
             <div className="team-grid">
               {members.map(member => (
                 <div key={member.id} className="team-member" onClick={() => handleMemberClick(member)}>
