@@ -4,17 +4,25 @@ import "../styles/LoginSignUp.css"
 import Email from '../assets/email.png';
 import User from '../assets/person.png';
 import Password from '../assets/password.png';
+import IBM_white from '../assets/IBM_white.PNG';
 
 
 
 const SignUp =() =>{
 
     const [userAction,setUserAction] = useState("Sign Up");
+    
 
 
 
     return (
         <div className = "container">
+            <div className="back-to-home">
+  <a href="/">
+    <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
+  </a>
+</div>
+
             <div className = "header">
                 <div className = "text">{userAction}</div>
                 <div className = "underline"></div>
