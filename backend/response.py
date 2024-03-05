@@ -1,15 +1,28 @@
 import os
 import dotenv
+import json
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.llms import HuggingFaceHub
 from langchain.schema import HumanMessage, SystemMessage
-
+# Import ChromaDB related modules
+import chromadb
+from chromadb.config import Settings
 
 # For this to work, you need to create a file called '.env' and input the following:
 # OPENAI_API_KEY=YOUR_KEY_HERE
 dotenv.load_dotenv()
+# Create ChromaDB client and collection
+chromadb_client = chromadb.PersistentClient(path="/path/to/persist/directory")#
+# Check if the collection exists
+# Check if the collection exists
+try:
+    # Try to create the collection
+    response_collection = chromadb_client.create_collection(name="CodeResponses")
+except chromadb.db.base.UniqueConstraintError:
+    # The collection already exists, get the existing collection
+    response_collection = chromadb_client.get_collection(name="CodeResponses")
 
 # You need to put the hugging face token in .env as well
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
@@ -22,7 +35,24 @@ starcoder = HuggingFaceHub(
 llama = HuggingFaceHub(
     repo_id='codellama/CodeLlama-7b-hf'
 )
+def log_response(user_input, result):
+    # Get the current count of responses
+    user_input_str = json.dumps(user_input)
+    result_str = json.dumps(result)
+    response_count = response_collection.count()
 
+    # Define a dictionary to store information about the response
+    response_info = {
+        "user_input": user_input_str,
+        "response": result_str,
+    }
+
+    # Add the response to ChromaDB
+    response_collection.add(
+        documents=[response_info],
+        metadatas=[{"source": "code response"}],
+        ids=[f"response_{response_count + 1}"]
+    )
 # Templates
 code_analysis_template = PromptTemplate(
     input_variables=['input'],
@@ -76,7 +106,9 @@ def AIModel(user_input: str, ai_model: str) -> dict:
             llm = llama
     
     code_analysis_chain = LLMChain(llm=llm, prompt=general_ai_model_template)
-
+    # Log the code response to ChromaDB
+    result = code_analysis_chain.invoke({'input': user_input})
+    log_response(user_input, result)
     return code_analysis_chain.invoke({'input': user_input})  
 
 

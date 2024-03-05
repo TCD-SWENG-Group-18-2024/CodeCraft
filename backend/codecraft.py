@@ -2,10 +2,19 @@ import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
-
+import chromadb
+from chromadb.config import Settings
+import json
 app = Flask(__name__)
 CORS(app)
-
+# Create ChromaDB client
+chromadb_client = chromadb.PersistentClient(path="/path/to/persist/directory")
+try:
+    # Try to create the collection
+    response_collection = chromadb_client.create_collection(name="CodeSubmissions")
+except chromadb.db.base.UniqueConstraintError:
+    # The collection already exists, get the existing collection
+    response_collection = chromadb_client.get_collection(name="CodeSubmissions")
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'asm' 'js', 'html','css','rb','php','kt','R','pl'}
@@ -17,6 +26,30 @@ def allowed_file(filename):
 @app.route('/')
 def homepage():
     return{"message": "Hello SwEng Project Group 18"}
+def log_submission(user_input, use_case, ai_model, input_language, output_language):
+    # Get the current count of submissions
+    submission_count = response_collection.count()
+    user_input_str = json.dumps(user_input)
+    use_case_str = json.dumps(use_case)
+    ai_model_str = json.dumps(ai_model)
+    input_language_str = json.dumps(input_language)
+    output_language_str = json.dumps(output_language)
+
+    # Define a dictionary to store information about the submission
+    submission_info = {
+        "use_case": use_case_str,
+        "ai_model": ai_model_str,
+        "input_language": input_language_str,
+        "output_language": output_language_str,
+        "user_input": user_input_str,
+    }
+
+    # Add the submission to ChromaDB
+    response_collection.add(
+        documents=[submission_info],
+        metadatas=[{"source": "code submission"}],
+        ids=[f"submission_{submission_count + 1}"]
+    )
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -34,7 +67,8 @@ def llm_text_request():
 
     # Call the appropriate function based on use_case and ai_model
     result = process_data(user_input, use_case, ai_model, input_language, output_language)
-
+        # Log the code submission to ChromaDB
+    log_submission(user_input, use_case, ai_model, input_language, output_language)
     return jsonify(result)
 
 @app.route('/llm/file', methods=['POST'])
@@ -73,7 +107,8 @@ def llm_file_request():
 
     # Call the appropriate function based on use_case and ai_model
     result = process_data(user_input, use_case, ai_model, input_language, output_language)
-
+        # Log the code submission to ChromaDB
+    log_submission(user_input, use_case, ai_model, input_language, output_language)
     return jsonify(result)
 
 def process_data(user_input, use_case, ai_model, input_language, output_language):
