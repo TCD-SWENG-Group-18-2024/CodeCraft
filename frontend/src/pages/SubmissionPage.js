@@ -18,7 +18,7 @@ const SubmissionPage = () => {
     const [droppedFiles, setDroppedFiles] = useState([]);
     const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
-    const [buttonClicked, setButtonClicked] = useState(false); //LUCIA CODE
+    const [isDropdownOpen,setIsDropdownopen]=useState(true);
     const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -292,15 +292,7 @@ const SubmissionPage = () => {
 
         else return "GPT3.5";
     };
-    //LUCIA CODE
-    const handleButtonClick = () => {
-        // Check if the use case is valid
-        if (useCase !== "" && (useCase === "code_completion" || useCase === "code_translation" || useCase === "code_generation"|| useCase === "code_analysis") ) {
-            // Set the button clicked state to true
-            setButtonClicked(true);
-        }
-    };
-    //LUCIA CODE ENDS
+    
     return [
     <>
 
@@ -332,39 +324,33 @@ const SubmissionPage = () => {
  
                         <nav className='dropdownMenu'>
                             <ol>
-                              {!buttonClicked && ( //LUCIA CODE
-                                <li className="menu-item">
-                                    <a href='#0'>
+                                <li className='menu-item'>
+                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         
                                         {inputType === "textbox" || inputType === "files" 
                                         ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
                                     </a>
-                                    <ol className={//LUCIA CODE  
-                                        `sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}>
-                                        <li className="menu-item">
+                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
+                                        <li className='menu-item'>
                                             <a href="#0" onClick={() => setInputType("textbox")}>
-                                                Texbox
+                                                Textbox
                                             </a>
                                         </li>
-                                        <li className="menu-item">
+                                        <li className='menu-item'>
                                             <a href="#0" onClick={() => setInputType("files")}>
                                                 File
                                             </a>
                                         </li>
                                     </ol>   
-                                </li>
-                            //LUCIA CODE
-                            )}    
-                            {!buttonClicked && ( //LUCIA CODE      
-                                <li className="menu-item">
-                                    <a href='#0'>
+                                </li>   
+                                <li className='menu-item'>
+                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         {useCase === "code_generation" || useCase === "code_completion"
                                         || useCase === "code_analysis" || useCase === "code_translation"
                                         ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
                                     </a>
                                     
-                                    <ol className={//LUCIA CODE  
-                                        `sub-menu ${buttonClicked ? 'hide-dropdown' : ''}`}> 
+                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}> 
                                     
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setUseCase("")}>
@@ -393,15 +379,12 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
-                               //LUCIA CODE 
-                               )}
-                                {!buttonClicked && ( //LUCIA CODE
                                 <li className="menu-item">
-                                    <a href='#0'>
+                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         {aiModel === "watsonx.ai" || aiModel === "openai"
                                         ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
                                     </a>
-                                    <ol className='sub-menu'>
+                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setAIModel("watsonx.ai")}>
                                                 StarCoder
@@ -414,16 +397,15 @@ const SubmissionPage = () => {
                                         </li>
                                     </ol>   
                                 </li>
-                                //LUCIA CODE ENDS
-                                )}
+
                                 {useCase === "code_completion" || useCase === "code_translation" ? (<>
                                     <li className="menu-item">
-                                        <a href='#0'>
+                                        <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                             {inputLanguage !== " " 
                                         ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
                                             
                                         </a>
-                                        <ol className='sub-menu'>
+                                        <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                             <li className="menu-item">
                                                 <a href="#0" onClick={()=>setInputLanguage("java")}>
                                                     Java
@@ -445,13 +427,13 @@ const SubmissionPage = () => {
 
                                 {useCase === "code_translation" ? (<>
                                     <li className="menu-item">
-                                        <a href='#0'>
+                                        <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                             {outputLanguage !== " " 
                                         ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
                                             
                                         
                                         </a>
-                                        <ol className='sub-menu'>
+                                        <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                             <li className="menu-item">
                                                 <a href="#0" onClick={()=>setOutputLanguage("java")}>
                                                     Java
@@ -513,7 +495,7 @@ const SubmissionPage = () => {
 
                     )}
 
-                    <button onClick={() => { handleButtonClick(); handleSubmit(); }} className="submitButton">Submit</button>
+                    <button onClick={() => { handleSubmit(); }} className="submitButton">Submit</button>
                     <button className="submitButton" onClick={handleExportClick}>Export</button>
     
                 </div> 
