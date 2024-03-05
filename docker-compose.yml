@@ -1,0 +1,24 @@
+services:
+  backend:
+    image: tcdswenggroup18/codecraft:backend-latest
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    image: tcdswenggroup18/codecraft:frontend-latest
+    build:
+      context: .
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
