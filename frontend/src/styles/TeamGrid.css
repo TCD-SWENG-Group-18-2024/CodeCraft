@@ -10,9 +10,15 @@
   }
 
   h2 {
-    text-align: center;
-    margin-top: 2rem;
-    color: #007bff;
+    color: #FFFFFF; 
+  font-size: 2em; 
+  font-weight: bold; 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+  background-color: rgba(255, 255, 255, 0.2); 
+  border-radius: 5px; 
+  padding: 10px 20px; 
+  margin-bottom: 20px; 
+  display: inline-block; 
   }
   
   .team-member {
