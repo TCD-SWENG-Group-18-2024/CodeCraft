@@ -51,6 +51,11 @@ const SubmissionPage = () => {
     const handleOutputLanguageChange = (event) =>{
         setOutputLanguage(event.target.value);
     };
+   
+    const handleExportClick = () => {
+    console.log('Export button clicked');
+};
+
 
 // takes input - files 
     const handleDragOver = (event) => { 
@@ -509,7 +514,8 @@ const SubmissionPage = () => {
                     )}
 
                     <button onClick={() => { handleButtonClick(); handleSubmit(); }} className="submitButton">Submit</button>
-
+                    <button className="submitButton" onClick={handleExportClick}>Export</button>
+    
                 </div> 
 
 
