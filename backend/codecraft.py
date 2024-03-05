@@ -17,7 +17,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def homepage():
-    return{"message": "Hello SwEng Project Group 18"}
+    return {"message": "Hello SwEng Project Group 18"}
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -100,16 +100,16 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
 
     return result
 
-#POST method to occur when user chooses to export on the frontend
+# POST method to occur when user chooses to export on the frontend
 @app.route('/export', methods=['POST'])
 def export_endpoint():
     # Extract data from the request
     data = request.get_json()           
-    llm_response = data.get('llm_response')     #llm response
-    filename = data.get('filename', 'response') #the filename user wants, if none, default to response
-    output_language = data.get('output_language') #take in output_language
+    llm_response = data.get('llm_response')         # llm response
+    filename = data.get('filename', 'response')     # the filename user wants, if none, default to response
+    output_language = data.get('output_language')   # take in output_language
 
-    #if there is an output language given, make the file extension correspond
+    # if there is an output language given, make the file extension correspond
     if output_language != '':                
         if output_language.lower() == 'python':
             filename += '.py'
@@ -141,14 +141,14 @@ def export_endpoint():
             filename += '.pl'
         else:
             filename += '.txt' #default to .txt
-    #if no output_language default to .txt
+    # if no output_language default to .txt
     else:
         filename += '.txt'
-
 
     # Export LLM response to file
     with open(filename, 'w') as f:
         f.write(llm_response)
+    
     # Return the exported file to the client as an attachment
     return send_file(filename, as_attachment=True)
 
