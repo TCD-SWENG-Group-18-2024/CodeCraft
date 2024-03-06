@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -177,17 +178,26 @@ def register_user():
     username = request.json['username'] 
     password = request.json['password']
 
-    # TODO: I would like for passwords to have minimum requirements such as:
-    # Min length
-    # Avoidance of dodgy chars: space, backtick, ¬, ¦, ~, etc. The standard disallowed password characters
-    # At least one number
-    # At least one (acceptable) special char: $,%,&,@,!
+    #Password Requirements:
+    if len(password) < 8:
+        return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
+    if len(password) > 20:
+        return jsonify({"error": "Password should be less than 20 characters long"}), 400 # Max length of password
+    if not re.search(r'\d', password):
+        return jsonify({"error": "Password should contain at least one number"}), 400 # At least one number
+    if re.search(r'[\s`¬¦~\t\n*#\'/|\\]', password):
+        return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No dodgy chars / standard disallowed password chars
+    if not re.search(r'[A-Z]', password):
+        return jsonify({"error": "Password should contain at least one capital letter"}), 400 # At least one capital
+    if not re.search(r'[a-z]', password):
+        return jsonify({"error": "Password should contain at least one lowercase letter"}), 400 # At least one lowercase
+    if re.search(r'[^\x00-\x7F]', password):
+        return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
 
 
-
+    #Username Requirements:
     if username == '':
         return jsonify({"error": "No username provided"}), 400
-
     username = username.lower()
     user_exists = User.query.filter_by(username=username).first() is not None
 
