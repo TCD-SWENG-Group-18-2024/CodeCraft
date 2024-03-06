@@ -129,6 +129,12 @@ def export_endpoint():
     filename = data.get('filename', 'response')
     output_language = data.get('output_language')   # take in output_language
 
+    #TODO: Test without output_language to see a txt file
+    #TODO: Test with an output_language to check if the file extenstion logic works
+    #TODO: Parse away the beginning of the AI repsonse, i.e. any instances of "Sure! Here is some code ..."
+    #TODO: Check the txt responses for code generation to ensure there are no backticks or dodgy characters
+    #TODO: Check where on a device the exported file actually ends up!
+
     # if there is an output language given, make the file extension correspond
     if output_language != '':
         if output_language.lower() == 'python':
