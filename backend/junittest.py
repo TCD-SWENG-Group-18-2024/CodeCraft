@@ -196,7 +196,7 @@ class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content}")
+       # print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
@@ -240,7 +240,7 @@ class TestFileUploadCodeCompletionWatsonX(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content}")
+      #  print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
@@ -285,7 +285,7 @@ class TestFileUploadCodeTranslationOpenAi(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content}")
+     #   print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
@@ -330,7 +330,7 @@ class TestFileUploadCodeTranslationWatsonX(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content}")
+     #   print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
@@ -375,7 +375,7 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content}")
+     #   print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
@@ -416,7 +416,7 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
             file_content = file.read()
 
         # Log the first few characters of the file content
-        print(f"File content: {file_content}")
+     #   print(f"File content: {file_content}")
 
         print("Sending file upload request...")
         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
@@ -437,6 +437,34 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
         
        #  Check if the response is successful (status code 200)
         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")     
+
+class TestRegistration(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        print("Registration Test")
+
+    def test_register_user(self):
+        # Prepare the JSON payload for registration
+        json_payload = {
+            "username": "testtesttesttesttesttesttesttesttesttest",
+            "password": "test_password"
+        }
+
+        # Make a POST request to register a new user
+        response = self.app.post('/register', json=json_payload, content_type='application/json')
+
+        # Check the response status code
+        self.assertEqual(response.status_code, 200)
+
+        # Check that response data is in JSON format
+        self.assertTrue(response.is_json)
+
+        # Check the response content for successful registration
+        response_data = response.json
+        self.assertIn('id', response_data)
+        self.assertIn('username', response_data)
+        self.assertEqual(response_data['username'], 'testtesttesttesttesttesttesttesttesttest')
+
 
 if __name__ == '__main__':
     unittest.main()

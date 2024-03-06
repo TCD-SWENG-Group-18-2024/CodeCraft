@@ -174,16 +174,17 @@ def export_endpoint():
 
 @app.route('/register', methods=['POST'])
 def register_user():
-    username = request.json['username']
+    username = request.json['username'] 
     password = request.json['password']
 
     if username == '':
         return jsonify({"error": "No username provided"}), 400
 
+    username = username.lower()
     user_exists = User.query.filter_by(username=username).first() is not None
 
     if user_exists:
-        return jsonify({"error": "User already exists"}), 409
+        return jsonify({"error": "User already exists"}), 409 
 
     hashed_password = bcrypt.generate_password_hash(password)
     new_user = User(username=username, password=hashed_password)
@@ -201,6 +202,7 @@ def register_user():
 def login_user():
     username = request.json['username']
     password = request.json['password']
+    username=username.lower()
 
     user = User.query.filter_by(username=username).first()
 
