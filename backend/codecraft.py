@@ -177,6 +177,14 @@ def register_user():
     username = request.json['username'] 
     password = request.json['password']
 
+    # TODO: I would like for passwords to have minimum requirements such as:
+    # Min length
+    # Avoidance of dodgy chars: space, backtick, ¬, ¦, ~, etc. The standard disallowed password characters
+    # At least one number
+    # At least one (acceptable) special char: $,%,&,@,!
+
+
+
     if username == '':
         return jsonify({"error": "No username provided"}), 400
 
