@@ -1,5 +1,5 @@
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, abort
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
@@ -11,8 +11,7 @@ CORS(app)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs',
-                      'S', 'js', 'html', 'css', 'rb', 'php', 'kt', 'R', 'pl'}
+ALLOWED_EXTENSIONS = {'txt', 'py', 'c', 'cpp', 'java', 'cs', 'S', 'js', 'html', 'css', 'rb', 'php', 'kt', 'R', 'pl'}
 MAX_FILE_SIZE_BYTES = 10 * 1024  # 10KB
 
 # Initialise database and configure
@@ -184,7 +183,7 @@ def register_user():
     username = request.json['username'] 
     password = request.json['password']
 
-    #Password Requirements:
+    # Password Requirements:
     if len(password) < 8:
         return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
     if len(password) > 20:
@@ -201,9 +200,10 @@ def register_user():
         return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
 
 
-    #Username Requirements:
+    # Username Requirements:
     if username == '':
         return jsonify({"error": "No username provided"}), 400
+    
     username = username.lower()
     user_exists = User.query.filter_by(username=username).first() is not None
 
@@ -226,8 +226,8 @@ def register_user():
 def login_user():
     username = request.json['username']
     password = request.json['password']
-    username=username.lower()
 
+    username = username.lower()
     user = User.query.filter_by(username=username).first()
 
     if user is None:
