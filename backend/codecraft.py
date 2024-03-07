@@ -7,7 +7,7 @@ from response import code_generation, code_completion, code_translation, code_an
 import re
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
