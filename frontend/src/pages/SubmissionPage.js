@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
+import {renderToString} from 'react-dom/server'
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { duotoneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './LoginSignUp';
 import './Home';
 
@@ -57,6 +60,11 @@ const SubmissionPage = () => {
 };
 
 
+    const getCodeBlock = (code) => (
+        <SyntaxHighlighter language="jsx" style={duotoneLight}>
+        {code}
+        </SyntaxHighlighter>
+    );
 // takes input - files 
     const handleDragOver = (event) => { 
         event.preventDefault();
@@ -166,7 +174,7 @@ const SubmissionPage = () => {
         }
     };
     const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
-    return `<pre class="code-block"><code>${code}</code></pre>`;
+        return `<pre class="code-block"><code>${renderToString( getCodeBlock(code))}</code></pre>`;
     });
 
     const formatFeedback = (responseData) => {
