@@ -1,4 +1,4 @@
-import Clients from '../assets/Clients.png';
+import mentors from '../assets/mentors.png';
 import HeroImage from '../assets/HeroImage.png';
 import IBMWatson from '../assets/IBMWatson.jpg';
 import IBM_white from '../assets/IBM_white.PNG';
@@ -45,7 +45,7 @@ const AboutPage = () => {
 
       <div className="section">
         <div className="image-container">
-          <img src={Clients} alt="Clients" className="image-right" />
+          <img src={mentors} alt="mentors" className="image-right" />
         </div>
         <div className="text">
           <h2>Meet Our Clients</h2>
