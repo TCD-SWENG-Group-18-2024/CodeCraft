@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
 import re
-
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
