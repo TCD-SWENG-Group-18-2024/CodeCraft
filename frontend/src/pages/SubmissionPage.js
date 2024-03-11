@@ -55,9 +55,6 @@ const SubmissionPage = () => {
         setOutputLanguage(event.target.value);
     };
    
-    const handleExportClick = () => {
-    console.log('Export button clicked');
-};
 
 
     const getCodeBlock = (code) => (
@@ -300,6 +297,24 @@ const SubmissionPage = () => {
 
         else return "GPT3.5";
     };
+
+    const handleExportClick = (feedback) => {
+        const blob = new Blob([feedback], { type: 'text/plain;charset=utf-8' });
+    
+        const a = document.createElement('a');
+        a.style.display = 'none';
+    
+        a.href = window.URL.createObjectURL(blob);
+    
+        a.download = 'feedback.txt';
+
+        document.body.appendChild(a);
+        a.click();
+    
+        document.body.removeChild(a);
+      };
+    
+
     
     return [
     <>
@@ -504,7 +519,6 @@ const SubmissionPage = () => {
                     )}
 
                     <button onClick={() => { handleSubmit(); }} className="submitButton">Submit</button>
-                    <button className="submitButton" onClick={handleExportClick}>Export</button>
     
                 </div> 
 
@@ -523,9 +537,13 @@ const SubmissionPage = () => {
                             <pre className = "code-block"><code>{feedback}</code></pre>:
                             <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
                             }
+                            
                         </div>
                     )}
+                    {!isLoading && feedback &&( 
+                        <button onClick={() => { handleExportClick(feedback); }} className="submitButton">Export</button>
 
+                    )}
                 </div>
 
             </div>

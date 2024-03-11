@@ -258,6 +258,7 @@
   padding: 1em; 
   margin-top: 1em; 
   margin: 15px;
+  border-radius: 15px;
 }
 .code-block {
   font-size: 11px;
