@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
 import './LoginSignUp';
 import './Home';
+import './ExportPage'
 
 const SubmissionPage = () => {
 
