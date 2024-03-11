@@ -17,13 +17,25 @@ const ExportPage = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
 };
+
+const handleTextAreaChange = (event) => {
+  setLlmResponse(event.target.value);
+};
+
+const handleFilenameChange = (event) => {
+  setFilename(event.target.value);
+};
+
+const handleOutputLanguageChange = (event) => {
+  setOutputLanguage(event.target.value);
+};
  
-  const ExportHandling =  async () => {
+  const handleExport =  async () => {
     if (!outputLanguage) {
       alert('Please select an output language');
       return;
     }
-
+    try{
       const response = await await fetch("http://localhost:8080/llm/text", { 
         method: 'POST',
       headers: {
@@ -49,7 +61,10 @@ const ExportPage = () => {
       // Handle the case where the export request fails
       console.error('Export failed:', response.statusText);
     }
-  };
+  } catch (error) {
+    console.error('Error occurred during export:', error.message);
+  }
+};
 
 return (
   <>
@@ -72,9 +87,31 @@ return (
           </header>
           <h2>Export Page Content</h2>
 
-
-
-
+          <div className="export-content">
+          <textarea
+            value={llmResponse}
+            onChange={handleTextAreaChange}
+            placeholder="Enter LLM Response"
+          />
+          <input
+            type="text"
+            value={filename}
+            onChange={handleFilenameChange}
+            placeholder="Enter Filename"
+          />
+          <label>Select Output Language:</label>
+          <select
+            value={outputLanguage}
+            onChange={handleOutputLanguageChange}
+          >
+            <option value="">-- Select Output Language --</option>
+            <option value="python">Python</option>
+            <option value="c">C</option>
+            <option value="c++">C++</option>
+            
+            </select>
+            <button onClick={handleExport}>Export</button>
+        </div>
         </div>
       </> 
     );
