@@ -1,5 +1,5 @@
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, session
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
@@ -232,8 +232,16 @@ def login_user():
     if user is None:
         return jsonify({"error": "User does not exist"}), 401
 
+    login_attempts = session.get('login_attempts', 0) #Get current login attempts, or initialise to zero
+
+    if login_attempts > 3:
+        return jsonify({"error": "Your account is frozen. Please contact support."}), 403 #403: server understood request but refused to authorise
+
     if not bcrypt.check_password_hash(user.password, password):
+        session['login_attempts'] = login_attempts + 1
         return jsonify({"error": "Incorrect password"}), 401
+    
+    session.pop('login_attempts', None) #Reset counter after the correct password is given
 
     return jsonify({
         "id": user.id,
