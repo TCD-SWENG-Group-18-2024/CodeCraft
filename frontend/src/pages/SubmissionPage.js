@@ -541,7 +541,7 @@ const SubmissionPage = () => {
                         </div>
                     )}
                     {!isLoading && feedback &&( 
-                        <button onClick={() => { handleExportClick(feedback); }} className="submitButton">Export</button>
+                        <button onClick={() => { handleExportClick(feedback); }} className="exportButton">Export</button>
 
                     )}
                 </div>
