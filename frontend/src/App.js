@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import LoginSignUp from './pages/LoginSignUp';
 import SubmissionPage from './pages/SubmissionPage';
 import TeamPage from './pages/TeamPage';
+import ExportPage from './pages/ExportPage';
 
 // move the logo to the indivdual pages
 // import IBM from "./assets/IBM.PNG"
@@ -37,14 +38,11 @@ function App(){
           <Route path ="/SubmissionPage" exact element = {<SubmissionPage/>}/>
           <Route path ="/LoginSignUp" exact element = {<LoginSignUp/>}/>
           <Route path="/about" element={<AboutPage />} />
-
+          <Route path ="/ExportPage" exact element = {<ExportPage/>}/>
           <Route path="/team" element={<TeamPage />} />
         </Routes>
       </Router>
-      
-      
-      
-  
+
     </div>
     
   )
