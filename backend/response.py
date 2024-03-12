@@ -144,19 +144,10 @@ def code_translation(input_language: str, output_language: str, input: str, ai_m
             llm = gpt
     
     code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
-    output = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'code': code})
     
     return code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': input})
 
 
 if __name__ == "__main__":
     # Enter code here to debug
-    '''
-    res = code_translation(input_language='c', target_language='java', ai_model='gpt', code=)
-    for line in res['code'].split(r'\n'):
-        print(line)
-    print('response is: ')
-    for line in res['text'].split(r'\n'):
-        print(line)
-    '''
     pass

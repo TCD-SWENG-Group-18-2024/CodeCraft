@@ -1,8 +1,15 @@
+email-validator
 Flask==3.0.2
+flask_bcrypt
+flask_mail
 Flask_Cors==4.0.0
+flask_login
+flask_sqlalchemy
+flask-wtf
 huggingface-hub==0.20.3
 langchain==0.1.8
 langchain_community==0.0.21
 langchain_openai==0.0.6
 python-dotenv==1.0.1
 Requests==2.31.0
+wtforms   

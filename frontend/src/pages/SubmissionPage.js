@@ -202,7 +202,7 @@ const SubmissionPage = () => {
 
             formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
         } else {
-            // empty use case: just generic LLM repsonse
+            // empty use case: just generic LLM response
             const formattedText = responseData.text ? `${responseData.text.replace(/\\n/g, '\n')}` : '';
 
             formattedFeedback = [formattedText].filter(Boolean).join('\n\n');
@@ -370,14 +370,14 @@ const SubmissionPage = () => {
                                     <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         {useCase === "code_generation" || useCase === "code_completion"
                                         || useCase === "code_analysis" || useCase === "code_translation"
-                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI repsonse</>}
+                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI response</>}
                                     </a>
                                     
                                     <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}> 
                                     
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setUseCase("")}>
-                                                Generic AI repsonse
+                                                Generic AI response
                                             </a>
                                         </li>
                                         <li className="menu-item">

@@ -3,6 +3,7 @@ from unittest.mock import patch
 from codecraft import app, process_data
 from io import BytesIO
 from codecraft import app
+import os
 class TestCodeAnalysisWatsonxAi(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
@@ -14,7 +15,7 @@ class TestCodeAnalysisWatsonxAi(unittest.TestCase):
         "ai_model": "watsonx_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -30,7 +31,7 @@ class TestCodeAnalysisOpenAi(unittest.TestCase):
         "ai_model": "open_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -47,7 +48,7 @@ class TestCodeGenerationWatsonxAi(unittest.TestCase):
         "ai_model": "watsonx_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -64,7 +65,7 @@ class TestCodeGenerationOpenAi(unittest.TestCase):
         "ai_model": "open_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -80,7 +81,7 @@ class TestCodeCompletionWatsonxAi(unittest.TestCase):
         "ai_model": "watsonx_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -96,7 +97,7 @@ class TestCodeCompletionOpenAi(unittest.TestCase):
         "ai_model": "open_ai"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -115,7 +116,7 @@ class TestCodeTranslationOpenAi(unittest.TestCase):
         "output_language": "javascript"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -133,7 +134,7 @@ class TestCodeTranslationWatsonxAi(unittest.TestCase):
         "output_language": "javascript"
     }
         print("Sending text upload request...")
-        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        # Make a POST request to /llm/text endpoint with the sample JSON payload
         response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
 
         print("Response received.")
@@ -149,6 +150,7 @@ class TestTextUpload(unittest.TestCase):
          json_text_payload = {
          "user_input":"import math def quadratic_roots(a, b, c):  discriminant = b**2 - 4*a*c  if discriminant < 0:     return None  # No real roots  elif discriminant == 0:    root = -b / (2*a)   return rootelse:root1 = (-b + math.sqrt(discriminant)) / (2*a)root2 = (-b - math.sqrt(discriminant)) / (2*a)return root1, root2",
          "use_case": "code_analysis",
+         #select the default AI model by not providing a specified model
          "ai_model": ""
      }
          print("Sending text upload request...")
@@ -162,7 +164,7 @@ class TestTextUpload(unittest.TestCase):
          json_text_payload = {
          "user_input":"int main() { for (int i = 0; i <= 9; ++i) {std::cout << i << ' ';}std::cout << std::endl;return 0;}",
          "use_case": "code_analysis",
-         "ai_model": ""
+         "ai_model": ""#select the default AI model by not providing a specified model
      }
          print("Sending text upload request...")
          response = self.app.post('/llm/text', json=json_text_payload, content_type='application/json')
@@ -172,247 +174,343 @@ class TestTextUpload(unittest.TestCase):
 
 ### These tests make use of absolute paths specific to one team member's machine. These paths must be generalized to run on all machines before these tests can be used in workflows.
          
-# class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
-#     def setUp(self):
-#         self.app = app.test_client()
+class TestFileUploadCodeCompletionOpenAi(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
 
-#     #FILE INPUT: python code which calculates the roots of a quadratic equation
-#     def test_file_upload_complex_code(self):
-#         from werkzeug.datastructures import MultiDict
-#          #Define a sample JSON payload
-#         json_file_payload = {
-#             "use_case": "code_completion",
-#             "ai_model": "OpenAI",
-#         }
+    def test_file_upload_complex_code(self):
+        from werkzeug.datastructures import MultiDict
+         #Define a sample JSON payload
+        json_file_payload = {
+            "use_case": "code_completion",
+            "ai_model": "OpenAI",
+        }
+        # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-#         # Open the file from the specified path
-#         file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\codecompletion.py"
-#         with open(file_path, 'rb') as file:
-#             file_content = file.read()
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "codecompletion.py")
+                # Open the file from the specified path
+        file_path = test_file_path
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
 
-#         # Log the first few characters of the file content
-#         print(f"File content: {file_content}")
+        # Log the first few characters of the file content
+       # print(f"File content: {file_content}")
 
-#         print("Sending file upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-#         data = MultiDict([
-#         ('file', (BytesIO(file_content), 'InsertionSort.py')),
-#         ('use_case', 'code_completion'),
-#         ('ai_model', 'OpenAI'),
-#         ('input_language', ''),
-#         ('output_language', '')
-#         ])
-#     # Use a MultiDict for the data parameter
-#         data = MultiDict(data)
-#         response = self.app.post('/llm/file',
-#                              content_type='multipart/form-data',
-#                              data=data)
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'codecompletion.py')),
+        ('use_case', 'code_completion'),
+        ('ai_model', 'OpenAI'),
+        ('input_language', ''),
+        ('output_language', '')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data=data)
  
-#         print("Response received.")
+        print("Response received.")
         
-#        #  Check if the response is successful (status code 200)
-#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+       #  Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
         
-# class TestFileUploadCodeCompletionWatsonX(unittest.TestCase):
-#     def setUp(self):
-#         self.app = app.test_client()
+class TestFileUploadCodeCompletionWatsonX(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
 
-#     #FILE INPUT: python code which calculates the roots of a quadratic equation
-#     def test_file_upload_complex_code(self):
-#         from werkzeug.datastructures import MultiDict
-#          #Define a sample JSON payload
-#         json_file_payload = {
-#             "use_case": "code_completion",
-#             "ai_model": "watsonx_ai",
-#         }
+    def test_file_upload_complex_code(self):
+        from werkzeug.datastructures import MultiDict
+         #Define a sample JSON payload
+        json_file_payload = {
+            "use_case": "code_completion",
+            "ai_model": "watsonx_ai",
+        }
+       # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-#         # Open the file from the specified path
-#         file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\codecompletion.py"
-#         with open(file_path, 'rb') as file:
-#             file_content = file.read()
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "codecompletion.py")
+                # Open the file from the specified path
+        file_path = test_file_path
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
 
-#         # Log the first few characters of the file content
-#         print(f"File content: {file_content}")
+        # Log the first few characters of the file content
+      #  print(f"File content: {file_content}")
 
-#         print("Sending file upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-#         data = MultiDict([
-#         ('file', (BytesIO(file_content), 'InsertionSort.py')),
-#         ('use_case', 'code_completion'),
-#         ('ai_model', 'watsonx_ai'),
-#         ('input_language', ''),
-#         ('output_language', '')
-#         ])
-#     # Use a MultiDict for the data parameter
-#         data = MultiDict(data)
-#         response = self.app.post('/llm/file',
-#                              content_type='multipart/form-data',
-#                              data=data)
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'codecompletion.py')),
+        ('use_case', 'code_completion'),
+        ('ai_model', 'watsonx_ai'),
+        ('input_language', ''),
+        ('output_language', '')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data=data)
  
-#         print("Response received.")
+        print("Response received.")
         
-#        #  Check if the response is successful (status code 200)
-#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+       #  Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
         
-# class TestFileUploadCodeTranslationOpenAi(unittest.TestCase):
-#     def setUp(self):
-#         self.app = app.test_client()
+class TestFileUploadCodeTranslationOpenAi(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
 
-#     #FILE INPUT: python code which calculates the roots of a quadratic equation
-#     def test_file_upload_complex_code(self):
-#         from werkzeug.datastructures import MultiDict
-#          #Define a sample JSON payload
-#         json_file_payload = {
-#             "use_case": "code_translation",
-#             "ai_model": "OpenAI",
-#         }
+    def test_file_upload_complex_code(self):
+        from werkzeug.datastructures import MultiDict
+         #Define a sample JSON payload
+        json_file_payload = {
+            "use_case": "code_translation",
+            "ai_model": "OpenAI",
+        }
 
-#         # Open the file from the specified path
-#         file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
-#         with open(file_path, 'rb') as file:
-#             file_content = file.read()
+         # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-#         # Log the first few characters of the file content
-#         print(f"File content: {file_content}")
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
 
-#         print("Sending file upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-#         data = MultiDict([
-#         ('file', (BytesIO(file_content), 'TriangleArea.java')),
-#         ('use_case', 'code_translation'),
-#         ('ai_model', 'OpenAI'),
-#         ('input_language', 'java'),
-#         ('output_language', 'python')
-#         ])
-#     # Use a MultiDict for the data parameter
-#         data = MultiDict(data)
-#         response = self.app.post('/llm/file',
-#                              content_type='multipart/form-data',
-#                              data=data)
+        # Log the first few characters of the file content
+     #   print(f"File content: {file_content}")
+
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'Triangle.java')),
+        ('use_case', 'code_translation'),
+        ('ai_model', 'OpenAI'),
+        ('input_language', 'java'),
+        ('output_language', 'python')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data=data)
  
-#         print("Response received.")
+        print("Response received.")
         
-#        #  Check if the response is successful (status code 200)
-#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+       #  Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
 
-# class TestFileUploadCodeTranslationWatsonX(unittest.TestCase):
-#     def setUp(self):
-#         self.app = app.test_client()
+class TestFileUploadCodeTranslationWatsonX(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
 
-#     #FILE INPUT: python code which calculates the roots of a quadratic equation
-#     def test_file_upload_complex_code(self):
-#         from werkzeug.datastructures import MultiDict
-#          #Define a sample JSON payload
-#         json_file_payload = {
-#             "use_case": "code_translation",
-#             "ai_model": "watsonx_ai",
-#         }
+    def test_file_upload_complex_code(self):
+        from werkzeug.datastructures import MultiDict
+         #Define a sample JSON payload
+        json_file_payload = {
+            "use_case": "code_translation",
+            "ai_model": "watsonx_ai",
+        }
 
-#         # Open the file from the specified path
-#         file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
-#         with open(file_path, 'rb') as file:
-#             file_content = file.read()
+          # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-#         # Log the first few characters of the file content
-#         print(f"File content: {file_content}")
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
 
-#         print("Sending file upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-#         data = MultiDict([
-#         ('file', (BytesIO(file_content), 'TriangleArea.java')),
-#         ('use_case', 'code_translation'),
-#         ('ai_model', 'watsonx_ai'),
-#         ('input_language', 'java'),
-#         ('output_language', 'python')
-#         ])
-#     # Use a MultiDict for the data parameter
-#         data = MultiDict(data)
-#         response = self.app.post('/llm/file',
-#                              content_type='multipart/form-data',
-#                              data=data)
+        # Log the first few characters of the file content
+     #   print(f"File content: {file_content}")
+
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'Triangle.java')),
+        ('use_case', 'code_translation'),
+        ('ai_model', 'watsonx_ai'),
+        ('input_language', 'java'),
+        ('output_language', 'python')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data=data)
  
-#         print("Response received.")
+        print("Response received.")
         
-#        #  Check if the response is successful (status code 200)
-#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+       #  Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
 
-# class TestFileUploadCodeAnalysis(unittest.TestCase):
-#     def setUp(self):
-#         self.app = app.test_client()
+class TestFileUploadCodeAnalysis(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
 
-#     #FILE INPUT: python code which calculates the roots of a quadratic equation
-#     def test_file_upload_complex_code(self):
-#         from werkzeug.datastructures import MultiDict
-#          #Define a sample JSON payload
-#         json_file_payload = {
-#             "use_case": "code_analysis",
-#             "ai_model": "OpenAI",
-#         }
+    def test_file_upload_complex_code(self):
+        from werkzeug.datastructures import MultiDict
+         #Define a sample JSON payload
+        json_file_payload = {
+            "use_case": "code_analysis",
+            "ai_model": "OpenAI",
+        }
 
-#         # Open the file from the specified path
-#         file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
-#         with open(file_path, 'rb') as file:
-#             file_content = file.read()
+        # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-#         # Log the first few characters of the file content
-#         print(f"File content: {file_content}")
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
 
-#         print("Sending file upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-#         data = MultiDict([
-#         ('file', (BytesIO(file_content), 'TriangleArea.java')),
-#         ('use_case', 'code_analsis'),
-#         ('ai_model', 'OpenAI'),
-#         ('input_language', ''),
-#         ('output_language', '')
-#         ])
-#     # Use a MultiDict for the data parameter
-#         data = MultiDict(data)
-#         response = self.app.post('/llm/file',
-#                              content_type='multipart/form-data',
-#                              data=data)
+        # Log the first few characters of the file content
+     #   print(f"File content: {file_content}")
+
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'Triangle.java')),
+        ('use_case', 'code_analsis'),
+        ('ai_model', 'OpenAI'),
+        ('input_language', ''),
+        ('output_language', '')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data=data)
  
-#         print("Response received.")
+        print("Response received.")
         
-#        #  Check if the response is successful (status code 200)
-#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
+       #  Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")
 
-#     #FILE INPUT: C code which prints the numbers 0-9 inclusive
-#     def test_file_upload_simple_code(self):
-#         from werkzeug.datastructures import MultiDict
-#          #Define a sample JSON payload
-#         json_file_payload = {
-#             "use_case": "code_analysis",
-#             "ai_model": "OpenAI",
-#         }
+    def test_file_upload_simple_code(self):
+        from werkzeug.datastructures import MultiDict
+         #Define a sample JSON payload
+        json_file_payload = {
+            "use_case": "code_analysis",
+            "ai_model": "OpenAI",
+        }
 
-#         # Open the file from the specified path
-#         file_path = "C:\\Users\\yupfe\\Downloads\\FolderWithSampleFiles\\Triangle.java"
-#         with open(file_path, 'rb') as file:
-#             file_content = file.read()
+         # Get the current script's directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
 
-#         # Log the first few characters of the file content
-#         print(f"File content: {file_content}")
+        # Construct the path to the test.py file
+        test_file_path = os.path.join(script_dir, "testing_files", "Triangle.java")
+                # Open the file from the specified path
+        file_path = test_file_path
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
 
-#         print("Sending file upload request...")
-#         # Make a POST request to /llm/file endpoint with the sample JSON payload and file
-#         data = MultiDict([
-#         ('file', (BytesIO(file_content), 'TriangleArea.java')),
-#         ('use_case', 'code_analysis'),
-#         ('ai_model', 'OpenAI'),
-#         ('input_language', ''),
-#         ('output_language', '')
-#         ])
-#     # Use a MultiDict for the data parameter
-#         data = MultiDict(data)
-#         response = self.app.post('/llm/file',
-#                              content_type='multipart/form-data',
-#                              data=data)
+        # Log the first few characters of the file content
+     #   print(f"File content: {file_content}")
+
+        print("Sending file upload request...")
+        # Make a POST request to /llm/file endpoint with the sample JSON payload and file
+        data = MultiDict([
+        ('file', (BytesIO(file_content), 'Triangle.java')),
+        ('use_case', 'code_analysis'),
+        ('ai_model', 'OpenAI'),
+        ('input_language', ''),
+        ('output_language', '')
+        ])
+    # Use a MultiDict for the data parameter
+        data = MultiDict(data)
+        response = self.app.post('/llm/file',
+                             content_type='multipart/form-data',
+                             data=data)
  
-#         print("Response received.")
+        print("Response received.")
         
-#        #  Check if the response is successful (status code 200)
-#         self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")     
+       #  Check if the response is successful (status code 200)
+        self.assertEqual(response.status_code, 200, msg=f"Response content: {response.data}")     
+
+class TestRegistration(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        print("Registration Test")
+
+    def test_register_user(self):
+        # Prepare the JSON payload for registration
+        json_payload = {
+            "username": "testtesttesttesttesttesttesttesttesttest",
+            "password": "test_Password1" #need to include all the password conditions liek number and captial
+        }
+
+        # Make a POST request to register a new user
+        response = self.app.post('/register', json=json_payload, content_type='application/json')
+
+        # Check the response status code
+        self.assertEqual(response.status_code, 200)
+
+        # Check that response data is in JSON format
+        self.assertTrue(response.is_json)
+
+        # Check the response content for successful registration
+        response_data = response.json
+        self.assertIn('id', response_data)
+        self.assertIn('username', response_data)
+        self.assertEqual(response_data['username'], 'testtesttesttesttesttesttesttesttesttest')
+
+class TestLogin(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        print("Login Test")
+
+    def test_login_user(self):
+        # Prepare the JSON payload for login
+        json_payload = {
+            "username": "testtesttesttesttesttesttesttesttesttest",
+            "password": "test_Password1"
+        }
+
+        # Make a POST request to login with the prepared JSON payload
+        response = self.app.post('/login', json=json_payload, content_type='application/json')
+
+        # Check the response status code
+        self.assertEqual(response.status_code, 200)
+
+        # Check that response data is in JSON format
+        self.assertTrue(response.is_json)
+
+        # Check the response content for successful login
+        response_data = response.json
+        self.assertIn('id', response_data)
+        self.assertIn('username', response_data)
+        # Additional checks as per your application logic
+
+    def test_login_user_wrong_password(self):
+        # Prepare the JSON payload for login
+        json_payload = {
+            "username": "testtesttesttesttesttesttesttesttesttest",
+            "password": "wrong_password"
+        }
+
+        # Make multiple POST requests with wrong passwords to simulate failed login attempts
+        for _ in range(4):  # Simulate 4 failed login attempts
+            response = self.app.post('/login', json=json_payload, content_type='application/json')
+            # Check that the response status code indicates a failed login attempt
+            self.assertEqual(response.status_code, 401)
+
+        response = self.app.post('/login', json=json_payload, content_type='application/json')
+        
+        # Check that the response status code indicates the account is frozen
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(response.is_json)
+
 
 if __name__ == '__main__':
     unittest.main()
