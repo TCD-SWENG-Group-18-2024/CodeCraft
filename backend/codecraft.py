@@ -179,6 +179,7 @@ def export_endpoint():
 
 @app.route('/register', methods=['POST'])
 def register_user():
+    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@aol.com', '@icloud.com', '@mail.com', '@protonmail.com', '@zoho.com', '@yandex.com']
     username = request.json['username'] 
     password = request.json['password']
 
@@ -202,6 +203,8 @@ def register_user():
     # Username Requirements:
     if username == '':
         return jsonify({"error": "No username provided"}), 400
+    if not any(username.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
+        return jsonify({"error": "Enter a valid email"}), 400
     
     username = username.lower()
     user_exists = User.query.filter_by(username=username).first() is not None
@@ -241,7 +244,7 @@ def login_user():
 
     login_attempts = session.get('login_attempts', 0) #Get current login attempts, or initialise to zero
 
-    if login_attempts > 3:
+    if login_attempts >= 3:
         session['last_login_attempt'] = time.time()  # Update the last login attempt time
         return jsonify({"error": "Your account is frozen. Please contact support."}), 403 #403: server understood request but refused to authorise
 
