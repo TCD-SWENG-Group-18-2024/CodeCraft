@@ -1,6 +1,7 @@
 email-validator
 Flask==3.0.2
 flask_bcrypt
+flask_mail
 Flask_Cors==4.0.0
 flask_login
 flask_sqlalchemy
