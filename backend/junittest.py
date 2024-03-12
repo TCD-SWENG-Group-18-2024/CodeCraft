@@ -447,7 +447,7 @@ class TestRegistration(unittest.TestCase):
         # Prepare the JSON payload for registration
         json_payload = {
             "username": "testtesttesttesttesttesttesttesttesttest",
-            "password": "test_password"
+            "password": "test_Password1" #need to include all the password conditions liek number and captial
         }
 
         # Make a POST request to register a new user
@@ -464,6 +464,52 @@ class TestRegistration(unittest.TestCase):
         self.assertIn('id', response_data)
         self.assertIn('username', response_data)
         self.assertEqual(response_data['username'], 'testtesttesttesttesttesttesttesttesttest')
+
+class TestLogin(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        print("Login Test")
+
+    def test_login_user(self):
+        # Prepare the JSON payload for login
+        json_payload = {
+            "username": "testtesttesttesttesttesttesttesttesttest",
+            "password": "test_Password1"
+        }
+
+        # Make a POST request to login with the prepared JSON payload
+        response = self.app.post('/login', json=json_payload, content_type='application/json')
+
+        # Check the response status code
+        self.assertEqual(response.status_code, 200)
+
+        # Check that response data is in JSON format
+        self.assertTrue(response.is_json)
+
+        # Check the response content for successful login
+        response_data = response.json
+        self.assertIn('id', response_data)
+        self.assertIn('username', response_data)
+        # Additional checks as per your application logic
+
+    def test_login_user_wrong_password(self):
+        # Prepare the JSON payload for login
+        json_payload = {
+            "username": "testtesttesttesttesttesttesttesttesttest",
+            "password": "wrong_password"
+        }
+
+        # Make multiple POST requests with wrong passwords to simulate failed login attempts
+        for _ in range(4):  # Simulate 4 failed login attempts
+            response = self.app.post('/login', json=json_payload, content_type='application/json')
+            # Check that the response status code indicates a failed login attempt
+            self.assertEqual(response.status_code, 401)
+
+        response = self.app.post('/login', json=json_payload, content_type='application/json')
+        
+        # Check that the response status code indicates the account is frozen
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(response.is_json)
 
 
 if __name__ == '__main__':
