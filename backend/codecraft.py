@@ -1,12 +1,12 @@
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session, url_for
+from flask import Flask, request, jsonify, send_file, session
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
 import re, time
-from itsdangerous import URLSafeTimedSerializer
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
@@ -19,7 +19,6 @@ MAX_FILE_SIZE_BYTES = 10 * 1024  # 10KB
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
 db.init_app(app)
-mail = Mail(app)
 
 with app.app_context():
     db.create_all()
@@ -263,71 +262,6 @@ def login_user():
         "username": user.username
     })
 
-serializer = URLSafeTimedSerializer(app.secret_key)
-# Function to generate a reset token
-def generate_reset_token(user):
-    return serializer.dumps(user.email, salt='reset-password')
-
-# Function to send reset password email
-def send_reset_password_email(email, token):
-    reset_url = url_for('reset_password', token=token, _external=True)
-
-    msg = Message("Reset Your Password", recipients=[email])
-    msg.body = f"Click the following link to reset your password: {reset_url}"
-    mail.send(msg)
-
-############# IGNORE FOR NOW #######################
-# # Configuration for Flask-Mail
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Example: for Gmail
-# app.config['MAIL_PORT'] = 587  # Example: for Gmail
-# app.config['MAIL_USE_TLS'] = True  # Example: for Gmail
-# app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # Your email address
-# app.config['MAIL_PASSWORD'] = 'your_email_password'  # Your email password
-#####################################################################
-
-@app.route('/forgot', methods=['POST'])
-def forgot_password():
-    
-    username = request.json['username']
-
-    # Check if the user exists
-    username = username.lower()
-    user = User.query.filter_by(username=username).first()
-
-    if user is None:
-        return jsonify({"error": "User does not exist"}), 404
-
-    # Generate a token and send a reset password link to the user's email
-    token = generate_reset_token(user)
-
-    # Send an email with a link to reset password
-    send_reset_password_email(user.email, token)
-
-    return jsonify({"message": "Reset password link sent to your email"})
-
-# Route for resetting password
-@app.route('/reset-password/<token>', methods=['POST'])
-def reset_password(token):
-    try:
-        # Decrypt the token to get the user's email
-        email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
-
-        # Find the user by email
-        user = User.query.filter_by(email=email).first()
-
-        if user is None:
-            return jsonify({"error": "User not found"}), 404
-
-        # Update the user's password
-        new_password = request.json['new_password']
-        hashed_password = bcrypt.generate_password_hash(new_password)
-        user.password = hashed_password
-        db.session.commit()
-
-        return jsonify({"message": "Password reset successfully"})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
 
 
 
