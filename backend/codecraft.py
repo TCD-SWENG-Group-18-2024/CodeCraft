@@ -124,7 +124,7 @@ def export_endpoint():
     data = request.get_json()
     llm_response = data.get('llm_response')         # llm response
     # the filename user wants, if none, default to response
-    filename = data.get('filename', 'response')
+    filename = data.get('filename', 'feedback')
     output_language = data.get('output_language')   # take in output_language
 
     #TODO: Test without output_language to see a txt file
@@ -179,7 +179,7 @@ def export_endpoint():
 
 @app.route('/register', methods=['POST'])
 def register_user():
-    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@aol.com', '@icloud.com', '@mail.com', '@protonmail.com', '@zoho.com', '@yandex.com']
+    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@aol.com', '@icloud.com', '@mail.com', '@protonmail.com', '@zoho.com', '@yandex.com', '@tcd.ie']
     username = request.json['username'] 
     password = request.json['password']
 
