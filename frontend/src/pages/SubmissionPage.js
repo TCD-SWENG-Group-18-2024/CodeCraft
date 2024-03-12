@@ -370,16 +370,11 @@ const SubmissionPage = () => {
                                     <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         {useCase === "code_generation" || useCase === "code_completion"
                                         || useCase === "code_analysis" || useCase === "code_translation"
-                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI response</>}
+                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Code Analysis</>}
                                     </a>
                                     
                                     <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}> 
                                     
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setUseCase("")}>
-                                                Generic AI response
-                                            </a>
-                                        </li>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setUseCase("code_generation")}>
                                                 Code Generation
@@ -416,6 +411,11 @@ const SubmissionPage = () => {
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setAIModel("openai")}>
                                                 GPT3.5
+                                            </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setAIModel("llama")}>
+                                                CodeLlama
                                             </a>
                                         </li>
                                     </ol>   
