@@ -2,23 +2,21 @@ import React from "react";
 import { useState } from "react";
 import "../styles/LoginSignUp.css"
 import Email from '../assets/email.png';
-import User from '../assets/person.png';
 import Password from '../assets/password.png';
 import IBM_white from '../assets/IBM_white.PNG';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+
 
 const SignUp =() =>{
 
     const [userAction,setUserAction] = useState("Sign Up");
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
     const HandleSignUp = () => {
 
         const userData = {
-            name: name,
-            email: email,
+            username: username, // username is the email
             password: password
         }
 
@@ -29,21 +27,54 @@ const SignUp =() =>{
             },
             body: JSON.stringify(userData),
         })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the server if needed
+            console.log(data);
+
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
 
         
     }
 
     const HandleLogin = () => {
 
+        const userData = {
+            username: username, // username is the email
+            password: password
+        }
+        fetch( "http://localhost:8080/login",{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the server if needed
+            console.log(data);
+
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+
     }
 
     const HandlePressingButton = () =>{
-    if (userAction === "Sign Up") {
-      HandleSignUp();
-    } else if (userAction === "Login") {
-      HandleLogin();
+        if (userAction === "Sign Up") {
+        HandleSignUp();
+        } else if (userAction === "Login") {
+        HandleLogin();
+        }
     }
-    }
+    
     return (
         <div className = "container">
 
@@ -60,20 +91,12 @@ const SignUp =() =>{
 
             <div className ="inputs">
 
-                {userAction==="Login"?<div></div>:<div className = "input">
-                    <img src ={User}/>
-                    <input type = "user" 
-                    placeholder = "Name" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)}/>
-                </div>}
-                    
                 <div className = "input">
                     <img src ={Email}/>
-                    <input type = "email" 
-                    placeholder = "Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}/>
+                    <input type = "user" 
+                    placeholder = "Email" 
+                    value={username} 
+                    onChange={(e) => setUserName(e.target.value)}/>
                 </div>
 
                 <div className = "input">
@@ -97,7 +120,7 @@ const SignUp =() =>{
                     <div>Don't have an Account?</div>
                     <div className="switchTab" onClick={() => setUserAction("Sign Up")}>Sign up</div>
                     <div >
-                        <a>
+                        <a href=" ">
                             {/* route to a another page*/ }
                             Forgot your password?
                         </a>
