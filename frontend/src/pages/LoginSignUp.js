@@ -12,6 +12,7 @@ const SignUp =() =>{
     const [userAction,setUserAction] = useState("Sign Up");
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [showMessage, setShowMessage] = useState(false);
 
     const HandleSignUp = () => {
 
@@ -31,7 +32,11 @@ const SignUp =() =>{
         .then(data => {
             // Handle the response from the server if needed
             console.log(data);
-
+            setShowMessage(true);
+            setTimeout(() => {
+                setShowMessage(false);
+                window.location.href = "/"
+            }, 2500);
         })
         .catch(error => {
             // Handle errors
@@ -57,8 +62,13 @@ const SignUp =() =>{
         .then(response => response.json())
         .then(data => {
             // Handle the response from the server if needed
+            console.log("Login Successful")
             console.log(data);
-
+            setShowMessage(true);
+            setTimeout(() => {
+                setShowMessage(false);
+                window.location.href="/"; 
+            }, 2500);
         })
         .catch(error => {
             // Handle errors
@@ -74,14 +84,18 @@ const SignUp =() =>{
         HandleLogin();
         }
     }
-    
+
     return (
+        <>
         <div className = "container">
 
+            
+           {!showMessage && 
+           <>
             <div className="back-to-home">
-                <a href="/">
-                    <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
-                </a>
+                    <a href="/">
+                        <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
+                    </a>
             </div>
 
             <div className = "header">
@@ -107,36 +121,36 @@ const SignUp =() =>{
                     onChange={(e) => setPassword(e.target.value)}/>
                 </div>
 
-            </div>
+                </div>
 
-            <div className ="submitContainer">
-                {/* {set user data, not yet implemented} */}
-                <div className = "submit" onClick={HandlePressingButton}>{userAction==="Login"?<>Login</>:<>Sign Up</>} </div>
-            </div>
+                <div className ="submitContainer">
+                    {/* {set user data, not yet implemented} */}
+                    <div className = "submit" onClick={HandlePressingButton}>{userAction==="Login"?<>Login</>:<>Sign Up</>} </div>
+                </div>
 
-            <div className ="switch">
-                {userAction === "Login" ? (
-                    <>
-                    <div>Don't have an Account?</div>
-                    <div className="switchTab" onClick={() => setUserAction("Sign Up")}>Sign up</div>
-                    <div >
-                        <a href=" ">
-                            {/* route to a another page*/ }
-                            Forgot your password?
-                        </a>
-                    </div>
-                    </>
-                    ) : (
-                    <>
-                    <div>Already have an account?</div>
-                    <div className = "switchTab" onClick={() => setUserAction("Login")}>Login</div>
-                    </>
-                )}
-            </div>
-
+                <div className ="switch">
+                    {userAction === "Login" ? (
+                        <>
+                        <div>Don't have an Account?</div>
+                        <div className="switchTab" onClick={() => setUserAction("Sign Up")}>Sign up</div>
+                        <div >
+                            <a href=" ">
+                                {/* route to a another page*/ }
+                                Forgot your password?
+                            </a>
+                        </div>
+                        </>
+                        ) : (
+                        <>
+                        <div>Already have an account?</div>
+                        <div className = "switchTab" onClick={() => setUserAction("Login")}>Login</div>
+                        </>
+                    )}
+                </div> 
+            </>}
+            {showMessage && <div className="popup-message">Successful, Redirecting...</div>}
         </div>
-
-
+        </>
     );
 }
 
