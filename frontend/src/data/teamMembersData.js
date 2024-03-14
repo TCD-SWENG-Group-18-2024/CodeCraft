@@ -33,7 +33,7 @@ const teamMembersData = [
       role: 'Styling Team Lead',
       year: '3rd',
       image: Leah,
-      description: ''
+      description: 'I\'m Leah and I am the Styling Team Leader for this project! I am a 3rd year Computer Science student and I have experience in programming with languages such as Java, C, Python, Prolog, Haskell, R, Verilog, VHDL, ARM Assembly, ReactJS, Javascript, CSS and HTML. I have worked on other projects such as creating an App to explore data relating to artificial space objects, SwEng Project with Mersus Technology and developing a web application for a song guessing game. I have also took part in some Hackathons including one with KPMG in Glasgow! I\'m excited to be working on this project and can’t wait to see what we are able to produce:)'
     },
     {
       id: 4,
@@ -41,7 +41,7 @@ const teamMembersData = [
       role: 'Backend Team Lead',
       year: '3rd',
       image: Gerard,
-      description: ''
+      description: 'I\'m Gerard and I\'m currently in 3rd year ICS. I\'m proficient in Java, Python and C and have experience with backend development using Java Spring Boot and Python Flask. I have worked on multiple projects in the past such as a web application for Cisco which crowdsources the most accurate translations for Webex.'
     },
     {
       id: 5,
