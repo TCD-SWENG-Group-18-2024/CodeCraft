@@ -32,7 +32,7 @@ function Home() {
           
         <nav className="App-nav">
           <div className="App-nav-links">
-            <a href="#features">Features</a>
+            <Link to ="/features">Features</Link>
             <Link to="/team">Meet the Team</Link>
             <Link to="/about">About</Link>
             <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
