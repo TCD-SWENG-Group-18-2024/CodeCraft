@@ -55,7 +55,7 @@ const SubmissionPage = () => {
         setOutputLanguage(event.target.value);
     };
    
-
+    const [customFileName, setCustomFileName] = useState('');
 
     const getCodeBlock = (code) => (
         <SyntaxHighlighter language="jsx" style={duotoneLight}>
@@ -299,6 +299,63 @@ const SubmissionPage = () => {
     };
 
     const handleExportClick = (feedback) => {
+       
+        const lines = feedback.split('\n');
+       
+    let codeBlock = '';
+    let language = '';
+
+    // Loop through each line to find the starting marker
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        if (line.startsWith("```")) {
+            // Extract the language from the line
+            language = line.substring(3).trim();
+            
+            // Start capturing the code block from the next line
+            for (let j = i + 1; j < lines.length; j++) {
+                const codeLine = lines[j].trim();
+
+                // Check if the line is the ending marker
+                if (codeLine.endsWith("```")) {
+                    // Extract the code block content
+                    codeBlock = lines.slice(i + 1, j).join('\n');
+                    feedback = codeBlock;
+                    break;  // Exit the loop once the ending marker is found
+                }
+            }
+            break;  // Exit the loop once the starting marker is found
+        }
+
+    }
+        const extensionMap = {
+            'python': '.py',
+            'java': '.java',
+            'c': '.c',
+            'c++': '.cpp',
+            'c#': '.cs',
+            'assembly': '.S',
+            'javascript': '.js',
+            'html': '.html',
+            'css': '.css',
+            'ruby': 'ruby',
+            'php': 'php',
+            'kotlin': '.kt',
+            'r': '.R',
+            'perl': '.pl'
+            // Add more mappings for other languages as needed
+        };
+    
+        const fileExtension = extensionMap[language] || 'txt';
+    
+        // Call the export function with the determined file extension
+        exportFeedback(feedback, fileExtension);
+    };
+
+    const exportFeedback = (feedback, fileExtension) => {
+        const fileName = customFileName || 'feedback';
+        
         const blob = new Blob([feedback], { type: 'text/plain;charset=utf-8' });
     
         const a = document.createElement('a');
@@ -306,15 +363,14 @@ const SubmissionPage = () => {
     
         a.href = window.URL.createObjectURL(blob);
     
-        a.download = 'feedback.txt';
+        a.download = fileName + fileExtension;
 
         document.body.appendChild(a);
         a.click();
     
         document.body.removeChild(a);
+        
       };
-    
-
     
     return [
     <>
@@ -541,8 +597,15 @@ const SubmissionPage = () => {
                         </div>
                     )}
                     {!isLoading && feedback &&( 
-                        <button onClick={() => { handleExportClick(feedback); }} className="exportButton">Export</button>
-
+                        <div>
+                         <button onClick={() => { handleExportClick(feedback); }} className="exportButton">Export</button>
+                         <input
+                         type="text"
+                         value={customFileName}
+                         onChange={(e) => setCustomFileName(e.target.value)}
+                         placeholder="Enter custom file name"
+                         />
+                        </div>
                     )}
                 </div>
 
