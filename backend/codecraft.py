@@ -22,11 +22,11 @@ bcrypt = Bcrypt(app)
 db.init_app(app)
 
 # Configuration for Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'  # Gmail SMTP server
-app.config['MAIL_PORT'] = 587  # Gmail SMTP port (use 587 for TLS)
-app.config['MAIL_USE_TLS'] = True  # Enable TLS encryption
-app.config['MAIL_USERNAME'] = 'tcdswenggroup18@gmail.com'  # Sender email
-app.config['MAIL_PASSWORD'] = 'CodeCraft#2024' # Sender password
+app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'              # Gmail SMTP server
+app.config['MAIL_PORT'] = 587                                   # Gmail SMTP port (use 587 for TLS)
+app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
+app.config['MAIL_USERNAME'] = null     # Sender email
+app.config['MAIL_PASSWORD'] = null           # Sender password
 mail = Mail(app)
 
 with app.app_context():
@@ -95,11 +95,8 @@ def llm_file_request():
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,
-                          input_language, output_language)
-
+    result = process_data(user_input, use_case, ai_model,input_language, output_language)
     return jsonify(result)
-
 
 def process_data(user_input, use_case, ai_model, input_language, output_language):
     if use_case is not None:
@@ -188,7 +185,7 @@ def export_endpoint():
 
 @app.route('/register', methods=['POST'])
 def register_user():
-    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@aol.com', '@icloud.com', '@mail.com', '@protonmail.com', '@zoho.com', '@yandex.com', '@tcd.ie']
+    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
     username = request.json['username'] 
     password = request.json['password']
 
@@ -271,7 +268,7 @@ def login_user():
 
 
 # Initialize the serializer with your app's secret key
-app.secret_key = 'your_secret_key_here'
+app.secret_key = 'your_secret_key_here'                     #TEMPORARY!!!!!!! WILL NEED ANOTHER KEY FOR THIS
 serializer = URLSafeTimedSerializer(app.secret_key)
 
 # Function to generate a reset token
