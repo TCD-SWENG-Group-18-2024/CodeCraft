@@ -25,8 +25,8 @@ db.init_app(app)
 app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'              # Gmail SMTP server
 app.config['MAIL_PORT'] = 587                                   # Gmail SMTP port (use 587 for TLS)
 app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
-app.config['MAIL_USERNAME'] = null     # Sender email
-app.config['MAIL_PASSWORD'] = null           # Sender password
+app.config['MAIL_USERNAME'] = None    # Sender email
+app.config['MAIL_PASSWORD'] = None           # Sender password
 mail = Mail(app)
 
 with app.app_context():
