@@ -1,11 +1,12 @@
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session
+from flask import Flask, request, jsonify, send_file, session, url_for
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel
-import re, time
+import re, time, secrets
+from itsdangerous import URLSafeTimedSerializer
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -20,6 +21,14 @@ app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
 db.init_app(app)
 
+# Configuration for Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'  # Gmail SMTP server
+app.config['MAIL_PORT'] = 587  # Gmail SMTP port (use 587 for TLS)
+app.config['MAIL_USE_TLS'] = True  # Enable TLS encryption
+app.config['MAIL_USERNAME'] = 'tcdswenggroup18@gmail.com'  # Sender email
+app.config['MAIL_PASSWORD'] = 'CodeCraft#2024' # Sender password
+mail = Mail(app)
+
 with app.app_context():
     db.create_all()
 
@@ -27,11 +36,9 @@ with app.app_context():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route('/')
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
-
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -263,7 +270,50 @@ def login_user():
     })
 
 
+# Initialize the serializer with your app's secret key
+app.secret_key = 'your_secret_key_here'
+serializer = URLSafeTimedSerializer(app.secret_key)
 
+# Function to generate a reset token
+def generate_reset_token(user):
+    return serializer.dumps(user.email, salt='reset-password')
+
+# Function to send reset password email
+def send_reset_password_email(email, token):
+    reset_url = url_for('reset_password', token=token, _external=True)
+    msg = Message("Reset Your Password", recipients=[email])
+    msg.body = f"Click the following link to reset your password: {reset_url}"
+    mail.send(msg)
+
+# Route for forgot password
+@app.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    email = request.json.get('email')  # Extract email from user input
+    # Check if the user exists
+    user = User.query.filter_by(email=email).first()
+    if user is None:
+        return jsonify({"error": "User does not exist"}), 404
+    token = generate_reset_token(user)       # Generate a reset token
+    send_reset_password_email(email, token) # Send reset password email
+    return jsonify({"message": "Reset password link sent to your email"})
+
+# Route for resetting password
+@app.route('/reset-password/<token>', methods=['POST'])
+def reset_password(token):
+    try:
+        # Decrypt the token to get the user's email
+        email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
+        user = User.query.filter_by(email=email).first()                      # Find the user by email
+        if user is None:
+            return jsonify({"error": "User not found"}), 404
+        new_password = request.json['new_password']                           # Update the user's password
+        hashed_password = bcrypt.generate_password_hash(new_password)
+        user.password = hashed_password
+        db.session.commit()
+        return jsonify({"message": "Password reset successfully"})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
