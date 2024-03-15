@@ -172,7 +172,6 @@
       &:nth-child(5){
         --accent-color: rgb(253, 253, 253);
       }
-      
       a{
         color: rgb(0, 0, 0);
         display: block;
@@ -221,20 +220,21 @@
         z-index:1;
         display: flex;
         flex-direction: column;
-      
         li{
           margin: 0;
           cursor: pointer;
 
         &:hover, a:focus{ 
           background-color: #0F62FE;
-        }
+          }
         }
       }
   }
   }
 }
-
+.hide-dropdown{
+  display:none
+}
 .feedBackArea {
   width: calc(66vh - 40px); 
   height: 25vw; 
@@ -258,6 +258,7 @@
   padding: 1em; 
   margin-top: 1em; 
   margin: 15px;
+  border-radius: 15px;
 }
 .code-block {
   font-size: 11px;
@@ -408,6 +409,83 @@
   background: rgb(92, 183, 213);
   animation-delay: 0.2s;
  }
+
+.exportButton{
+  margin-top: 20px;
+  margin-left: 5%;
+  color: #0F62FE;
+  border-color: #0F62FE;
+  border: 1px #0F62FE solid;
+  height: 35px;
+  width: 85px;
+}
+
+
+.exportButton:hover{
+    color: white;
+    background-color: #0F62FE;
+}
+/*
+.exportButton{
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1em;
+
+  padding: 0.75em 1em;
+  color: #0F62FE;
+
+  border: 0.15em solid #0F62FE;
+  border-radius: calc(0.75em + 0.5em + 0.15em);
+
+  transition: 2s;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: -1.5em;
+
+    z-index: -1;
+
+    width: 200%;
+    aspect-ratio: 1;
+
+    border-radius: 40%;
+
+    background-color: rgba(#0F62FE, 0.25);
+
+    transition: 2s;
+  }
+
+  &:before{
+    left: -80%;
+    transform: translate3d(0, 1em, 0) rotate(-340deg);
+  }
+
+  &:after{
+    right: -80%;
+    transform: translate3d(0, 1em, 0) rotate(390deg);
+  }
+
+  &:hover,
+  &:focus{
+    color: white;
+    background-color: rgba(15, 98, 254, 0.75);
+    border-color: white;
+
+    &:before, 
+    &:after {
+      background-color: rgba(#0F62FE, 0.75);
+    }
+  }
+ }
+*/
+
  
 @keyframes bounce {
   from, to {
@@ -427,4 +505,10 @@
     animation-timing-function: ease-out;
   }
     
+}
+
+.submission-page .wave_container {
+  position: fixed;
+  bottom: 0;
+  z-index: -1;
 }

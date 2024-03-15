@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import HeaderImage from '../assets/IBM_white.PNG';
+import {renderToString} from 'react-dom/server'
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { duotoneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './LoginSignUp';
 import './Home';
 
@@ -18,6 +21,7 @@ const SubmissionPage = () => {
     const [droppedFiles, setDroppedFiles] = useState([]);
     const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
+    const [isDropdownOpen,setIsDropdownopen]=useState(true);
     const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -50,7 +54,14 @@ const SubmissionPage = () => {
     const handleOutputLanguageChange = (event) =>{
         setOutputLanguage(event.target.value);
     };
+   
+    const [customFileName, setCustomFileName] = useState('');
 
+    const getCodeBlock = (code) => (
+        <SyntaxHighlighter language="jsx" style={duotoneLight}>
+        {code}
+        </SyntaxHighlighter>
+    );
 // takes input - files 
     const handleDragOver = (event) => { 
         event.preventDefault();
@@ -160,7 +171,7 @@ const SubmissionPage = () => {
         }
     };
     const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
-    return `<pre class="code-block"><code>${code}</code></pre>`;
+        return `<pre class="code-block"><code>${renderToString( getCodeBlock(code))}</code></pre>`;
     });
 
     const formatFeedback = (responseData) => {
@@ -287,6 +298,80 @@ const SubmissionPage = () => {
         else return "GPT3.5";
     };
 
+    const handleExportClick = (feedback) => {
+       
+        const lines = feedback.split('\n');
+       
+    let codeBlock = '';
+    let language = '';
+
+    // Loop through each line to find the starting marker
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        if (line.startsWith("```")) {
+            // Extract the language from the line
+            language = line.substring(3).trim();
+            
+            // Start capturing the code block from the next line
+            for (let j = i + 1; j < lines.length; j++) {
+                const codeLine = lines[j].trim();
+
+                // Check if the line is the ending marker
+                if (codeLine.endsWith("```")) {
+                    // Extract the code block content
+                    codeBlock = lines.slice(i + 1, j).join('\n');
+                    feedback = codeBlock;
+                    break;  // Exit the loop once the ending marker is found
+                }
+            }
+            break;  // Exit the loop once the starting marker is found
+        }
+
+    }
+        const extensionMap = {
+            'python': '.py',
+            'java': '.java',
+            'c': '.c',
+            'c++': '.cpp',
+            'c#': '.cs',
+            'assembly': '.S',
+            'javascript': '.js',
+            'html': '.html',
+            'css': '.css',
+            'ruby': 'ruby',
+            'php': 'php',
+            'kotlin': '.kt',
+            'r': '.R',
+            'perl': '.pl'
+            // Add more mappings for other languages as needed
+        };
+    
+        const fileExtension = extensionMap[language] || 'txt';
+    
+        // Call the export function with the determined file extension
+        exportFeedback(feedback, fileExtension);
+    };
+
+    const exportFeedback = (feedback, fileExtension) => {
+        const fileName = customFileName || 'feedback';
+        
+        const blob = new Blob([feedback], { type: 'text/plain;charset=utf-8' });
+    
+        const a = document.createElement('a');
+        a.style.display = 'none';
+    
+        a.href = window.URL.createObjectURL(blob);
+    
+        a.download = fileName + fileExtension;
+
+        document.body.appendChild(a);
+        a.click();
+    
+        document.body.removeChild(a);
+        
+      };
+    
     return [
     <>
 
@@ -318,39 +403,34 @@ const SubmissionPage = () => {
  
                         <nav className='dropdownMenu'>
                             <ol>
-
-                                <li className="menu-item">
-                                    <a href='#0'>
+                                <li className='menu-item'>
+                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         
                                         {inputType === "textbox" || inputType === "files" 
                                         ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
                                     </a>
-                                    <ol className='sub-menu'>
-                                        <li className="menu-item">
+                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
+                                        <li className='menu-item'>
                                             <a href="#0" onClick={() => setInputType("textbox")}>
-                                                Texbox
+                                                Textbox
                                             </a>
                                         </li>
-                                        <li className="menu-item">
+                                        <li className='menu-item'>
                                             <a href="#0" onClick={() => setInputType("files")}>
                                                 File
                                             </a>
                                         </li>
                                     </ol>   
-                                </li>
-
-                                <li className="menu-item">
-                                    <a href='#0'>
+                                </li>   
+                                <li className='menu-item'>
+                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         {useCase === "code_generation" || useCase === "code_completion"
                                         || useCase === "code_analysis" || useCase === "code_translation"
-                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Generic AI response</>}
+                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Code Analysis</>}
                                     </a>
-                                    <ol className='sub-menu'>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setUseCase("")}>
-                                                Generic AI response
-                                            </a>
-                                        </li>
+                                    
+                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}> 
+                                    
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setUseCase("code_generation")}>
                                                 Code Generation
@@ -371,16 +451,14 @@ const SubmissionPage = () => {
                                                 Code Translation
                                             </a>
                                         </li>
-
                                     </ol>   
                                 </li>
-
                                 <li className="menu-item">
-                                    <a href='#0'>
+                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                         {aiModel === "watsonx.ai" || aiModel === "openai"
                                         ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
                                     </a>
-                                    <ol className='sub-menu'>
+                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                         <li className="menu-item">
                                             <a href="#0" onClick={() => setAIModel("watsonx.ai")}>
                                                 StarCoder
@@ -391,17 +469,22 @@ const SubmissionPage = () => {
                                                 GPT3.5
                                             </a>
                                         </li>
+                                        <li className="menu-item">
+                                            <a href="#0" onClick={() => setAIModel("llama")}>
+                                                CodeLlama
+                                            </a>
+                                        </li>
                                     </ol>   
                                 </li>
 
                                 {useCase === "code_completion" || useCase === "code_translation" ? (<>
                                     <li className="menu-item">
-                                        <a href='#0'>
+                                        <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                             {inputLanguage !== " " 
                                         ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
                                             
                                         </a>
-                                        <ol className='sub-menu'>
+                                        <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                             <li className="menu-item">
                                                 <a href="#0" onClick={()=>setInputLanguage("java")}>
                                                     Java
@@ -423,13 +506,13 @@ const SubmissionPage = () => {
 
                                 {useCase === "code_translation" ? (<>
                                     <li className="menu-item">
-                                        <a href='#0'>
+                                        <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
                                             {outputLanguage !== " " 
                                         ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
                                             
                                         
                                         </a>
-                                        <ol className='sub-menu'>
+                                        <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                             <li className="menu-item">
                                                 <a href="#0" onClick={()=>setOutputLanguage("java")}>
                                                     Java
@@ -491,9 +574,8 @@ const SubmissionPage = () => {
 
                     )}
 
-
-                    <button onClick={handleSubmit} className="submitButton">Submit</button>
-
+                    <button onClick={() => { handleSubmit(); }} className="submitButton">Submit</button>
+    
                 </div> 
 
 
@@ -511,9 +593,20 @@ const SubmissionPage = () => {
                             <pre className = "code-block"><code>{feedback}</code></pre>:
                             <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
                             }
+                            
                         </div>
                     )}
-
+                    {!isLoading && feedback &&( 
+                        <div>
+                         <button onClick={() => { handleExportClick(feedback); }} className="exportButton">Export</button>
+                         <input
+                         type="text"
+                         value={customFileName}
+                         onChange={(e) => setCustomFileName(e.target.value)}
+                         placeholder="Enter custom file name"
+                         />
+                        </div>
+                    )}
                 </div>
 
             </div>

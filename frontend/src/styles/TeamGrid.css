@@ -8,11 +8,29 @@
     max-width: 1200px;
     margin: 0 auto;
   }
+  h1 {
+    font-size: 3em; 
+    font-weight: 700; 
+    color: #FFFFFF; 
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); 
+    line-height: 1.2; 
+    margin-bottom: 0.5em; 
+    text-align: center; 
+    padding: 0.5em 0; 
+    border-radius: 10px; 
+  }
+  
 
   h2 {
-    text-align: center;
-    margin-top: 2rem;
-    color: #007bff;
+    color: #FFFFFF; 
+  font-size: 2em; 
+  font-weight: bold; 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+  background-color: rgba(255, 255, 255, 0.2); 
+  border-radius: 5px; 
+  padding: 10px 20px; 
+  margin-bottom: 20px; 
+  display: inline-block; 
   }
   
   .team-member {
