@@ -1,6 +1,15 @@
 import React from 'react';
+import {Link, useNavigate} from 'react-router-dom'
 
 function Account() {
+
+    const navigate = useNavigate();
+
+    const handleSignout = () => {
+        localStorage.removeItem('userID');
+        navigate('/');
+    };
+
     return (
         <>
             <div className="back-to-home">
@@ -10,7 +19,7 @@ function Account() {
             </div>
             <h1>Hello, User!</h1>
             <div>Manage Your Account Here</div>
-            <div></div>
+            <button onClick={handleSignout}>Sign out</button>
         </>
     );
 }
