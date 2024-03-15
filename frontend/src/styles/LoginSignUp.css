@@ -105,3 +105,12 @@
     color: #0d69e4;
   }
   
+  .forgotPasswordLink{
+    margin: 10px;
+    color: #1d2be8;
+  }
+
+  .user-icon{
+    margin: 10px;
+    color: white;
+  }

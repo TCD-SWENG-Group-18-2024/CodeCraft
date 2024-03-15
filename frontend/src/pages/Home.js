@@ -2,24 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IBM_White from "../assets/IBM_white.PNG";
 import Sidebar from '../components/Sidebar';
+import UserIcon from "../assets/person.png";
 import '../styles/Home.css';
 import './LoginSignUp';
 import './SubmissionPage';
 
 
 function Home() {
+
   const [isLogoLoaded, setLogoLoaded] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedInIn] = useState(false);
+  const [userID, setUserID] = useState(null);
+
 
   useEffect(() => {
       setLogoLoaded(true);
-
+      checkAuthentication();
       const welcomeMessage = document.querySelector('.welcome-message');
       welcomeMessage.classList.add('typing-animation');
   }, []);
 
   const toggleSidebar = () => {
       setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const checkAuthentication = () => {
+    const storedUserID = localStorage.getItem("userID")
+    setIsLoggedInIn(!!storedUserID);
+    setUserID(storedUserID);
   };
 
   return (
@@ -35,7 +46,11 @@ function Home() {
             <Link to ="/features">Features</Link>
             <Link to="/team">Meet the Team</Link>
             <Link to="/about">About</Link>
-            <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
+            {isLoggedIn ? (
+              <img src={UserIcon} alt="Manage Your Account" className='user-icon'></img>
+            ) : (
+              <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
+            )}
           </div>
         </nav>
   

@@ -7,7 +7,7 @@ import IBM_white from '../assets/IBM_white.PNG';
 import { Link} from 'react-router-dom';
 
 
-const SignUp =() =>{
+const SignUp = () =>{
 
     const [userAction,setUserAction] = useState("Sign Up");
     const [username, setUserName] = useState("");
@@ -64,6 +64,9 @@ const SignUp =() =>{
             // Handle the response from the server if needed
             console.log("Login Successful")
             console.log(data);
+            
+            localStorage.setItem("userID", data.id);
+
             setShowMessage(true);
             setTimeout(() => {
                 setShowMessage(false);
@@ -79,9 +82,9 @@ const SignUp =() =>{
 
     const HandlePressingButton = () =>{
         if (userAction === "Sign Up") {
-        HandleSignUp();
+            HandleSignUp();
         } else if (userAction === "Login") {
-        HandleLogin();
+            HandleLogin();
         }
     }
 
@@ -133,8 +136,8 @@ const SignUp =() =>{
                         <>
                         <div>Don't have an Account?</div>
                         <div className="switchTab" onClick={() => setUserAction("Sign Up")}>Sign up</div>
-                        <div >
-                            <a href=" ">
+                        <div className="forgotPasswordLink">
+                            <a href="">
                                 {/* route to a another page*/ }
                                 Forgot your password?
                             </a>
@@ -148,7 +151,7 @@ const SignUp =() =>{
                     )}
                 </div> 
             </>}
-            {showMessage && <div className="popup-message">Successful, Redirecting...</div>}
+            {showMessage && <div className="popup-message">Successful, Redirecting to Home Page...</div>}
         </div>
         </>
     );
