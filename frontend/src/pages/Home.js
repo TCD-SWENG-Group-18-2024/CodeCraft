@@ -7,7 +7,6 @@ import '../styles/Home.css';
 import './LoginSignUp';
 import './SubmissionPage';
 
-
 function Home() {
 
   const [isLogoLoaded, setLogoLoaded] = useState(false);
@@ -47,7 +46,10 @@ function Home() {
             <Link to="/team">Meet the Team</Link>
             <Link to="/about">About</Link>
             {isLoggedIn ? (
-              <img src={UserIcon} alt="Manage Your Account" className='user-icon'></img>
+              <Link to="/Account">
+               Account
+              </Link>
+              
             ) : (
               <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
             )}
@@ -80,4 +82,4 @@ function Home() {
     );
   }
 
-  export default Home;
+export default Home;

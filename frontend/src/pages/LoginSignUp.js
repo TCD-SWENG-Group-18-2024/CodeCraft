@@ -7,7 +7,7 @@ import IBM_white from '../assets/IBM_white.PNG';
 import { Link} from 'react-router-dom';
 
 
-const SignUp = () =>{
+const SignUp = () => {
 
     const [userAction,setUserAction] = useState("Sign Up");
     const [username, setUserName] = useState("");
@@ -64,7 +64,7 @@ const SignUp = () =>{
             // Handle the response from the server if needed
             console.log("Login Successful")
             console.log(data);
-            
+
             localStorage.setItem("userID", data.id);
 
             setShowMessage(true);
