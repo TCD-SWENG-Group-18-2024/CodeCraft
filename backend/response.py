@@ -5,6 +5,12 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.llms import HuggingFaceHub
 from langchain.schema import HumanMessage, SystemMessage
+import openai
+from milvus import default_server
+from pymilvus import utility, connections
+from langchain.vectorstores import Milvus
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.memory import VectorStoreRetrieverMemory
 
 
 # For this to work, you need to create a file called '.env' and input the following:
@@ -13,6 +19,18 @@ dotenv.load_dotenv()
 
 # You need to put the hugging face token in .env as well
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
+
+default_server.start()
+embeddings = OpenAIEmbeddings()
+connections.connect(host="127.0.0.1", port=default_server.listen_port)
+utility.drop_collection('LangChainCollection')
+vectordb = Milvus.from_documents(
+    {},
+    embeddings,
+    connection_args={"host":"127.0.0.1", "port":default_server.listen_port}
+)
+retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
+memory = VectorStoreRetrieverMemory(retriever=retriever)
 
 # AI Models
 gpt = ChatOpenAI()
@@ -25,9 +43,11 @@ llama = HuggingFaceHub(
 
 # Templates
 code_analysis_template = PromptTemplate(
-    input_variables=['input'],
-    template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell me what my code does and give  \
-        give feedback and tips on how to improve it. Please be specific as possible: My code is here as follows: {input}'
+    input_variables=['input', 'history'],
+    template='''You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell 
+    me what my code does and give feedback and tips on how to improve it. 
+    Relevant pieces of previous information: {history}
+    Please be specific as possible: My code is here as follows: {input}'''
 )
 
 code_generation_template = PromptTemplate(
@@ -108,10 +128,19 @@ def code_analysis(user_input: str, ai_model: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
-    
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template)
 
-    return code_analysis_chain.invoke({'input': user_input})
+    # If the collection had been deleted, it needs to be re-initialised
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
+
+    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
+    response = code_analysis_chain.invoke({'input': user_input})
+
+    # Save the prompt/response pair in the Milvus collection
+    memory.save_context({'input': user_input}, {'output': response['text']})
+
+    return response
 
 
 def code_completion(user_input: str, ai_model: str, input_language: str) -> dict:
@@ -146,6 +175,23 @@ def code_translation(input_language: str, output_language: str, input: str, ai_m
     code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
     
     return code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': input})
+
+
+def initialise_vectordb():
+    """
+    Initialises an empty VectorDB.
+    This function is inelegant but seemingly necessary because of Python's weirdness with variable scope
+    """
+    # Implicitly declare new collection
+    vectordb = Milvus.from_documents(
+        {},
+        embeddings,
+        connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
+    )
+
+    retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
+    global memory
+    memory = VectorStoreRetrieverMemory(retriever=retriever)
 
 
 if __name__ == "__main__":

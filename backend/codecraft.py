@@ -1,40 +1,16 @@
-#vector db code
 import json
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
-from langchain.memory import VectorStoreRetrieverMemory
-from langchain.chains import ConversationChain
-from langchain.prompts import PromptTemplate
-import os 
-from dotenv import load_dotenv
-import openai
-load_dotenv()
-openai.api_key = os.getenv('OPENAI_API_KEY')
-from milvus import default_server
-default_server.start()
-from langchain.vectorstores import Milvus
-embeddings=OpenAIEmbeddings()
-from pymilvus import utility, connections
-connections.connect(host="127.0.0.1", port=default_server.listen_port)
-utility.drop_collection('LangchainConnection')
-vectordb = Milvus.from_documents(
-    {},
-    embeddings,
-    connection_args={"host":"127.0.0.1", "port":default_server.listen_port}
-)
-retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
-memory = VectorStoreRetrieverMemory(retriever=retriever)
-
-
 from config import ApplicationConfig
 from flask import Flask, request, jsonify, send_file, session, url_for
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
-from response import code_generation, code_completion, code_translation, code_analysis, AIModel
-import re, time, secrets
+from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
+import re
+import time
+import secrets
 from itsdangerous import URLSafeTimedSerializer
+
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -64,9 +40,11 @@ with app.app_context():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @app.route('/')
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
+
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -126,6 +104,17 @@ def llm_file_request():
     result = process_data(user_input, use_case, ai_model,input_language, output_language)
     return jsonify(result)
 
+
+@app.route('/llm/clearmemory', methods=['DELETE'])
+def clear_memory():
+    """
+    Clears the MilvusDB collection
+    """
+    utility.drop_collection('LangChainCollection')
+    # Should be 200 whether the collection exists or not
+    return jsonify({'success': 'Cleared the Milvus collection.'})
+
+
 def process_data(user_input, use_case, ai_model, input_language, output_language):
     input_string = {"input": user_input}
     if use_case is not None:
@@ -146,14 +135,14 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     else:
         result = {"error": "Invalid use case"}
         count =1
-    if(count ==0):
-        memory.save_context(input_string, result)
+    #if(count ==0):
+    #    memory.save_context(input_string, result)
 
     # TODO: Add more conditions for other AI models
     # TODO: Can add more conditions for other use cases
 
     return result
-
+'''
 #added this call to chat history- should allow user to input qs about history and get response
 @app.route('/chathistory', methods=['POST'])
 def chat_history():
@@ -180,7 +169,7 @@ def chat_history():
     )
     return conversation_chain.predict(input=input)
     # conversation_chain.predict(input="what is my favourite food")
-
+'''
 # POST method to occur when user chooses to export on the frontend
 @app.route('/export', methods=['POST'])
 def export_endpoint():
