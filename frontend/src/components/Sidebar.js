@@ -1,4 +1,4 @@
-import { faArrowCircleLeft, faBars, faDashboard, faChartBar, faLayerGroup, faPeopleGroup} from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleLeft, faBars, faDashboard, faChartBar, faLayerGroup, faPeopleGroup, faBook, faHouse} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link, useLocation} from 'react-router-dom';
@@ -31,12 +31,27 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <Link to="/team">
             <FontAwesomeIcon icon={faPeopleGroup} /> Meet the Team
           </Link>
+          <Link to="/about">
+            <FontAwesomeIcon icon={faBook} /> About us
+          </Link>
         </div>
         )}
         {!isHomePage && (
+          <div>
           <Link to="/" className="sidebar_link">
-            <FontAwesomeIcon icon={faDashboard} /> Dashboard
+            <FontAwesomeIcon icon={faHouse} /> Home
           </Link>
+          <Link to="/Features">
+            <FontAwesomeIcon icon={faLayerGroup} /> Features
+          </Link>
+          <Link to="/team">
+            <FontAwesomeIcon icon={faPeopleGroup} /> Meet the Team
+          </Link>
+          <Link to="/about">
+            <FontAwesomeIcon icon={faBook} /> About us
+          </Link>
+        </div>
+          
         )}
       </nav>
     </div>

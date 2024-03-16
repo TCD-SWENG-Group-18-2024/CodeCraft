@@ -1,5 +1,5 @@
 .sidebar {
-    width: 200px; /* Width of the sidebar */
+    width: 200px; /* Width of the sidebar. If left aligned 210 otherwise 200*/
     background: none; /* Background color of the sidebar */
     color: white;
     height: 100%;
@@ -30,6 +30,8 @@
 
    .sidebar__nav {
     padding: 20px;
+    /*text-align: left; */
+    /*added for alignment*/
     /* Style your sidebar navigation/content here */
   }
    .sidebar__nav a {
