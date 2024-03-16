@@ -1,3 +1,31 @@
+#vector db code
+import json
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms import OpenAI
+from langchain.memory import VectorStoreRetrieverMemory
+from langchain.chains import ConversationChain
+from langchain.prompts import PromptTemplate
+import os 
+from dotenv import load_dotenv
+import openai
+load_dotenv()
+openai.api_key = os.getenv('OPENAI_API_KEY')
+from milvus import default_server
+default_server.start()
+from langchain.vectorstores import Milvus
+embeddings=OpenAIEmbeddings()
+from pymilvus import utility, connections
+connections.connect(host="127.0.0.1", port=default_server.listen_port)
+utility.drop_collection('LangchainConnection')
+vectordb = Milvus.from_documents(
+    {},
+    embeddings,
+    connection_args={"host":"127.0.0.1", "port":default_server.listen_port}
+)
+retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
+memory = VectorStoreRetrieverMemory(retriever=retriever)
+
+
 from config import ApplicationConfig
 from flask import Flask, request, jsonify, send_file, session, url_for
 from flask_mail import Mail, Message
@@ -99,9 +127,10 @@ def llm_file_request():
     return jsonify(result)
 
 def process_data(user_input, use_case, ai_model, input_language, output_language):
+    input_string = {"input": user_input}
     if use_case is not None:
         use_case = use_case.lower()
-
+    count =0
     if use_case == 'code_analysis':
         result = code_analysis(user_input, ai_model)
     elif use_case == 'code_generation':
@@ -116,12 +145,41 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
         result = AIModel(user_input, ai_model)
     else:
         result = {"error": "Invalid use case"}
+        count =1
+    if(count ==0):
+        memory.save_context(input_string, result)
 
     # TODO: Add more conditions for other AI models
     # TODO: Can add more conditions for other use cases
 
     return result
 
+#added this call to chat history- should allow user to input qs about history and get response
+@app.route('/chathistory', methods=['POST'])
+def chat_history():
+    data = request.get_json()
+    input = data.get('input')
+    llm = OpenAI(temperature=0)
+    DEFAULT_TEMPLATE = """The following exchange is a friendly conversation with a human and ai.The ai is talkative and provides a lot of specific details from its context.
+    If the ai doesnt know the answer to the question, it will truthfully say it does not know.
+
+    Relevant pieces of previous information:
+    {history}
+
+    Current Conversation:
+    Humans: {input}
+    Ai:"""
+    PROMPT = PromptTemplate(
+        input_variables=["input", "history"],template = DEFAULT_TEMPLATE
+    )
+    conversation_chain = ConversationChain(
+        llm = llm,
+        prompt = PROMPT,
+        memory = memory,
+        verbose = True
+    )
+    return conversation_chain.predict(input=input)
+    # conversation_chain.predict(input="what is my favourite food")
 
 # POST method to occur when user chooses to export on the frontend
 @app.route('/export', methods=['POST'])
