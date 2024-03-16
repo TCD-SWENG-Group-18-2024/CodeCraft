@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IBM_White from "../assets/IBM_white.PNG";
 import Sidebar from '../components/Sidebar';
+import Header from '../components/Header'; 
 import UserIcon from "../assets/person.png";
 import '../styles/Home.css';
 import './LoginSignUp';
@@ -35,26 +36,12 @@ function Home() {
   return (
     <>
       <div className="App">
-          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           
           {/* Optional: Button to toggle sidebar */}
           {/* <button onClick={toggleSidebar} className="toggle-sidebar-button">Menu</button> */}
           
-        <nav className="App-nav">
-          <div className="App-nav-links">
-            <Link to ="/features">Features</Link>
-            <Link to="/team">Meet the Team</Link>
-            <Link to="/about">About</Link>
-            {isLoggedIn ? (
-              <Link to="/Account">
-               Account
-              </Link>
-              
-            ) : (
-              <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
-            )}
-          </div>
-        </nav>
+        <Header isLoggedIn={isLoggedIn} /> 
   
         <a href='https://www.ibm.com/us-en' target='blank_'><img src={IBM_White} alt="logo" className={`logo ${isLogoLoaded ? `loaded`: ''}`} /></a>
         <h1 className="ProjectName">CodeCraft</h1>
