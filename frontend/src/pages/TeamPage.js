@@ -3,15 +3,24 @@ import React from 'react';
 import TeamGrid from '../components/TeamGrid';
 import '../styles/TeamPage.css';
 import IBM_white from '../assets/IBM_white.PNG';
+import Header from '../components/Header'; 
+import {useState} from 'react';
 
 const TeamPage = () => {
+  const [isLoggedIn, setIsLoggedInIn] = useState(false);
+  const [userID, setUserID] = useState(null);
+
+  const checkAuthentication = () => {
+      const storedUserID = localStorage.getItem("userID")
+      setIsLoggedInIn(!!storedUserID);
+      setUserID(storedUserID);
+  };
+
   return (
     <div className="team-page-container">
       <div className="back-to-home">
-  <a href="/">
-    <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
-  </a>
-</div>
+        <Header isLoggedIn={isLoggedIn} /> 
+      </div>
 
       <div className="team-page-header">
         <h1 className="team-page-title">Meet the Team</h1>

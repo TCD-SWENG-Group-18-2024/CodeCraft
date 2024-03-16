@@ -5,6 +5,7 @@ import Email from '../assets/email.png';
 import Password from '../assets/password.png';
 import IBM_white from '../assets/IBM_white.PNG';
 import { Link} from 'react-router-dom';
+import Header from '../components/Header'; 
 
 
 const SignUp = () => {
@@ -13,6 +14,15 @@ const SignUp = () => {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [showMessage, setShowMessage] = useState(false);
+
+    const [isLoggedIn, setIsLoggedInIn] = useState(false);
+    const [userID, setUserID] = useState(null);
+
+    const checkAuthentication = () => {
+        const storedUserID = localStorage.getItem("userID")
+        setIsLoggedInIn(!!storedUserID);
+        setUserID(storedUserID);
+    };
 
     const HandleSignUp = () => {
 
@@ -96,9 +106,7 @@ const SignUp = () => {
            {!showMessage && 
            <>
             <div className="back-to-home">
-                    <a href="/">
-                        <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
-                    </a>
+                <Header isLoggedIn={isLoggedIn} /> 
             </div>
 
             <div className = "header">

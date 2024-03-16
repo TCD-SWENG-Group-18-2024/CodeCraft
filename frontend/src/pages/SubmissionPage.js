@@ -27,7 +27,8 @@ const SubmissionPage = () => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
-    const isLoggedIn = false;
+    const [isLoggedIn, setIsLoggedInIn] = useState(false);
+    const [userID, setUserID] = useState(null);
  
     /*Takes input */
     const handleTextBoxChange = (event) => {
@@ -56,6 +57,12 @@ const SubmissionPage = () => {
     const handleOutputLanguageChange = (event) =>{
         setOutputLanguage(event.target.value);
     };
+
+    const checkAuthentication = () => {
+        const storedUserID = localStorage.getItem("userID")
+        setIsLoggedInIn(!!storedUserID);
+        setUserID(storedUserID);
+    };
    
     const [customFileName, setCustomFileName] = useState('');
 
@@ -82,6 +89,7 @@ const SubmissionPage = () => {
         setDroppedFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // deconstruct array into separate variables
         console.log("Dropped Files: ", droppedFiles);
     };
+
 
     // need to set max size
     const MAX_FILE_SIZE = 10000;

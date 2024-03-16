@@ -1,7 +1,8 @@
 import React from 'react';
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import "../styles/Features.css"
 import IBM_white from '../assets/IBM_white.PNG';
+import Header from '../components/Header'; 
 
 const Features = () =>{
     useEffect(() => {
@@ -39,12 +40,20 @@ const Features = () =>{
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    const [isLoggedIn, setIsLoggedInIn] = useState(false);
+    const [userID, setUserID] = useState(null);
+
+    const checkAuthentication = () => {
+        const storedUserID = localStorage.getItem("userID")
+        setIsLoggedInIn(!!storedUserID);
+        setUserID(storedUserID);
+    };
+
     return(
         <div className = "features-container">
-            <div className = "back-to-home">
-                <a href = "/">
-                    <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
-                </a>
+            <div className="back-to-home">
+            <Header isLoggedIn={isLoggedIn} /> 
             </div>
             <div className = "hero-sec">
                 <div className = "hero-container">    
