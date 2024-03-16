@@ -32,7 +32,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <FontAwesomeIcon icon={faPeopleGroup} /> Meet the Team
           </Link>
           <Link to="/about">
-            <FontAwesomeIcon icon={faBook} /> About us
+            <FontAwesomeIcon icon={faBook} /> About Us
           </Link>
         </div>
         )}

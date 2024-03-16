@@ -8,6 +8,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { duotoneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './LoginSignUp';
 import './Home';
+import Header from '../components/Header'; 
 
 const SubmissionPage = () => {
 
@@ -26,6 +27,7 @@ const SubmissionPage = () => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+    const isLoggedIn = false;
  
     /*Takes input */
     const handleTextBoxChange = (event) => {
@@ -382,15 +384,7 @@ const SubmissionPage = () => {
             <header className="submission-header">
                 <h1 className="submission-title">Submission Area</h1>
 
-                <nav className="App-nav">
-                    <div className="App-nav-links">
-                        <Link to="/"><img src={HeaderImage} alt="Code Craft" className="header-image"/></Link>
-                        <a href="#features">Features</a>
-                        <Link to="/team">Meet the Team</Link>
-                        <a href="#about">About</a>
-                        <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
-                    </div>
-                </nav>
+                <Header isLoggedIn={isLoggedIn} /> 
 
             </header>
 
