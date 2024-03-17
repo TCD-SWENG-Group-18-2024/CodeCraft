@@ -46,40 +46,47 @@ code_analysis_template = PromptTemplate(
     input_variables=['history', 'input'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
              ' Please tell me what my code does and give feedback and tips on how to improve it.'
+             ' You will help me identify potential bugs in this code, give important suggestions'
+             ' on improving the code quality and maintainability, and check if it adheres to coding'
+             ' standards and best practices.'
              ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_generation_template = PromptTemplate(
     input_variables=['history', 'input'],
-    template='You are a code generation tool. Please generate code based on the explanation being given {input}.'
+    template='You are a code generation tool. Please generate code based on the explanation being given.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
-             ' Be as specific as possible'
+             ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_completion_template = PromptTemplate(
-    input_variables=['input_language', 'input'],
-    template='You are a code completion tool. The input will be incompleted code in {input_language}. \
-            Your job is to correct the code so that it is working and complete. Add in semicolons, \
-            parenthesis, curly braces, etc. where needed. Please ensure that the code is correct \
-            and follows best practices or standards set in programming language mentioned above. \
-            The output should only be a completed version of the inputted code. My code is given \
-            as follows: {input}'
+    input_variables=['input_language', 'history','input'],
+    template='You are a code completion tool. The input will be incompleted code in {input_language}.'
+             ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
+             ' parenthesis, curly braces, etc. where needed. Please ensure that the code is correct'
+             ' and follows best practices or standards set in programming language mentioned above.'
+             ' The output should only be a completed version of the inputted code.'
+             ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_translation_template = PromptTemplate(
-    input_variables=['input_language', 'output_language', 'input'],
+    input_variables=['input_language', 'output_language', 'history', 'input'],
     template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
              ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
-             ' indentation where needed. My code is given as follows: {input}'
+             ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-general_ai_model_template = PromptTemplate (
-   input_variables=['input'],
-   template = 'You are a coding assistant tool designed to help users with various coding tasks.'
-              ' Please assist the user with their request {input} by providing relevant information,'
-              ' generating code snippets, analyzing code, completing code segments, or offering advice.'
-              ' Please be as specific and helpful as possible.'
+general_ai_model_template = PromptTemplate(
+    input_variables=['history', 'input'],
+    template='You are a coding assistant tool designed to help users with various coding tasks.'
+             ' Please assist the user with their request by providing relevant information,'
+             ' generating code snippets, analyzing code, completing code segments, or offering advice.'
+             ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 # AI Model Functions
