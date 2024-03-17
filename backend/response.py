@@ -128,9 +128,18 @@ def code_generation(user_input: str, ai_model: str) -> dict:
         elif ai_model == 'llama':
             llm = llama
     
-    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template)
+    # If the collection had been deleted, it needs to be re-initialised
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
 
-    return code_generation_chain.invoke({'input': user_input})  
+    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
+    response = code_generation_chain.invoke({'input': user_input})
+
+    # Save the prompt/response pair in the Milvus collection
+    memory.save_context({'input': user_input}, {'output': response['text']})
+
+    return response 
 
 
 def code_analysis(user_input: str, ai_model: str) -> dict:
