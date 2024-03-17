@@ -180,8 +180,6 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
         elif ai_model == 'openai':
             llm = gpt
     
-    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
-
     # If the collection had been deleted, it needs to be re-initialised
     if 'LangChainCollection' not in utility.list_collections():
         initialise_vectordb()
@@ -196,7 +194,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
     return response
 
 
-def code_translation(input_language: str, output_language: str, input: str, ai_model: str) -> dict:
+def code_translation(input_language: str, output_language: str, user_input: str, ai_model: str) -> dict:
     # starcoder by default
     llm = starcoder
 
@@ -208,9 +206,18 @@ def code_translation(input_language: str, output_language: str, input: str, ai_m
         elif ai_model == 'openai':
             llm = gpt
     
-    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template)
+    # If the collection had been deleted, it needs to be re-initialised
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
+
+    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, memory=memory, verbose=True)
+    response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})
+
+    # Save the prompt/response pair in the Milvus collection
+    memory.save_context({'input': user_input}, {'output': response['text']})
     
-    return code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': input})
+    return response
 
 
 def initialise_vectordb():
