@@ -43,16 +43,16 @@ llama = HuggingFaceHub(
 
 # Templates
 code_analysis_template = PromptTemplate(
-    input_variables=['input', 'history'],
-    template='''You are a code analysis tool. Please evaluate my code and check for any possible mistakes. Please tell 
-    me what my code does and give feedback and tips on how to improve it. 
-    Relevant pieces of previous information: {history}
-    Please be specific as possible: My code is here as follows: {input}'''
+    input_variables=['history', 'input'],
+    template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
+             ' Please tell me what my code does and give feedback and tips on how to improve it.'
+             ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_generation_template = PromptTemplate(
-   input_variables=['input'],
-   template= 'You are a code generation tool. Please generate code based on the explanation being given {input}.'
+    input_variables=['history', 'input'],
+    template='You are a code generation tool. Please generate code based on the explanation being given {input}.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
              ' Be as specific as possible'
 )
