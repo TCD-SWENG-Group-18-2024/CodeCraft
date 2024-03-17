@@ -15,7 +15,7 @@ const SubmissionPage = () => {
     const [inputType, setInputType] = useState('textbox');
     const [input, setInput] = useState('');
     const [useCase, setUseCase] = useState(''); // set default cases
-    const [aiModel, setAIModel] = useState('openai'); 
+    const [aiModel, setAIModel] = useState('openai');  //set default AI model
     const [feedback, setFeedback] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -301,7 +301,7 @@ const SubmissionPage = () => {
     };
 
     const formatAIModel = (str) => {
-        if (str === "watsonx.ai"){
+        if (str === "StarCoder"){
             return "StarCoder";
         }
 
@@ -457,12 +457,12 @@ const SubmissionPage = () => {
                                 </li>
                                 <li className="menu-item">
                                     <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
-                                        {aiModel === "watsonx.ai" || aiModel === "openai"
+                                        {aiModel === "StarCoder" || aiModel === "openai"
                                         ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
                                     </a>
                                     <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
                                         <li className="menu-item">
-                                            <a href="#0" onClick={() => setAIModel("watsonx.ai")}>
+                                            <a href="#0" onClick={() => setAIModel("StarCoder")}>
                                                 StarCoder
                                             </a>
                                         </li>
