@@ -139,7 +139,7 @@ def code_generation(user_input: str, ai_model: str) -> dict:
     # Save the prompt/response pair in the Milvus collection
     memory.save_context({'input': user_input}, {'output': response['text']})
 
-    return response 
+    return response
 
 
 def code_analysis(user_input: str, ai_model: str) -> dict:
@@ -181,8 +181,19 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
             llm = gpt
     
     code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template)
+
+    # If the collection had been deleted, it needs to be re-initialised
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
+
+    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, memory=memory, verbose=True)
+    response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
+
+    # Save the prompt/response pair in the Milvus collection
+    memory.save_context({'input': user_input}, {'output': response['text']})
     
-    return code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
+    return response
 
 
 def code_translation(input_language: str, output_language: str, input: str, ai_model: str) -> dict:
