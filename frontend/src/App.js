@@ -13,20 +13,6 @@ import Account from './pages/Account';
 // import IBM_White from "./assets/IBM_white.PNG"
 
 function App(){
-  // Not useful at the moment,for fetching data from the endpoint(backend)
-  const [data,setData] = useState([{}])
-  useEffect(() =>{
-    fetch("/...").then(
-      //res.json() parses the response body as JSON. The resulting 
-      //promise resolves to the JavaScript object described by the JSON string.
-      res=>res.json()
-    ).then(
-      data => {
-        setData(data)
-        console.log(data)
-      }
-    )
-  },[])
 
   return(
     <div className='App'>
@@ -45,9 +31,6 @@ function App(){
         </Routes>
       </Router>
       
-      
-      
-  
     </div>
     
   )
