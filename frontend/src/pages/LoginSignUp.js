@@ -1,168 +1,140 @@
-import React from "react";
-import { useState } from "react";
-import "../styles/LoginSignUp.css"
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Email from '../assets/email.png';
 import Password from '../assets/password.png';
-import IBM_white from '../assets/IBM_white.PNG';
-import { Link} from 'react-router-dom';
-import Header from '../components/Header'; 
+import Sidebar from '../components/Sidebar';
+import "../styles/LoginSignUp.css";
 
-
-const SignUp = () => {
-
-    const [userAction,setUserAction] = useState("Sign Up");
+const SignUp = ({ setIsLoggedIn }) => {
+    const navigate = useNavigate();
+    const [userAction, setUserAction] = useState("Sign Up");
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [showMessage, setShowMessage] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const [isLoggedIn, setIsLoggedInIn] = useState(false);
-    const [userID, setUserID] = useState(null);
-
-    const checkAuthentication = () => {
-        const storedUserID = localStorage.getItem("userID")
-        setIsLoggedInIn(!!storedUserID);
-        setUserID(storedUserID);
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
     };
 
-    const HandleSignUp = () => {
-
-        const userData = {
-            username: username, // username is the email
-            password: password
-        }
-
-        fetch( "http://localhost:8080/register",{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the response from the server if needed
-            console.log(data);
+    const handleSignUp = async () => {
+        const userData = { username, password };
+        try {
+            const response = await fetch("http://localhost:8080/register", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData),
+            });
+            const data = await response.json();
+            // If sign up is successful:
             setShowMessage(true);
             setTimeout(() => {
                 setShowMessage(false);
-                window.location.href = "/"
+                setIsLoggedIn(true); // Set global isLoggedIn state to true
+                navigate('/'); // Navigate to the home page using react-router
             }, 2500);
-        })
-        .catch(error => {
-            // Handle errors
+        } catch (error) {
             console.error('Error:', error);
-        });
-
-        
-    }
-
-    const HandleLogin = () => {
-
-        const userData = {
-            username: username, // username is the email
-            password: password
         }
-        fetch( "http://localhost:8080/login",{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the response from the server if needed
-            console.log("Login Successful")
-            console.log(data);
+    };
 
-            localStorage.setItem("userID", data.id);
-
+    const handleLogin = async () => {
+        const userData = { username, password };
+        try {
+            const response = await fetch("http://localhost:8080/login", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData),
+            });
+            const data = await response.json();
+            // If login is successful:
+            console.log("Login Successful", data);
+            localStorage.setItem("userID", data.id); // Save userID
             setShowMessage(true);
             setTimeout(() => {
                 setShowMessage(false);
-                window.location.href="/"; 
+                setIsLoggedIn(true); // Set global isLoggedIn state to true
+                navigate('/'); // Navigate to the home page using react-router
             }, 2500);
-        })
-        .catch(error => {
-            // Handle errors
+        } catch (error) {
             console.error('Error:', error);
-        });
+        }
+    };
 
-    }
-
-    const HandlePressingButton = () =>{
+    const handlePressingButton = () => {
         if (userAction === "Sign Up") {
-            HandleSignUp();
+            handleSignUp();
         } else if (userAction === "Login") {
-            HandleLogin();
+            handleLogin();
         }
-    }
+    };
 
     return (
         <>
-        <div className = "container">
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div className="container">
+            {!showMessage && (
+                <>
+                    <div className="header">
+                        <div className="text">{userAction}</div>
+                        <div className="underline"></div>
+                    </div>
 
-            
-           {!showMessage && 
-           <>
-            <div className="back-to-home">
-                <Header isLoggedIn={isLoggedIn} /> 
-            </div>
-
-            <div className = "header">
-                <div className = "text">{userAction}</div>
-                <div className = "underline"></div>
-            </div>
-
-            <div className ="inputs">
-
-                <div className = "input">
-                    <img src ={Email}/>
-                    <input type = "user" 
-                    placeholder = "Email" 
-                    value={username} 
-                    onChange={(e) => setUserName(e.target.value)}/>
-                </div>
-
-                <div className = "input">
-                    <img src ={Password}/>
-                    <input type = "password" 
-                    placeholder = "Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}/>
-                </div>
-
-                </div>
-
-                <div className ="submitContainer">
-                    {/* {set user data, not yet implemented} */}
-                    <div className = "submit" onClick={HandlePressingButton}>{userAction==="Login"?<>Login</>:<>Sign Up</>} </div>
-                </div>
-
-                <div className ="switch">
-                    {userAction === "Login" ? (
-                        <>
-                        <div>Don't have an Account?</div>
-                        <div className="switchTab" onClick={() => setUserAction("Sign Up")}>Sign up</div>
-                        <div className="forgotPasswordLink">
-                            <a href="">
-                                {/* route to a another page*/ }
-                                Forgot your password?
-                            </a>
+                    <div className="inputs">
+                        <div className="input">
+                            <img src={Email} alt="Email" />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={username}
+                                onChange={(e) => setUserName(e.target.value)}
+                            />
                         </div>
-                        </>
+
+                        <div className="input">
+                            <img src={Password} alt="Password" />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="submitContainer">
+                        <div className="submit" onClick={handlePressingButton}>
+                            {userAction === "Login" ? "Login" : "Sign Up"}
+                        </div>
+                    </div>
+
+                    <div className="switch">
+                        {userAction === "Login" ? (
+                            <>
+                                <div>Don't have an Account?</div>
+                                <div className="switchTab" onClick={() => setUserAction("Sign Up")}>
+                                    Sign up
+                                </div>
+                                {/* The forgot password link should lead somewhere */}
+                                <div className="forgotPasswordLink">
+                                    Forgot your password?
+                                </div>
+                            </>
                         ) : (
-                        <>
-                        <div>Already have an account?</div>
-                        <div className = "switchTab" onClick={() => setUserAction("Login")}>Login</div>
-                        </>
-                    )}
-                </div> 
-            </>}
+                            <>
+                                <div>Already have an account?</div>
+                                <div className="switchTab" onClick={() => setUserAction("Login")}>
+                                    Login
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </>
+            )}
             {showMessage && <div className="popup-message">Successful, Redirecting to Home Page...</div>}
         </div>
         </>
     );
-}
+};
 
 export default SignUp;

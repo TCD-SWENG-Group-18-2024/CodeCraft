@@ -1,10 +1,16 @@
-import React from 'react';
-import { useEffect, useState} from 'react';
-import "../styles/Features.css"
-import IBM_white from '../assets/IBM_white.PNG';
-import Header from '../components/Header'; 
+import React, { useEffect, useState } from 'react';
+import Sidebar from '../components/Sidebar'; // Import the Sidebar component
+import "../styles/Features.css";
 
 const Features = () =>{
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Function to toggle the Sidebar
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     useEffect(() => {
         
         const handleScroll = () => {
@@ -41,19 +47,20 @@ const Features = () =>{
         };
     }, []);
 
-    const [isLoggedIn, setIsLoggedInIn] = useState(false);
-    const [userID, setUserID] = useState(null);
+   // const [isLoggedIn, setIsLoggedInIn] = useState(false);
+   // const [userID, setUserID] = useState(null);
 
-    const checkAuthentication = () => {
-        const storedUserID = localStorage.getItem("userID")
-        setIsLoggedInIn(!!storedUserID);
-        setUserID(storedUserID);
-    };
+   // const checkAuthentication = () => {
+   //     const storedUserID = localStorage.getItem("userID")
+   //     setIsLoggedInIn(!!storedUserID);
+   //     setUserID(storedUserID);
+  //  };
 
     return(
+        <>
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <div className = "features-container">
             <div className="back-to-home">
-            <Header isLoggedIn={isLoggedIn} /> 
             </div>
             <div className = "hero-sec">
                 <div className = "hero-container">    
@@ -145,16 +152,9 @@ const Features = () =>{
             
             </div>
 
-
-
-
-
-
-
-
         </div>
+        </>
     );
-
 };
 
 export default Features;
