@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import HeaderImage from '../assets/IBM_white.PNG';
-import {renderToString} from 'react-dom/server'
-import { Link } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
-import '../styles/SubmissionPage.css';
+import { renderToString } from 'react-dom/server';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { duotoneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import './LoginSignUp';
+import Sidebar from '../components/Sidebar';
+import '../styles/SubmissionPage.css';
 import './Home';
-import Header from '../components/Header'; 
+import './LoginSignUp';
 
 const SubmissionPage = () => {
 
@@ -27,8 +24,8 @@ const SubmissionPage = () => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
-    const [isLoggedIn, setIsLoggedInIn] = useState(false);
-    const [userID, setUserID] = useState(null);
+    //const [isLoggedIn, setIsLoggedInIn] = useState(false);
+    //const [userID, setUserID] = useState(null);
  
     /*Takes input */
     const handleTextBoxChange = (event) => {
@@ -58,11 +55,11 @@ const SubmissionPage = () => {
         setOutputLanguage(event.target.value);
     };
 
-    const checkAuthentication = () => {
-        const storedUserID = localStorage.getItem("userID")
-        setIsLoggedInIn(!!storedUserID);
-        setUserID(storedUserID);
-    };
+   // const checkAuthentication = () => {
+    //    const storedUserID = localStorage.getItem("userID")
+    //    setIsLoggedInIn(!!storedUserID);
+    //    setUserID(storedUserID);
+   // };
    
     const [customFileName, setCustomFileName] = useState('');
 
@@ -391,8 +388,6 @@ const SubmissionPage = () => {
         <div className={`main-content ${isSidebarOpen ? 'with-sidebar' : ''}`}>
             <header className="submission-header">
                 <h1 className="submission-title">Submission Area</h1>
-
-                <Header isLoggedIn={isLoggedIn} /> 
 
             </header>
 

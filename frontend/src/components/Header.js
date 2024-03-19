@@ -11,19 +11,23 @@ const Header = ({ isLoggedIn }) => {
     <nav className="App-nav">
       <div className="App-nav-links">
         {isLoggedIn ? (
+          // Links to show when the user is logged in
           <div>
-          <Link to="/Account">Account</Link>
-          {!isHomePage && (
+            <Link to="/account">Account</Link>
+            {/* The IBM logo will only show when not on the home page */}
+            {!isHomePage && (
               <a href="https://www.ibm.com/us-en" target="_blank" rel="noopener noreferrer">
                 <img src={HeaderImage} alt="IBM Logo" className="header-image" />
               </a>
             )}
           </div>
         ) : (
+          // Links to show when the user is not logged in
           <div>
-          <Link to="/">Home</Link>
-          <Link to="/LoginSignUp" className="App-sign-up">Sign up</Link>
-          {!isHomePage && (
+            <Link to="/">Home</Link>
+            <Link to="/loginSignUp" className="App-sign-up">Sign up</Link>
+            {/* The IBM logo will only show when not on the home page */}
+            {!isHomePage && (
               <a href="https://www.ibm.com/us-en" target="_blank" rel="noopener noreferrer">
                 <img src={HeaderImage} alt="IBM Logo" className="header-image" />
               </a>

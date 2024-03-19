@@ -4,6 +4,7 @@
     text-align: center;
     height:100%;
     position: relative;
+    flex-grow: 1;
 }
 .hero-sec{
     position: relative;

@@ -1,27 +1,33 @@
-import mentors from '../assets/mentors.png';
+import React, { useState } from 'react';
 import HeroImage from '../assets/HeroImage.png';
 import IBMWatson from '../assets/IBMWatson.jpg';
-import IBM_white from '../assets/IBM_white.PNG';
 import Team from '../assets/Team.png';
+import mentors from '../assets/mentors.png';
+import Sidebar from '../components/Sidebar';
 import '../styles/AboutPage.css';
-import Header from '../components/Header'; 
-import {useState} from 'react';
-
 
 
 const AboutPage = () => {
-  const [isLoggedIn, setIsLoggedInIn] = useState(false);
-  const [userID, setUserID] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const checkAuthentication = () => {
-      const storedUserID = localStorage.getItem("userID")
-      setIsLoggedInIn(!!storedUserID);
-      setUserID(storedUserID);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
+
+  //const [isLoggedIn, setIsLoggedInIn] = useState(false);
+  //const [userID, setUserID] = useState(null);
+
+  //const checkAuthentication = () => {
+  //    const storedUserID = localStorage.getItem("userID")
+  //    setIsLoggedInIn(!!storedUserID);
+  //    setUserID(storedUserID);
+ // };
   return (
+    <>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
     <div className="about-page-container">
       <div className="back-to-home">
-      <Header isLoggedIn={isLoggedIn} /> 
+     {/* <Header isLoggedIn={isLoggedIn} /> */}
       </div>
       <div className="hero-section">
         <img src={HeroImage} alt="Hero" className="hero-image" />
@@ -61,6 +67,7 @@ const AboutPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
