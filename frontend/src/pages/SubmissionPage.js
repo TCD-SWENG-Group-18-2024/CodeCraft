@@ -357,7 +357,7 @@ const SubmissionPage = () => {
             // Add more mappings for other languages as needed
         };
     
-        const fileExtension = extensionMap[language] || 'txt';
+        const fileExtension = extensionMap[language] || '.txt';
     
         // Call the export function with the determined file extension
         exportFeedback(feedback, fileExtension);
