@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import {AuthContext} from '../components/AuthContext'
 import Email from '../assets/email.png';
 import Password from '../assets/password.png';
 import Sidebar from '../components/Sidebar';
 import "../styles/LoginSignUp.css";
 
-const SignUp = ({ setIsLoggedIn }) => {
+const SignUp = () => {
     const navigate = useNavigate();
+    const {login } = useContext(AuthContext);
     const [userAction, setUserAction] = useState("Sign Up");
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
@@ -27,12 +29,15 @@ const SignUp = ({ setIsLoggedIn }) => {
             });
             const data = await response.json();
             // If sign up is successful:
+
             setShowMessage(true);
             setTimeout(() => {
                 setShowMessage(false);
-                setIsLoggedIn(true); // Set global isLoggedIn state to true
+                login();
+                // setIsLoggedIn(true); // Set global isLoggedIn state to true
                 navigate('/'); // Navigate to the home page using react-router
-            }, 2500);
+            }, 1500);
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -53,9 +58,10 @@ const SignUp = ({ setIsLoggedIn }) => {
             setShowMessage(true);
             setTimeout(() => {
                 setShowMessage(false);
-                setIsLoggedIn(true); // Set global isLoggedIn state to true
+                login();
+                // setIsLoggedIn(true); // Set global isLoggedIn state to true
                 navigate('/'); // Navigate to the home page using react-router
-            }, 2500);
+            }, 1500);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -131,6 +137,7 @@ const SignUp = ({ setIsLoggedIn }) => {
                     </div>
                 </>
             )}
+            
             {showMessage && <div className="popup-message">Successful, Redirecting to Home Page...</div>}
         </div>
         </>

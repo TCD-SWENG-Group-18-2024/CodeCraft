@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../components/AuthContext'; 
 import '../styles/Account.css';
 
 function Account() {
     const navigate = useNavigate();
+    const {logout } = useContext(AuthContext);
 
     const handleSignout = () => {
-        localStorage.removeItem('userID');
+        logout();
+        console.log("Signing out...");
         navigate('/');
     };
 
@@ -17,7 +20,7 @@ function Account() {
             </div>
             <div className="userGreeting">
                 <h1>Hello, User!</h1>
-                <p>Welcome back!</p>
+                <p> Welcome back!</p>
                 <p> Manage Your Account Here </p>
             </div>
             <ul className="featureList">

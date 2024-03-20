@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import "./App.css";
+import {AuthProvider} from './components/AuthContext'
 import Header from './components/Header';
 import AboutPage from './pages/AboutPage';
 import Account from './pages/Account';
@@ -35,19 +36,21 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-      <Header isLoggedIn={isLoggedIn} /> {/* Pass isLoggedIn state as prop */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/submissionPage" element={<SubmissionPage />} />
-          <Route path="/loginSignUp" element={<LoginSignUp />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/team" element={<TeamPage />} />
-          <Route path="/account" element={<Account />} />
-          {/* Add more routes as needed */}
-        </Routes>
-      </div>
+      <AuthProvider>
+        <div className="App">
+        <Header isLoggedIn={isLoggedIn} /> {/* Pass isLoggedIn state as prop */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/submissionPage" element={<SubmissionPage />} />
+            <Route path="/loginSignUp" element={<LoginSignUp />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/team" element={<TeamPage />} />
+            <Route path="/account" element={<Account />} />
+            {/* Add more routes as needed */}
+          </Routes>
+        </div>
+      </AuthProvider>
     </Router>
   );
 }
