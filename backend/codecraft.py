@@ -36,15 +36,12 @@ mail = Mail(app)
 with app.app_context():
     db.create_all()
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @app.route('/')
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
-
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -114,7 +111,6 @@ def clear_memory():
     # Should be 200 whether the collection exists or not
     return jsonify({'success': 'Cleared the Milvus collection.'})
 
-
 def process_data(user_input, use_case, ai_model, input_language, output_language):
     input_string = {"input": user_input}
     if use_case is not None:
@@ -142,92 +138,6 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     # TODO: Can add more conditions for other use cases
 
     return result
-'''
-#added this call to chat history- should allow user to input qs about history and get response
-@app.route('/chathistory', methods=['POST'])
-def chat_history():
-    data = request.get_json()
-    input = data.get('input')
-    llm = OpenAI(temperature=0)
-    DEFAULT_TEMPLATE = """The following exchange is a friendly conversation with a human and ai.The ai is talkative and provides a lot of specific details from its context.
-    If the ai doesnt know the answer to the question, it will truthfully say it does not know.
-
-    Relevant pieces of previous information:
-    {history}
-
-    Current Conversation:
-    Humans: {input}
-    Ai:"""
-    PROMPT = PromptTemplate(
-        input_variables=["input", "history"],template = DEFAULT_TEMPLATE
-    )
-    conversation_chain = ConversationChain(
-        llm = llm,
-        prompt = PROMPT,
-        memory = memory,
-        verbose = True
-    )
-    return conversation_chain.predict(input=input)
-    # conversation_chain.predict(input="what is my favourite food")
-'''
-# POST method to occur when user chooses to export on the frontend
-@app.route('/export', methods=['POST'])
-def export_endpoint():
-    # Extract data from the request
-    data = request.get_json()
-    llm_response = data.get('llm_response')         # llm response
-    # the filename user wants, if none, default to response
-    filename = data.get('filename', 'feedback')
-    output_language = data.get('output_language')   # take in output_language
-
-    #TODO: Test without output_language to see a txt file
-    #TODO: Test with an output_language to check if the file extenstion logic works
-    #TODO: Parse away the beginning of the AI repsonse, i.e. any instances of "Sure! Here is some code ..."
-    #TODO: Check the txt responses for code generation to ensure there are no backticks or dodgy characters
-    #TODO: Check where on a device the exported file actually ends up!
-
-    # if there is an output language given, make the file extension correspond
-    if output_language != '':
-        if output_language.lower() == 'python':
-            filename += '.py'
-        elif output_language.lower() == 'c':
-            filename += '.c'
-        elif output_language.lower() == 'c++':
-            filename += '.cpp'
-        elif output_language.lower() == 'java':
-            filename += '.java'
-        elif output_language.lower() == 'c#':
-            filename += '.cs'
-        elif output_language.lower() == 'assembly':
-            filename += '.S'
-        elif output_language.lower() == 'javascript':
-            filename += '.js'
-        elif output_language.lower() == 'html':
-            filename += '.html'
-        elif output_language.lower() == 'css':
-            filename += '.css'
-        elif output_language.lower() == 'ruby':
-            filename += '.rb'
-        elif output_language.lower() == 'php':
-            filename += '.php'
-        elif output_language.lower() == 'kotlin':
-            filename += '.kt'
-        elif output_language.lower() == 'r':
-            filename += '.R'
-        elif output_language.lower() == 'perl':
-            filename += '.pl'
-        else:
-            filename += '.txt'  # default to .txt
-    # if no output_language default to .txt
-    else:
-        filename += '.txt'
-
-    # Export LLM response to file
-    with open(filename, 'w') as f:
-        f.write(llm_response)
-
-    # Return the exported file to the client as an attachment
-    return send_file(filename, as_attachment=True)
 
 
 @app.route('/register', methods=['POST'])
