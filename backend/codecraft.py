@@ -6,11 +6,8 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
-import re
-import time
-import secrets
+import re, time , secrets
 from itsdangerous import URLSafeTimedSerializer
-
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
