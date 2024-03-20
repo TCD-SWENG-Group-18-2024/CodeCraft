@@ -1,4 +1,4 @@
-import json
+import json, re, time , secrets, os, dotenv
 from config import ApplicationConfig
 from flask import Flask, request, jsonify, send_file, session, url_for
 from flask_mail import Mail, Message
@@ -6,7 +6,6 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
-import re, time , secrets
 from itsdangerous import URLSafeTimedSerializer
 
 app = Flask(__name__)
@@ -23,11 +22,11 @@ bcrypt = Bcrypt(app)
 db.init_app(app)
 
 # Configuration for Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'              # Gmail SMTP server
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'              # Gmail SMTP server
 app.config['MAIL_PORT'] = 587                                   # Gmail SMTP port (use 587 for TLS)
 app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
-app.config['MAIL_USERNAME'] = None                              # Sender email
-app.config['MAIL_PASSWORD'] = None                              # Sender password
+app.config['MAIL_USERNAME'] =  os.getenv('MAIL_USERNAME')                              # Sender email
+app.config['MAIL_PASSWORD'] =  os.getenv('MAIL_PASSWORD')                              # Sender password
 mail = Mail(app)
 
 with app.app_context():
