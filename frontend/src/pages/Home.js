@@ -38,7 +38,7 @@ function Home() {
                     </button>
                 </Link>
             </div>
-            <div className='wave_container'>
+            <div className="wave_container">
                 <div className="wave"></div>
                 <div className="wave"></div>
                 <div className="wave"></div>
