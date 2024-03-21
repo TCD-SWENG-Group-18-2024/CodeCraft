@@ -139,7 +139,7 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
 @app.route('/register', methods=['POST'])
 def register_user():
     ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
-    username = request.json['username'] 
+    email = request.json['email'] 
     password = request.json['password']
 
     # Password Requirements:
@@ -160,36 +160,36 @@ def register_user():
 
 
     # Username Requirements:
-    if username == '':
+    if email == '':
         return jsonify({"error": "No username provided"}), 400
-    if not any(username.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
+    if not any(email.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
         return jsonify({"error": "Enter a valid email"}), 400
     
-    username = username.lower()
-    user_exists = User.query.filter_by(username=username).first() is not None
+    email = email.lower()
+    user_exists = User.query.filter_by(email=email).first() is not None
 
     if user_exists:
         return jsonify({"error": "User already exists"}), 409 
 
     hashed_password = bcrypt.generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
+    new_user = User(email=email, password=hashed_password)
 
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({
         "id": new_user.id,
-        "username": new_user.username
+        "email": new_user.email
     })
 
 
 @app.route('/login', methods=['POST'])
 def login_user():
-    username = request.json['username']
+    email = request.json['email']
     password = request.json['password']
 
-    username = username.lower()
-    user = User.query.filter_by(username=username).first()
+    email = email.lower()
+    user = User.query.filter_by(email=email).first()
 
     if user is None:
         return jsonify({"error": "User does not exist"}), 401
@@ -216,7 +216,7 @@ def login_user():
 
     return jsonify({
         "id": user.id,
-        "username": user.username
+        "username": user.email
     })
 
 
@@ -243,9 +243,10 @@ def forgot_password():
     user = User.query.filter_by(email=email).first()
     if user is None:
         return jsonify({"error": "User does not exist"}), 404
-    token = generate_reset_token(user)       # Generate a reset token
-    send_reset_password_email(email, token) # Send reset password email
-    return jsonify({"message": "Reset password link sent to your email"})
+    else:
+        token = generate_reset_token(user)       # Generate a reset token
+        send_reset_password_email(email, token) # Send reset password email
+        return jsonify({"message": "Reset password link sent to your email"})
 
 # Route for resetting password
 @app.route('/reset-password/<token>', methods=['POST'])

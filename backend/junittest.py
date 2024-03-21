@@ -412,7 +412,7 @@ class TestRegistration(unittest.TestCase):
     def test_register_user(self):
         # Prepare the JSON payload for registration
         json_payload = {
-            "username": "test_username",
+            "email": "test_username@gmail.com",
             "password": "test_Password1" #need to include all the password conditions liek number and captial
         }
 
@@ -425,8 +425,8 @@ class TestRegistration(unittest.TestCase):
         # Check the response content for successful registration
         response_data = response.json
         self.assertIn('id', response_data)
-        self.assertIn('username', response_data)
-        self.assertEqual(response_data['username'], 'test_username')
+        self.assertIn('email', response_data)
+        self.assertEqual(response_data['email'], 'test_username@gmail.com')
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
@@ -436,7 +436,7 @@ class TestLogin(unittest.TestCase):
     def test_login_user(self):
         # Prepare the JSON payload for login
         json_payload = {
-            "username": "test_username",
+            "email": "test_username@gmail.com",
             "password": "test_Password1"
         }
 
@@ -449,18 +449,32 @@ class TestLogin(unittest.TestCase):
         # Check the response content for successful login
         response_data = response.json
         self.assertIn('id', response_data)
-        self.assertIn('username', response_data)
+        self.assertIn('email', response_data)
         # Additional checks as per your application logic
 
     def test_login_user_wrong_password(self):
         # Prepare the JSON payload for login
         json_payload = {
-            "username": "test_username",
+            "email": "test_username@gmail.com",
             "password": "wrong_password"
         }
         response = self.app.post('/login', json=json_payload, content_type='application/json')
         # Check that the response status code indicates a failed login attempt
         self.assertEqual(response.status_code, 401)
+        # Check that response data is in JSON format
+        self.assertTrue(response.is_json)
+
+class TestForgot(unittest.TestCase):
+    def setUp(self):
+        print("Forgot Password Test")
+    def test_forgot_password(self):
+        # Prepare the JSON payload for forgot
+        json_payload = {
+        "email": "test_username@gmail.com"}
+        # Make a POST request to forgot with the prepared JSON payload
+        response = self.app.post('/forgot-password', json=json_payload, content_type='application/json')
+        # Check the response status code
+        self.assertEqual(response.status_code, 200)
         # Check that response data is in JSON format
         self.assertTrue(response.is_json)
 
