@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from '../components/AuthContext'
 import Email from '../assets/email.png';
@@ -14,6 +14,8 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [showMessage, setShowMessage] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -67,13 +69,27 @@ const SignUp = () => {
         }
     };
 
-    const handlePressingButton = () => {
+    const handleSubmit = () => {
         if (userAction === "Sign Up") {
             handleSignUp();
         } else if (userAction === "Login") {
             handleLogin();
         }
     };
+
+    const handleEmailEnter = (e) => {
+        if (e.key == 'Enter') {
+            e.preventDefault();
+            passwordRef.current.focus();
+        }
+    }
+
+    const handlePasswordEnter = (e) => {
+        if (e.key == 'Enter') {
+            e.preventDefault();
+            handleSubmit();
+        }
+    }
 
     return (
         <>
@@ -94,6 +110,8 @@ const SignUp = () => {
                                 placeholder="Email"
                                 value={username}
                                 onChange={(e) => setUserName(e.target.value)}
+                                onKeyDown={handleEmailEnter}
+                                ref={emailRef}
                             />
                         </div>
 
@@ -104,12 +122,14 @@ const SignUp = () => {
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                onKeyDown={handlePasswordEnter}
+                                ref={passwordRef}
                             />
                         </div>
                     </div>
 
                     <div className="submitContainer">
-                        <div className="submit" onClick={handlePressingButton}>
+                        <div className="submit" onClick={handleSubmit}>
                             {userAction === "Login" ? "Login" : "Sign Up"}
                         </div>
                     </div>
