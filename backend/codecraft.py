@@ -216,7 +216,7 @@ def login_user():
 
     return jsonify({
         "id": user.id,
-        "username": user.email
+        "email": user.email
     })
 
 
