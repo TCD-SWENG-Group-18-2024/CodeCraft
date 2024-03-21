@@ -30,3 +30,6 @@ node_modules/
 
 # Ignore any local development files
 .vscode/
+
+#Ignore volume files
+/MilvusDB/volumes/
