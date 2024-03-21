@@ -22,24 +22,30 @@ const SignUp = () => {
     const handleSignUp = async () => {
         const userData = { username, password };
         try {
+
             const response = await fetch("http://localhost:8080/register", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
             });
+
+            
+            if (!response.ok){
+                const errorData = await response.json();
+                // console.log(errorData);
+                throw new Error(errorData.error);
+            }
+
             const data = await response.json();
             // If sign up is successful:
+            console.log(data);
 
             setShowMessage(true);
-            setTimeout(() => {
-                setShowMessage(false);
-                login();
-                // setIsLoggedIn(true); // Set global isLoggedIn state to true
-                navigate('/'); // Navigate to the home page using react-router
-            }, 1500);
+            login();
+            navigate('/'); // Navigate to the home page using react-router
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error.message);
         }
     };
 
@@ -51,17 +57,21 @@ const SignUp = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
             });
+
+            if (!response.ok){
+                const errorData = await response.json();
+                throw new Error(errorData.error);
+            }
             const data = await response.json();
             // If login is successful:
             console.log("Login Successful", data);
             localStorage.setItem("userID", data.id); // Save userID
+
             setShowMessage(true);
-            setTimeout(() => {
-                setShowMessage(false);
-                login();
-                // setIsLoggedIn(true); // Set global isLoggedIn state to true
-                navigate('/'); // Navigate to the home page using react-router
-            }, 1500);
+            login();
+            // setIsLoggedIn(true); // Set global isLoggedIn state to true
+            navigate('/'); // Navigate to the home page using react-router
+            
         } catch (error) {
             console.error('Error:', error);
         }
@@ -137,7 +147,7 @@ const SignUp = () => {
                     </div>
                 </>
             )}
-            
+
             {showMessage && <div className="popup-message">Successful, Redirecting to Home Page...</div>}
         </div>
         </>
