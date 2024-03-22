@@ -38,7 +38,7 @@ function App() {
     <Router>
       <AuthProvider>
         <div className="App">
-        <Header isLoggedIn={isLoggedIn} /> {/* Pass isLoggedIn state as prop */}
+        <Header isLoggedIn={isLoggedIn} /> {/*pass islogged in as prop*/}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/features" element={<Features />} />
