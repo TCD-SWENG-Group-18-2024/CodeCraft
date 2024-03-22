@@ -234,7 +234,7 @@ def initialise_vectordb():
 
     retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
     global memory
-    memory = VectorStoreRetrieverMemory(retriever=retriever)
+    memory = VectorStoreRetrieverMemory(retriever=retriever, input_key='input')
 
 
 if __name__ == "__main__":
