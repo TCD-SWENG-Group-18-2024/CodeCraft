@@ -5,11 +5,13 @@
 }
 
 .userArea{
+  
   margin: 20px;
   height: auto;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+  align-items: center;
   position: relative;
 }
 
@@ -236,12 +238,12 @@
   display:none
 }
 .feedBackArea {
-  width: calc(66vh - 40px); 
-  height: 25vw; 
+  width: calc(80vh - 40px); 
   position: fixed; 
-  right: 66px; 
-  top: 265px; 
-  margin-right: 150px;
+  display: flex;
+  justify-content: center;
+  margin-right: -850px;    /*just for now*/
+  margin-top: 200px;      /*just for now*/
   padding: 1rem; 
   overflow-y: auto; 
   background-color: none; 
@@ -249,19 +251,8 @@
   z-index: 1000; 
 }
 
-.feedBackBox {
-  font-family: 'Courier New', Courier, monospace; 
-  font-size: 0.9em; 
-  text-align: left;
-  background: white; 
-  border: 1px solid #0F62FE; 
-  padding: 1em; 
-  margin-top: 1em; 
-  margin: 15px;
-  border-radius: 15px;
-}
 .code-block {
-  font-size: 11px;
+  font-size: 10px;
   font-family: 'Fira Code', 'Courier New', monospace;
   line-height: 1.5;
   color:#6F8FAF;
@@ -410,16 +401,20 @@
   animation-delay: 0.2s;
  }
 
-.exportButton{
-  margin-top: 20px;
-  margin-left: 5%;
-  color: #0F62FE;
-  border-color: #0F62FE;
-  border: 1px #0F62FE solid;
-  height: 35px;
-  width: 85px;
+.card-area{
+  display: flex;
+  flex-direction: row;
 }
-
+.export-button{
+  margin-top:10px;
+  margin-left: -50px;
+  height: 25px;
+  width: 25px;
+}
+.export-img{
+  height: 20px;
+  width: 20px;
+}
 
 .exportButton:hover{
     color: white;

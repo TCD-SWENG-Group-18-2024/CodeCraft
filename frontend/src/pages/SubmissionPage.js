@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { renderToString } from 'react-dom/server';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { duotoneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Sidebar from '../components/Sidebar';
 import '../styles/SubmissionPage.css';
 import './Home';
 import './LoginSignUp';
+import Export from "../assets/export.png";
+import CardElement from "../components/CardElement";
 
 const SubmissionPage = () => {
 
@@ -20,6 +22,7 @@ const SubmissionPage = () => {
     const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
     const [isDropdownOpen,setIsDropdownopen]=useState(true);
+    const [cards, setCards] = useState([]);     // whenever submit is clicked
     const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -63,9 +66,10 @@ const SubmissionPage = () => {
    
     const [customFileName, setCustomFileName] = useState('');
 
-    const getCodeBlock = (code) => (
-        <SyntaxHighlighter language="jsx" style={duotoneLight}>
-        {code}
+    
+    const highlightCodeBlock = (code) => (
+        <SyntaxHighlighter language="jsx" style={syntax} >
+            {code}
         </SyntaxHighlighter>
     );
 // takes input - files 
@@ -118,7 +122,6 @@ const SubmissionPage = () => {
             alert("Please Enter some code before submitting");
             return;
         }
-
         setIsLoading(true);
 
         const data ={
@@ -178,7 +181,7 @@ const SubmissionPage = () => {
         }
     };
     const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
-        return `<pre class="code-block"><code>${renderToString( getCodeBlock(code))}</code></pre>`;
+        return `<pre class="code-block"><code>${renderToString( highlightCodeBlock(code))}</code></pre>`;
     });
 
     const formatFeedback = (responseData) => {
@@ -283,8 +286,9 @@ const SubmissionPage = () => {
             handleTextSubmit();
         }
         else if (inputType === "files"){
-            handleFileSubmit();
+            handleFileSubmit();   
         }
+
     };
 
     const capitaliseFirstLetter = (str) => {
@@ -378,10 +382,25 @@ const SubmissionPage = () => {
         document.body.removeChild(a);
         
       };
-    
+    useEffect(() => {
+        if (!isLoading && modifiedFeedback) {
+            addCard();
+        }
+    }, [isLoading, modifiedFeedback]);
+
+    const addCard = () => {
+        
+        const newCard = {
+            id:"0",
+            usecase: useCase,
+            query: input,
+            response: useCase==="code_translation"||useCase==="code_completion" ? highlightCodeBlock(feedback) : modifiedFeedback,
+        };
+        setCards([newCard]); // Add the new card to the dictionary,for now only 1
+        
+    };
     return [
     <>
-
 
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
@@ -577,33 +596,34 @@ const SubmissionPage = () => {
 
 
                 <div className='feedBackArea'>
-
-                    {isLoading && <div className="loading">
-                        <div className='loading1'></div>
-                        <div className='loading2'></div>
-                        <div className='loading3'></div>
-                        </div>}
-
-                    {!isLoading && feedback &&( 
-                        <div class="feedBackBox">
-                            {useCase ==='code_translation'? 
-                            <pre className = "code-block"><code>{feedback}</code></pre>:
-                            <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
-                            }
-                            
-                        </div>
-                    )}
-                    {!isLoading && feedback &&( 
+                    <div className="card-area">
+                        {/* <CardElement usecase ={useCase} query = {input} response = {modifiedFeedback} isLoading = {isLoading}/> */}
+                        {cards.map((card) => (
+                            <div key={"0"}>
+                            <CardElement
+                                usecase={card.usecase}
+                                query={card.query}
+                                response={card.response}
+                                isLoading={isLoading}
+                            />
+                            </div>
+                        ))}
+                        {!isLoading && feedback &&( 
                         <div>
-                         <button onClick={() => { handleExportClick(feedback); }} className="exportButton">Export</button>
-                         <input
+                         <button className ="export-button"onClick={() => { handleExportClick(feedback); }}>
+                            <img src= {Export} alt="Export Icon" className='export-img'/>
+                        </button>
+                         {/* <input
                          type="text"
                          value={customFileName}
                          onChange={(e) => setCustomFileName(e.target.value)}
                          placeholder="Enter custom file name"
-                         />
+                         /> */}
                         </div>
                     )}
+                    </div>
+                    
+                    
                 </div>
 
             </div>

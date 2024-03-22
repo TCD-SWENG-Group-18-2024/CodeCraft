@@ -33,7 +33,7 @@ body, h1, h2, p, a, button {
 
 .App-nav {
   height: 65px;
-  margin: 2px;
+  width: 100%;
   position: sticky;
   top: 0; /* Ensures the navigation sticks to the top of the page */   
   padding: 1rem;
