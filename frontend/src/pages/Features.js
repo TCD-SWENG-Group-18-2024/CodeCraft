@@ -75,7 +75,7 @@ const Features = () =>{
                 </div>
                 <div className = "llms-content">
                     <p>In an era dominated by artificial intelligence, our Codecraft platform leads the way in innovation. By integration
-                        with leading language models such as <a href="https://openai.com" className="llm-link">OpenAI</a> and <a href="https://www.ibm.com/watsonx" className="llm-link">WatsonX</a>, 
+                        with leading language models such as <a href="https://openai.com" className="llm-link">OpenAI</a>, <a href="https://ai.meta.com/blog/code-llama-large-language-model-coding/" className="llm-link">Code Llama</a> and <a href="https://www.ibm.com/watsonx" className="llm-link">WatsonX</a>, 
                         Codecraft unlocks a new realm of possibilities.<br/>
                         With OpenAI's expertise in natural language understanding and generation, 
                         and WatsonX's advanced natural language processing capabilities, CodeCraft empowers developers like never before.
