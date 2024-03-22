@@ -119,8 +119,7 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     elif use_case == 'code_completion':
         result = code_completion(user_input, ai_model, input_language)
     elif use_case == 'code_translation':
-        result = code_translation(
-            input_language, output_language, user_input, ai_model)
+        result = code_translation(input_language, output_language, user_input, ai_model)
     elif use_case == '':
         # general model for no specified operation
         result = AIModel(user_input, ai_model)
@@ -139,7 +138,7 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
 @app.route('/register', methods=['POST'])
 def register_user():
     ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
-    email = request.json['email'] 
+    email = request.json['email']
     password = request.json['password']
 
     # Password Requirements:
@@ -157,7 +156,6 @@ def register_user():
         return jsonify({"error": "Password should contain at least one lowercase letter"}), 400 # At least one lowercase
     if re.search(r'[^\x00-\x7F]', password):
         return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
-
 
     # Username Requirements:
     if email == '':
