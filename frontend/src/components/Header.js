@@ -11,7 +11,7 @@ const Header = () => {
   const {isLoggedIn} = useContext(AuthContext);
 
   return (
-    <nav className="App-nav">
+    <nav className="App-nav" style={{height:"30px"}}>
       <div className="App-nav-links">
         {isLoggedIn ? (
           // Links to show when the user is logged in
@@ -34,7 +34,7 @@ const Header = () => {
             {/* The IBM logo will only show when not on the home page */}
             {!isHomePage && (
               <a href="https://www.ibm.com/us-en" target="_blank" rel="noopener noreferrer">
-                <img src={HeaderImage} alt="IBM Logo" className="header-image" />
+                <img src={HeaderImage} alt="IBM Logo" className="header-image"/>
               </a>
             )}
           </div>
