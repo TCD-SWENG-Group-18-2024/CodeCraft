@@ -64,14 +64,14 @@ const Features = () =>{
             </div>
             <div className = "hero-sec">
                 <div className = "hero-container">    
-                    <h1 class="hero-title">Features</h1>
-                    <p class="hero-overview">Experience the future of coding with CodeCraft – an advanced coding platform equipped with cutting-edge AI capabilities. From code translation to intelligent code completion and analysis, CodeCraft empowers developers to write, review, and deploy code with unparalleled efficiency and accuracy.</p>
+                    <h1 className="hero-title">Features</h1>
+                    <p className="hero-overview">Experience the future of coding with CodeCraft – an advanced coding platform equipped with cutting-edge AI capabilities. From code translation to intelligent code completion and analysis, CodeCraft empowers developers to write, review, and deploy code with unparalleled efficiency and accuracy.</p>
                     <a href="#llms-container" className="lm-button">Learn More</a>
                 </div>   
             </div>
             <div className = "fade-container llms-container" id="llms-container">
                 <div className = "llms-column">
-                    <h2>Integration with <span class = "underline-letter">L</span>LMs</h2>
+                    <h2>Integration with <span className = "underline-letter">L</span>LMs</h2>
                 </div>
                 <div className = "llms-content">
                     <p>In an era dominated by artificial intelligence, our Codecraft platform leads the way in innovation. By integration
@@ -87,7 +87,7 @@ const Features = () =>{
             </div>
             <div className = "fade-container file-container">
                 <div className = "file-column">
-                    <h2>File <span class = "underline-letter">M</span>anagement</h2>
+                    <h2>File <span className = "underline-letter">M</span>anagement</h2>
                 </div>
                 <div className = "file-content">
                     <p>
@@ -100,7 +100,7 @@ const Features = () =>{
             </div>
             <div className = "fade-container language-container">
                 <div className = "language-column">
-                    <h2>Comprehensive <span class = "underline-letter-dark">L</span>anguage Support</h2>
+                    <h2>Comprehensive <span className = "underline-letter-dark">L</span>anguage Support</h2>
                 </div>
                 <div className = "language-content">
                     <p>
@@ -115,7 +115,7 @@ const Features = () =>{
             </div>
             <div className = "fade-container toolkit-container">
                 <div className = "toolkit-content">
-                    <h2>Code<span class = "underline-letter">C</span>raft 's <span class = "underline-letter">To</span>olkit</h2>
+                    <h2>Code<span className = "underline-letter">C</span>raft 's <span className = "underline-letter">To</span>olkit</h2>
                     <h3 className = "toolkit-subheading">Code Analysis</h3>
                     <p>
                     CodeCraft provides functionalities to help users analyze their code effectively. 
