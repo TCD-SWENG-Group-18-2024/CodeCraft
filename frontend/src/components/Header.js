@@ -11,15 +11,15 @@ const Header = () => {
   const {isLoggedIn} = useContext(AuthContext);
 
   return (
-    <nav className="App-nav" style={{height:"30px"}}>
-      <div className="App-nav-links">
+    <nav className="App-nav">
+      <div className="App-nav-links" style={{textAlign:"right"}}>
         {isLoggedIn ? (
           // Links to show when the user is logged in
           <div>
             <Link to="/account">Account</Link>
-            {/* The IBM logo will only show when not on the home page */}
+            {/* The logo will only show when not on the home page */}
             {!isHomePage && (
-                <img src={HeaderImage} alt="IBM Logo" className="header-image" />
+                <img src={HeaderImage} alt="CodeCraft Logo" className="header-image"/>
             )}
           </div>
         ) : (
@@ -27,12 +27,12 @@ const Header = () => {
           <div>
             
             {!isSignUpPage && (
-              <Link to="/loginSignUp" className="App-sign-up">Sign up</Link>
+              <Link to="/loginSignUp" className="App-sign-up">Sign Up</Link>
             )}
-            {/* The IBM logo will only show when not on the home page */}
+            {/* The logo will only show when not on the home page */}
             {!isHomePage && (
                 <Link to="/">
-                <img src={HeaderImage} alt="IBM Logo" className="header-image"/>
+                <img src={HeaderImage} alt="CodeCraft Logo" className="header-image"/>
                 </Link>
             )}
           </div>

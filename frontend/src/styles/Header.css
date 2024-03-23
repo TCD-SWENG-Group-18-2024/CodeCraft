@@ -1,5 +1,50 @@
+.App-nav {
+  height: 30px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end; 
+  align-items: right;
+  background: linear-gradient(315deg, #006699 3%, #0F62FE 38%, 68%, #689cfa 98%);
+  z-index: 1000; 
+}
+
+.App-nav-links {
+    background-color: transparent;
+    border-radius: 8px;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin-left: auto; 
+}
+
+.App-nav-links a, .App-sign-up {
+    color: #ffffff; 
+    text-decoration: none;
+    margin: 0 1rem;
+    transition: 0.3s;
+}
+
+.App-nav-links a:hover,
+.App-sign-up:hover {
+    color: #bbebff;
+    transition: 0.3s;
+}
+
+.App-sign-up {
+    /*background: #0062ff; */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
 .header-image {
-  height: 15px;
-  width: 100px;
-  margin-right: 9px;
- }
+  height: 50%;
+  width: 10%;
+  text-align: right;
+  margin-right: 2%;
+}
