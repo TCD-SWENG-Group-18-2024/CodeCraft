@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import "./App.css";
 import {AuthProvider} from './components/AuthContext'
+import { Toaster } from 'react-hot-toast'
 import Header from './components/Header';
 import AboutPage from './pages/AboutPage';
 import Account from './pages/Account';
@@ -40,6 +41,7 @@ function App() {
       <Router>
       <AuthProvider>
         <div className="App">
+        <Toaster position='top-center' toastOptions={{duration: 4500}}/>
         <Header isLoggedIn={isLoggedIn} /> {/*pass islogged in as prop*/}
           <Routes>
             <Route path="/" element={<Home />} />
