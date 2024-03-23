@@ -34,9 +34,8 @@
 }
 
 .App-sign-up {
-    /*background: #0062ff; */
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
