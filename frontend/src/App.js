@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import LoginSignUp from './pages/LoginSignUp';
 import SubmissionPage from './pages/SubmissionPage';
 import TeamPage from './pages/TeamPage';
+import Footer from './components/Footer'
 // move the logo to the indivdual pages
 // import IBM from "./assets/IBM.PNG"
 // import IBM_White from "./assets/IBM_white.PNG"
@@ -35,7 +36,8 @@ function App() {
 
 
   return (
-    <Router>
+    <div>
+      <Router>
       <AuthProvider>
         <div className="App">
         <Header isLoggedIn={isLoggedIn} /> {/*pass islogged in as prop*/}
@@ -52,6 +54,10 @@ function App() {
         </div>
       </AuthProvider>
     </Router>
+    <Footer />
+    </div>
+    
+
   );
 }
 
