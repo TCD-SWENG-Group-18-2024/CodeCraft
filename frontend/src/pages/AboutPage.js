@@ -27,15 +27,9 @@ const AboutPage = () => {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
     <div className="about-page-container">
       <div className="back-to-home">
-     {/* <Header isLoggedIn={isLoggedIn} /> */}
+        {/* <Header isLoggedIn={isLoggedIn} /> */}
       </div>
-      <div className="hero-section">
-        <img src={HeroImage} alt="Hero" className="hero-image" />
-        <div className="overlay-text">
-          <h1>About Us</h1>
-          <p>CodeCraft: Revolutionizing Software Engineering with AI</p>
-        </div>
-      </div>
+      <h1 className="about-title">About Us</h1>
 
       <div className="section reverse-section">
         <div className="text">
