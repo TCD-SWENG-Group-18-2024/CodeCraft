@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import AboutPage from './AboutPage'; // Assuming this is the correct import path
+import AboutPage from './AboutPage'; 
 
 test('renders CodeCraft text', () => {
   render(
@@ -10,12 +10,11 @@ test('renders CodeCraft text', () => {
     </BrowserRouter>
   );
 
-  const textElements = screen.getAllByText(/CodeCraft/i); // Case-insensitive regex matcher
+  const textElements = screen.getAllByText(/CodeCraft/i); 
 
   // Assert that at least one matching element is present
   expect(textElements.length).toBeGreaterThan(0);
 
-  // You can further assert on each individual element if needed
   textElements.forEach(element => {
     expect(element).toBeInTheDocument();
   });
