@@ -55,16 +55,3 @@ const CardElement = ({usecase,query,response,isLoading})=>{
 );
 };
 export default CardElement;
-
-// {usecase === "code_translation" || usecase === "code_completion" ? (
-//   <Typography sx={{ fontSize: 11 }} style={{ textAlign: "left" }} variant="body2">
-//     {response}
-//     {/* <pre className="code-block">{response}</pre> */}
-//     <br />
-//   </Typography>
-// ) : (
-//   <Typography sx={{ fontSize: 11 }} style={{ textAlign: "left" }} variant="body2">
-//     
-//     <br />
-//   </Typography>
-// )}
