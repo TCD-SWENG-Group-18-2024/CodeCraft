@@ -18,8 +18,9 @@ import Footer from './components/Footer'
 
 function App() {
 
+    // dont need the below logic anymore, Handled in AuthProvider
     // State for managing login status
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    /*const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // Check for user authentication status when the app loads
     useEffect(() => {
@@ -34,7 +35,7 @@ function App() {
       setIsLoggedIn(false);
       // Additional logout logic if needed
     };
-
+*/
 
   return (
     <div>
@@ -42,7 +43,7 @@ function App() {
       <AuthProvider>
         <div className="App">
         <Toaster position='top-center' toastOptions={{duration: 4500}}/>
-        <Header isLoggedIn={isLoggedIn} /> {/*pass islogged in as prop*/}
+        <Header /> 
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/features" element={<Features />} />
