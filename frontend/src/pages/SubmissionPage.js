@@ -23,7 +23,7 @@ const SubmissionPage = () => {
     const [outputLanguage, setOutputLanguage] = useState('');
     const [isDropdownOpen,setIsDropdownopen]=useState(true);
     const [cards, setCards] = useState([]);     // whenever submit is clicked
-    const tempFeedback = `<code>${feedback}</code>`   
+    // const tempFeedback = `<code>${feedback}</code>`   
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
@@ -180,9 +180,9 @@ const SubmissionPage = () => {
             event.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
         }
     };
-    const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
-        return `<pre class="code-block"><code>${renderToString( highlightCodeBlock(code))}</code></pre>`;
-    });
+    // const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
+    //     return `<pre class="code-block"><code>${renderToString( highlightCodeBlock(code))}</code></pre>`;
+    // });
 
     const formatFeedback = (responseData) => {
 
@@ -383,10 +383,10 @@ const SubmissionPage = () => {
         
       };
     useEffect(() => {
-        if (!isLoading && modifiedFeedback) {
+        if (!isLoading && feedback) {
             addCard();
         }
-    }, [isLoading, modifiedFeedback]);
+    }, [isLoading, feedback]);
 
     const addCard = () => {
         
@@ -394,7 +394,8 @@ const SubmissionPage = () => {
             id:"0",
             usecase: useCase,
             query: input,
-            response: useCase==="code_translation"||useCase==="code_completion" ? highlightCodeBlock(feedback) : modifiedFeedback,
+            response: feedback
+            // response: useCase==="code_translation"||useCase==="code_completion" ? highlightCodeBlock(feedback) : modifiedFeedback,
         };
         setCards([newCard]); // Add the new card to the dictionary,for now only 1
         
