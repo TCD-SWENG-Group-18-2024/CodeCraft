@@ -115,7 +115,6 @@ const SubmissionPage = () => {
             alert("Please Enter some code before submitting");
             return;
         }
-        setIsLoading(true);
 
         const data ={
             user_input: input,
@@ -149,7 +148,10 @@ const SubmissionPage = () => {
             setFeedback(`Error occurred while submitting: ${error.message}`)
         }
         finally{
-            setIsLoading(false);
+            setTimeout(() => {
+                // Simulate API response
+                setIsLoading(false); 
+            }, 2000);
         }
 
         // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
@@ -221,7 +223,6 @@ const SubmissionPage = () => {
             alert("Please select or drop some files before submitting");
             return;
         }
-        setIsLoading(true);
 
         const formData = new FormData();
         droppedFiles.forEach((file) =>{
@@ -265,13 +266,17 @@ const SubmissionPage = () => {
             setFeedback(`Error occurred while submitting files: ${error.message}`)
         }
         finally{
-            setIsLoading(false);
+            setTimeout(() => {
+                // Simulate API response
+                setIsLoading(false); 
+            }, 2000);
         }
         console.log("Feedback", feedback);
     }
 
 
     const handleSubmit = () => {
+        setIsLoading(true);
         if(inputType === "textbox"){
             handleTextSubmit();
         }
@@ -373,10 +378,10 @@ const SubmissionPage = () => {
         
       };
     useEffect(() => {
-        if (!isLoading && feedback) {
+        if (feedback) {
             addCard();
         }
-    }, [isLoading, feedback]);
+    }, [feedback]);
 
     const addCard = () => {
         
