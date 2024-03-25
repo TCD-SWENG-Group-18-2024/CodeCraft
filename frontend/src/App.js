@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import "./App.css";
 import {AuthProvider} from './components/AuthContext'
+import { Toaster } from 'react-hot-toast'
 import Header from './components/Header';
 import AboutPage from './pages/AboutPage';
 import Account from './pages/Account';
@@ -17,8 +18,9 @@ import Footer from './components/Footer'
 
 function App() {
 
+    // dont need the below logic anymore, Handled in AuthProvider
     // State for managing login status
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    /*const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // Check for user authentication status when the app loads
     useEffect(() => {
@@ -33,14 +35,15 @@ function App() {
       setIsLoggedIn(false);
       // Additional logout logic if needed
     };
-
+*/
 
   return (
     <div>
       <Router>
       <AuthProvider>
         <div className="App">
-        <Header isLoggedIn={isLoggedIn} /> {/*pass islogged in as prop*/}
+        <Toaster position='top-center' toastOptions={{duration: 4500}}/>
+        <Header /> 
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/features" element={<Features />} />

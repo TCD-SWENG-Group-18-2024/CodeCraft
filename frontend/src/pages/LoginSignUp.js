@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
+import {toast} from "react-hot-toast"
 import {AuthContext} from '../components/AuthContext'
 import Email from '../assets/email.png';
 import Password from '../assets/password.png';
@@ -13,6 +14,7 @@ const SignUp = () => {
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [showMessage, setShowMessage] = useState(false);
+    const [showError, setError] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -34,7 +36,8 @@ const SignUp = () => {
             
             if (!response.ok){
                 const errorData = await response.json();
-                // console.log(errorData);
+                console.log(errorData);
+                toast.error(errorData.error);
                 throw new Error(errorData.error);
             }
 
@@ -62,6 +65,8 @@ const SignUp = () => {
 
             if (!response.ok){
                 const errorData = await response.json();
+                console.log(errorData);
+                toast.error(errorData.error);
                 throw new Error(errorData.error);
             }
             const data = await response.json();
@@ -71,7 +76,6 @@ const SignUp = () => {
 
             setShowMessage(true);
             login();
-            // setIsLoggedIn(true); // Set global isLoggedIn state to true
             navigate('/'); // Navigate to the home page using react-router
             
         } catch (error) {

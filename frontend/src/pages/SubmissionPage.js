@@ -22,14 +22,10 @@ const SubmissionPage = () => {
     const [inputLanguage, setInputLanguage] = useState('java');
     const [outputLanguage, setOutputLanguage] = useState('');
     const [isDropdownOpen,setIsDropdownopen]=useState(true);
-    const [cards, setCards] = useState([]);     // whenever submit is clicked
-    const tempFeedback = `<code>${feedback}</code>`   
+    const [cards, setCards] = useState([]);     // whenever submit is clicked 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
-    //const [isLoggedIn, setIsLoggedInIn] = useState(false);
-    //const [userID, setUserID] = useState(null);
- 
     /*Takes input */
     const handleTextBoxChange = (event) => {
         setInput(event.target.value);
@@ -57,12 +53,6 @@ const SubmissionPage = () => {
     const handleOutputLanguageChange = (event) =>{
         setOutputLanguage(event.target.value);
     };
-
-   // const checkAuthentication = () => {
-    //    const storedUserID = localStorage.getItem("userID")
-    //    setIsLoggedInIn(!!storedUserID);
-    //    setUserID(storedUserID);
-   // };
    
     const [customFileName, setCustomFileName] = useState('');
 
@@ -180,9 +170,6 @@ const SubmissionPage = () => {
             event.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
         }
     };
-    const modifiedFeedback = tempFeedback.replace(/```([\s\S]*?)```/g, (match, code) => {
-        return `<pre class="code-block"><code>${renderToString( highlightCodeBlock(code))}</code></pre>`;
-    });
 
     const formatFeedback = (responseData) => {
 
@@ -383,10 +370,10 @@ const SubmissionPage = () => {
         
       };
     useEffect(() => {
-        if (!isLoading && modifiedFeedback) {
+        if (!isLoading && feedback) {
             addCard();
         }
-    }, [isLoading, modifiedFeedback]);
+    }, [isLoading, feedback]);
 
     const addCard = () => {
         
@@ -394,7 +381,7 @@ const SubmissionPage = () => {
             id:"0",
             usecase: useCase,
             query: input,
-            response: useCase==="code_translation"||useCase==="code_completion" ? highlightCodeBlock(feedback) : modifiedFeedback,
+            response: feedback
         };
         setCards([newCard]); // Add the new card to the dictionary,for now only 1
         
@@ -597,7 +584,6 @@ const SubmissionPage = () => {
 
                 <div className='feedBackArea'>
                     <div className="card-area">
-                        {/* <CardElement usecase ={useCase} query = {input} response = {modifiedFeedback} isLoading = {isLoading}/> */}
                         {cards.map((card) => (
                             <div key={"0"}>
                             <CardElement
