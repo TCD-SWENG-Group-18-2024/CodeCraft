@@ -1,0 +1,47 @@
+.task-card {
+    width: 30vw;
+    margin-bottom: 10px;
+    border: 1px solid #293045;
+    text-align: left;
+    background: linear-gradient(45deg, #311b92 30%, #6200ea 90%);
+    transition: box-shadow 0.3s ease; /* Add transition for smoother effect */
+}
+
+.task-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15); /* Glow effect on hover */
+}
+
+.cardStyle {
+    position: relative;
+    width: 50vw;
+    margin-bottom: 10px;
+    border: 1px solid #293045;
+    text-align: left;
+    background: linear-gradient(45deg, #311b92 30%, #6200ea 90%);
+}
+  
+.deleteButtonStyle {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+}
+  
+.expandButtonStyle {
+    position: absolute;
+    top: 2em;
+    right: 0.5em;
+}
+  
+.titleContainerStyle {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+  
+.titleStyle {
+    margin-left: 8px;
+}
+
+div.MuiCardContent-root.main-content {
+    padding-right: 3.5em;
+}
