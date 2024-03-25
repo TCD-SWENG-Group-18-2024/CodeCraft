@@ -40,7 +40,6 @@
   align-items: flex-start;
 }
 
-
 .fileDropZone{
   width: 150%;
   height: 20px;
@@ -101,6 +100,9 @@
 
 .feedBackArea {
   width: calc(80vh - 40px); 
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
   display: flex;
   padding: none;
   overflow-y: none; 
@@ -128,14 +130,16 @@
 @media (max-width: 1410px){
 
   .feedBackArea {
-    position: relative; 
-    right: 0; 
-    top: 0; 
-    width: auto;
-    height: auto;
+    width: calc(80vh - 40px); 
+    align-items: center;
+    justify-content: center;
     margin-top: 50px;
-    margin-left: 150px;
+    display: flex;
+    padding: none;
+    overflow-y: none; 
     background-color: none; 
+    border-radius: 5px;
+    z-index: 1000; 
   }
   
   .textBoxContainer{

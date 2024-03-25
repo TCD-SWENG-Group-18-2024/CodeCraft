@@ -34,29 +34,35 @@ const Dropdown = ({inputType, setInputType,
       <nav className='dropdownMenu'>
       <div className="arrow-down"></div> 
         <ol>
-          <li className='menu-item'>
+
+        <li className='menu-item'>
             <a href='#0' onMouseEnter={() => setIsDropdownOpen(true)}>
-              {inputType === "textbox" || inputType === "files" 
-                ? <>{formatInputType(inputType)}</> : <>-Select Input Type-</>}
+                {inputType === "textbox" || inputType === "files" 
+                    ? <>{formatInputType(inputType)}</> : <>-Select Input Type-</>}
             </a>
             <ol className={isDropdownOpen ? 'sub-menu' : 'hide-dropdown'} onClick={() => setIsDropdownOpen(false)}>
-              <li className='menu-item'>
-                <a href="#0" onClick={() => setInputType("textbox")}>Text Submission</a>
-              </li>
-              <li className='menu-item'>
-                <a href="#0" onClick={() => setInputType("files")}>File Submission</a>
-              </li>
+                <li className='menu-item'>
+                    <a href="#0" onClick={() => setInputType("textbox")}>Text Submission</a>
+                </li>
+                <li className='menu-item'>
+                    <a href="#0" onClick={() => setInputType("files")}>File Submission</a>
+                </li>
             </ol>   
-          </li>
+        </li>
+
         <li className='menu-item'>
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
                 {useCase === "code_generation" || useCase === "code_completion"
                 || useCase === "code_analysis" || useCase === "code_translation"
                 ? <>Use Case: {formatUseCase(useCase)}</> : <>Code Analysis</>}
             </a>
-            
             <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}> 
-            
+
+                <li className="menu-item">
+                    <a href="#0" onClick={() => setUseCase("code_analysis")}>
+                        Code Analysis
+                    </a>
+                </li>
                 <li className="menu-item">
                     <a href="#0" onClick={() => setUseCase("code_generation")}>
                         Code Generation
@@ -68,17 +74,13 @@ const Dropdown = ({inputType, setInputType,
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_analysis")}>
-                        Code Analysis
-                    </a>
-                </li>
-                <li className="menu-item">
                     <a href="#0" onClick={() => setUseCase("code_translation")}>
                         Code Translation
                     </a>
                 </li>
             </ol>   
         </li>
+
         <li className="menu-item">
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
                 {aiModel === "StarCoder" || aiModel === "openai" || aiModel === "llama"
