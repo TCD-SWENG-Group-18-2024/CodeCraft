@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Sidebar from '../components/Sidebar';
 import SubmissionBar from '../components/SubmissionBar';
+import Dropdown from '../components/dropdown';
 import '../styles/SubmissionPage.css';
 import './Home';
 import './LoginSignUp';
@@ -396,10 +397,12 @@ const SubmissionPage = () => {
             <div className="userArea">
 
                 <div className='submissionArea'>
+                <Dropdown />
 
-                    <div className='dropDownContainer'>
+
+                    {/* <div className='dropDownContainer'>
  
-                        <nav className='dropdownMenu'>
+                        <nav className='dropdownMenu<Dropdown />'>
                             <ol>
                                 <li className='menu-item'>
                                     <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
@@ -534,7 +537,7 @@ const SubmissionPage = () => {
                             </ol>
 
                         </nav>
-                    </div>
+                    </div> */}
 
 
                     {inputType === "textbox" && (

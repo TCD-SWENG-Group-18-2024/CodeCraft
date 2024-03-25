@@ -1,0 +1,42 @@
+.dropDownContainer {
+    display: flex;
+    align-items: center;
+    padding-right: 10px; 
+  }
+  
+  
+  .dropdownMenu {
+    margin: 5px;
+    flex-grow: 1;
+  }
+  
+  .menu-item a {
+    display: block;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #E0E0E0; /* Light grey background */
+    color: black;
+    border: 1px solid #A0A0A0; /* Grey border */
+    border-radius: 5px;
+  }
+  
+  .menu-item a:hover, .menu-item a.active {
+    background-color: #C0C0C0; /* Slightly darker grey for hover/active */
+    border-color: purple; /* Purple border for the active item */
+  }
+  
+  /* Hide/Show sub-menus */
+  .sub-menu {
+    display: none;
+  }
+  
+  .menu-item:hover .sub-menu {
+    display: block;
+  }
+  
+  /* Style the sub-menu items */
+  .sub-menu .menu-item a {
+    background-color: #F0F0F0; /* Even lighter grey for sub-menu items */
+    color: black;
+  }
