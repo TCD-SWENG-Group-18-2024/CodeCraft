@@ -1,6 +1,6 @@
 .sidebar {
     width: 200px; /* Width of the sidebar. If left aligned 210 otherwise 200*/
-    background: rgba(0, 123, 255, 0.5); /* Background color of the sidebar */
+    background: rgb(0, 50, 143, 0.4); /* Background color of the sidebar */
     color: white;
     height: 100%;
     position: fixed;
