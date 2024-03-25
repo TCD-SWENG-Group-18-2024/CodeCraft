@@ -1,11 +1,12 @@
+import json, re, time , secrets, os, dotenv
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session
+from flask import Flask, request, jsonify, send_file, session, url_for, render_template
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
-from response import code_generation, code_completion, code_translation, code_analysis, AIModel
-import re, time
+from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
+from itsdangerous import URLSafeTimedSerializer
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -20,18 +21,24 @@ app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
 db.init_app(app)
 
+# Configuration for Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'              # Gmail SMTP server
+app.config['MAIL_PORT'] = 587                                   # Gmail SMTP port (use 587 for TLS)
+app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
+app.config['MAIL_USERNAME'] =  os.getenv('MAIL_USERNAME')                              # Sender email
+app.config['MAIL_PASSWORD'] =  os.getenv('MAIL_PASSWORD')                              # Sender password
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')  # Default sender (same as MAIL_USERNAME)
+mail = Mail(app)
+
 with app.app_context():
     db.create_all()
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route('/')
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
-
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -88,16 +95,24 @@ def llm_file_request():
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,
-                          input_language, output_language)
-
+    result = process_data(user_input, use_case, ai_model,input_language, output_language)
     return jsonify(result)
 
 
+@app.route('/llm/clearmemory', methods=['DELETE'])
+def clear_memory():
+    """
+    Clears the MilvusDB collection
+    """
+    utility.drop_collection('LangChainCollection')
+    # Should be 200 whether the collection exists or not
+    return jsonify({'success': 'Cleared the Milvus collection.'})
+
 def process_data(user_input, use_case, ai_model, input_language, output_language):
+    input_string = {"input": user_input}
     if use_case is not None:
         use_case = use_case.lower()
-
+    count =0
     if use_case == 'code_analysis':
         result = code_analysis(user_input, ai_model)
     elif use_case == 'code_generation':
@@ -105,13 +120,15 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     elif use_case == 'code_completion':
         result = code_completion(user_input, ai_model, input_language)
     elif use_case == 'code_translation':
-        result = code_translation(
-            input_language, output_language, user_input, ai_model)
+        result = code_translation(input_language, output_language, user_input, ai_model)
     elif use_case == '':
         # general model for no specified operation
         result = AIModel(user_input, ai_model)
     else:
         result = {"error": "Invalid use case"}
+        count =1
+    #if(count ==0):
+    #    memory.save_context(input_string, result)
 
     # TODO: Add more conditions for other AI models
     # TODO: Can add more conditions for other use cases
@@ -119,70 +136,10 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     return result
 
 
-# POST method to occur when user chooses to export on the frontend
-@app.route('/export', methods=['POST'])
-def export_endpoint():
-    # Extract data from the request
-    data = request.get_json()
-    llm_response = data.get('llm_response')         # llm response
-    # the filename user wants, if none, default to response
-    filename = data.get('filename', 'feedback')
-    output_language = data.get('output_language')   # take in output_language
-
-    #TODO: Test without output_language to see a txt file
-    #TODO: Test with an output_language to check if the file extenstion logic works
-    #TODO: Parse away the beginning of the AI repsonse, i.e. any instances of "Sure! Here is some code ..."
-    #TODO: Check the txt responses for code generation to ensure there are no backticks or dodgy characters
-    #TODO: Check where on a device the exported file actually ends up!
-
-    # if there is an output language given, make the file extension correspond
-    if output_language != '':
-        if output_language.lower() == 'python':
-            filename += '.py'
-        elif output_language.lower() == 'c':
-            filename += '.c'
-        elif output_language.lower() == 'c++':
-            filename += '.cpp'
-        elif output_language.lower() == 'java':
-            filename += '.java'
-        elif output_language.lower() == 'c#':
-            filename += '.cs'
-        elif output_language.lower() == 'assembly':
-            filename += '.S'
-        elif output_language.lower() == 'javascript':
-            filename += '.js'
-        elif output_language.lower() == 'html':
-            filename += '.html'
-        elif output_language.lower() == 'css':
-            filename += '.css'
-        elif output_language.lower() == 'ruby':
-            filename += '.rb'
-        elif output_language.lower() == 'php':
-            filename += '.php'
-        elif output_language.lower() == 'kotlin':
-            filename += '.kt'
-        elif output_language.lower() == 'r':
-            filename += '.R'
-        elif output_language.lower() == 'perl':
-            filename += '.pl'
-        else:
-            filename += '.txt'  # default to .txt
-    # if no output_language default to .txt
-    else:
-        filename += '.txt'
-
-    # Export LLM response to file
-    with open(filename, 'w') as f:
-        f.write(llm_response)
-
-    # Return the exported file to the client as an attachment
-    return send_file(filename, as_attachment=True)
-
-
 @app.route('/register', methods=['POST'])
 def register_user():
-    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', '@aol.com', '@icloud.com', '@mail.com', '@protonmail.com', '@zoho.com', '@yandex.com', '@tcd.ie']
-    username = request.json['username'] 
+    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
+    email = request.json['email']
     password = request.json['password']
 
     # Password Requirements:
@@ -201,38 +158,37 @@ def register_user():
     if re.search(r'[^\x00-\x7F]', password):
         return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
 
-
     # Username Requirements:
-    if username == '':
+    if email == '':
         return jsonify({"error": "No username provided"}), 400
-    if not any(username.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
+    if not any(email.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
         return jsonify({"error": "Enter a valid email"}), 400
     
-    username = username.lower()
-    user_exists = User.query.filter_by(username=username).first() is not None
+    email = email.lower()
+    user_exists = User.query.filter_by(email=email).first() is not None
 
     if user_exists:
         return jsonify({"error": "User already exists"}), 409 
 
     hashed_password = bcrypt.generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
+    new_user = User(email=email, password=hashed_password)
 
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({
         "id": new_user.id,
-        "username": new_user.username
+        "email": new_user.email
     })
 
 
 @app.route('/login', methods=['POST'])
 def login_user():
-    username = request.json['username']
+    email = request.json['email']
     password = request.json['password']
 
-    username = username.lower()
-    user = User.query.filter_by(username=username).first()
+    email = email.lower()
+    user = User.query.filter_by(email=email).first()
 
     if user is None:
         return jsonify({"error": "User does not exist"}), 401
@@ -259,10 +215,74 @@ def login_user():
 
     return jsonify({
         "id": user.id,
-        "username": user.username
+        "email": user.email
     })
 
 
+# Initialize the serializer with your app's secret key
+app.secret_key = 'your_secret_key_here'                     #TEMPORARY!!!!!!! WILL NEED ANOTHER KEY FOR THIS
+serializer = URLSafeTimedSerializer(app.secret_key)
+
+# Function to generate a reset token
+def generate_reset_token(user):
+    return serializer.dumps(user.email, salt='reset-password')
+
+# Function to send reset password email
+def send_reset_password_email(email, token):
+    reset_url = url_for('reset_password', token=token, _external=True)
+    msg = Message("Reset Your Password", recipients=[email])
+    msg.body = f"Click the following link to reset your password: {reset_url}"
+    mail.send(msg)
+
+# Route for forgot password
+@app.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    email = request.json.get('email')  # Extract email from user input
+    # Check if the user exists
+    user = User.query.filter_by(email=email).first()
+    if user is None:
+        return jsonify({"error": "User does not exist"}), 404
+    else:
+        token = generate_reset_token(user)       # Generate a reset token
+        send_reset_password_email(email, token) # Send reset password email
+        return jsonify({"message": "Reset password link sent to your email"})
+
+# Route for resetting password
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if request.method == 'GET':
+        # Handle GET request (e.g., render password reset form)
+        return render_template('reset_password_form.html', token=token)
+    elif request.method == 'POST':
+        try:
+            # Decrypt the token to get the user's email
+            email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
+            user = User.query.filter_by(email=email).first()                      # Find the user by email
+            if user is None:
+                return jsonify({"error": "User not found"}), 404
+            
+            # Retrieve new password and confirm new password from the form
+            new_password = request.form['new_password']
+            confirm_new_password = request.form['confirm_new_password']
+
+            # Ensure the new password matches the confirm new password
+            if new_password != confirm_new_password:
+                return jsonify({"error": "New passwords do not match"}), 400
+            
+            # Proceed with updating the user's password
+            hashed_password = bcrypt.generate_password_hash(new_password)
+            user.password = hashed_password
+            db.session.commit()
+            return jsonify({"message": "Password reset successfully"})
+        
+########## AT THIS STAGE THE USER SHOULD BE REDIRECTED TO HOME  ##############
+
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+    else:
+        # Handle other HTTP methods
+        return jsonify({"error": "Method not allowed"}), 405
 
 
 if __name__ == "__main__":
