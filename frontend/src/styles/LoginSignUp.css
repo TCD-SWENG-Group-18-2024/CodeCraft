@@ -105,9 +105,15 @@
     color: #0d69e4;
   }
   
-  .forgotPasswordLink{
+  .forgotPassword{
+    cursor: pointer;
     margin: 10px;
+    text-decoration: underline;
     color: #1d2be8;
+  }
+
+  .forgotPassword:hover{
+    color: #0d69e4;
   }
 
   .user-icon{
