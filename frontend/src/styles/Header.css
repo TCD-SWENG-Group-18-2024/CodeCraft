@@ -7,7 +7,7 @@
   display: flex;
   justify-content: flex-end; 
   align-items: right;
-  background: linear-gradient(315deg, #2467F5 3%, #0051ff 38%, 68%, #2467F5 98%);
+  background: linear-gradient(315deg, rgb(0, 50, 143, 0.7) 3%,rgb(0, 50, 143, 0.7) 38%, rgb(0, 50, 143, 0.7) 68%,rgb(0, 50, 143, 0.7) 98%);
   z-index: 1000; 
 }
 

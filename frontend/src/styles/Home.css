@@ -43,7 +43,7 @@ body, h1, h2, p, a, button {
 
 .tab-link {
     text-decoration: none;
-    color: #006699;
+    color: rgb(0, 50, 143, 0.7);
 }
 
 .StartAnalysisButton{
@@ -59,7 +59,7 @@ body, h1, h2, p, a, button {
     position: relative;
     font-size: 2em;
     font-weight: 200;
-    color: #006699;
+    color: rgb(0, 50, 143, 0.7) ;
     cursor: pointer;
     transition: 0.01s .23s ease-out all;
     overflow: hidden;
@@ -100,14 +100,14 @@ body, h1, h2, p, a, button {
         }
 		.icon-right.after:after {
 			left: -145px;
-			color: #006699;
+			color: rgb(0, 50, 143, 0.7);
 			transition: .2s .2s ease all;
 		}
 		.icon-right.after:before {
 			left: -220px;
     	    top: 18px;
 			opacity: 0.2;
-			color: #006699;
+			color: rgb(0, 50, 143, 0.7);
 		}
     }
 }
@@ -128,7 +128,7 @@ body, h1, h2, p, a, button {
 	}
 	&.after:after {
 		left: -350px;
-		color: #006699;
+		color: rgb(0, 50, 143, 0.7);
 		transition: .15s .25s ease left, .5s .05s ease color;
 	}
 	&.after:before {
