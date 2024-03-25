@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 
 const SubmissionBar = ({ input, handleTextBoxChange, handleKeyDown, handleSubmit }) => {
   return (
-    <div className='submission-bar' style={{ display: 'flex', alignItems: 'flex-start' }}>
+    <div className='submission-bar' style={{ display: 'flex', alignItems: 'flex-start', width: '728px' }}>
       <TextField
         id='code-submission'
         label='Submission Area'

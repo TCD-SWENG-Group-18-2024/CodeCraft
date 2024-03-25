@@ -196,9 +196,11 @@ body, h1, h2, p, a, button {
 }
 .wave_container{
     display: flex;
-    height: 200px;
+    flex-direction: column;
+    min-height: 60vh;
+    height: 100%;
     width: 100%;
-    overflow:hidden;
+    overflow: hidden;
     position: relative;
 }
 .wave {

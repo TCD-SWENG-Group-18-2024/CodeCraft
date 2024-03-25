@@ -398,160 +398,18 @@ const SubmissionPage = () => {
             <div className="userArea">
 
                 <div className='submissionArea'>
-                <Dropdown 
-                    inputType={inputType}
-                    setInputType={setInputType}
-                    useCase={useCase}
-                    setUseCase={setUseCase}
-                    aiModel={aiModel}
-                    setAIModel={setAIModel}
-                    inputLanguage={inputLanguage}
-                    setInputLanguage={setInputLanguage}
-                    outputLanguage={outputLanguage}
-                    setOutputLanguage={setOutputLanguage}
-                />
-
-
-                    {/* <div className='dropDownContainer'>
- 
-                        <nav className='dropdownMenu<Dropdown />'>
-                            <ol>
-                                <li className='menu-item'>
-                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
-                                        
-                                        {inputType === "textbox" || inputType === "files" 
-                                        ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
-                                    </a>
-                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
-                                        <li className='menu-item'>
-                                            <a href="#0" onClick={() => setInputType("textbox")}>
-                                                Textbox
-                                            </a>
-                                        </li>
-                                        <li className='menu-item'>
-                                            <a href="#0" onClick={() => setInputType("files")}>
-                                                File
-                                            </a>
-                                        </li>
-                                    </ol>   
-                                </li>   
-                                <li className='menu-item'>
-                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
-                                        {useCase === "code_generation" || useCase === "code_completion"
-                                        || useCase === "code_analysis" || useCase === "code_translation"
-                                        ? <>Use Case: {formatUseCase(useCase)}</> : <>Code Analysis</>}
-                                    </a>
-                                    
-                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}> 
-                                    
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setUseCase("code_generation")}>
-                                                Code Generation
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setUseCase("code_completion")}>
-                                                Code Completion
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setUseCase("code_analysis")}>
-                                                Code Analysis
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setUseCase("code_translation")}>
-                                                Code Translation
-                                            </a>
-                                        </li>
-                                    </ol>   
-                                </li>
-                                <li className="menu-item">
-                                    <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
-                                        {aiModel === "StarCoder" || aiModel === "openai"
-                                        ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
-                                    </a>
-                                    <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setAIModel("StarCoder")}>
-                                                StarCoder
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setAIModel("openai")}>
-                                                GPT3.5
-                                            </a>
-                                        </li>
-                                        <li className="menu-item">
-                                            <a href="#0" onClick={() => setAIModel("llama")}>
-                                                CodeLlama
-                                            </a>
-                                        </li>
-                                    </ol>   
-                                </li>
-
-                                {useCase === "code_completion" || useCase === "code_translation" ? (<>
-                                    <li className="menu-item">
-                                        <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
-                                            {inputLanguage !== " " 
-                                        ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
-                                            
-                                        </a>
-                                        <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
-                                            <li className="menu-item">
-                                                <a href="#0" onClick={()=>setInputLanguage("java")}>
-                                                    Java
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="#0" onClick={()=>setInputLanguage("python")}>
-                                                    Python
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="#0" onClick={()=>setInputLanguage("c")}>
-                                                    C
-                                                </a>
-                                            </li>
-                                        </ol>   
-                                    </li>
-                                </>): null}
-
-                                {useCase === "code_translation" ? (<>
-                                    <li className="menu-item">
-                                        <a href='#0'onMouseEnter={()=>setIsDropdownopen(true)}>
-                                            {outputLanguage !== " " 
-                                        ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
-                                            
-                                        
-                                        </a>
-                                        <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownopen(false)}>
-                                            <li className="menu-item">
-                                                <a href="#0" onClick={()=>setOutputLanguage("java")}>
-                                                    Java
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="#0" onClick={()=>setOutputLanguage("python")}>
-                                                    Python
-                                                </a>
-                                            </li>
-                                            <li className="menu-item">
-                                                <a href="#0" onClick={()=>setOutputLanguage("c")}>
-                                                    C
-                                                </a>
-                                            </li>
-                                        </ol>   
-                                    </li>
-                                </>):null}
-
-
-                            </ol>
-
-                        </nav>
-                    </div> */}
-
-
+                    <Dropdown 
+                        inputType={inputType}
+                        setInputType={setInputType}
+                        useCase={useCase}
+                        setUseCase={setUseCase}
+                        aiModel={aiModel}
+                        setAIModel={setAIModel}
+                        inputLanguage={inputLanguage}
+                        setInputLanguage={setInputLanguage}
+                        outputLanguage={outputLanguage}
+                        setOutputLanguage={setOutputLanguage}
+                    />
                     {inputType === "textbox" && (
                         <SubmissionBar
                             input={input}
@@ -560,7 +418,6 @@ const SubmissionPage = () => {
                             handleSubmit={handleSubmit}
                         />
                     )}
-
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
                             <div className='fileDropZone' onDrop={handleFileDrop} onDragOver={handleDragOver} onClick={() => document.getElementById("fileInput").click()}>
@@ -574,16 +431,6 @@ const SubmissionPage = () => {
                                 handleFileSelect(e);
                               }} />
                             </div>
-                            {/* {droppedFiles.length > 0 && (
-                              <div className='droppedFileContainer'>
-                                <p>Dropped Files:</p>
-                                <ul>
-                                  {droppedFiles.map((file, index) =>
-                                    <li key={index}>{file && file.name}</li>
-                                  )}
-                                </ul>
-                              </div>
-                            )} */}
                             <Button variant='contained' onClick={handleSubmit} sx={{ ml: 2, height: "64px", padding: "16px 32px"}}>
                                 Submit
                             </Button>
