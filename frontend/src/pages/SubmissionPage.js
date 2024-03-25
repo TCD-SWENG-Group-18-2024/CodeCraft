@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Sidebar from '../components/Sidebar';
+import SubmissionBar from '../components/SubmissionBar';
 import '../styles/SubmissionPage.css';
 import './Home';
 import './LoginSignUp';
@@ -392,12 +393,6 @@ const SubmissionPage = () => {
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
         <div className={`main-content ${isSidebarOpen ? 'with-sidebar' : ''}`}>
-            <header className="submission-header">
-                <h1 className="submission-title">Submission Area</h1>
-
-            </header>
-
-
             <div className="userArea">
 
                 <div className='submissionArea'>
@@ -543,17 +538,12 @@ const SubmissionPage = () => {
 
 
                     {inputType === "textbox" && (
-                        <div className='textBoxContainer'>
-                            <textarea 
-                                type='text'
-                                value={input}
-                                onChange={handleTextBoxChange}
-                                className="textbox"
-                                placeholder='Code Submission Area'
-                                onKeyDown={handleKeyDown}
-                            ></textarea>
-                            
-                        </div>
+                        <SubmissionBar
+                        input={input}
+                        handleTextBoxChange={handleTextBoxChange}
+                        handleKeyDown={handleKeyDown}
+                        handleSubmit={handleSubmit}
+                        />
                     )}
 
                     {inputType === "files" && (
@@ -576,10 +566,8 @@ const SubmissionPage = () => {
                         </div>
 
                     )}
-
-                    <button onClick={() => { handleSubmit(); }} className="submitButton">Submit</button>
-    
-                </div> 
+                    {/* <button onClick={() => { handleSubmit(); }} className="submitButton">Submit</button>*/}
+                </div>
 
 
                 <div className='feedBackArea'>
