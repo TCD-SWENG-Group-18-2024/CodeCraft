@@ -1,6 +1,6 @@
 import json, re, time , secrets, os, dotenv
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session, url_for
+from flask import Flask, request, jsonify, send_file, session, url_for, render_template
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -27,6 +27,7 @@ app.config['MAIL_PORT'] = 587                                   # Gmail SMTP por
 app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
 app.config['MAIL_USERNAME'] =  os.getenv('MAIL_USERNAME')                              # Sender email
 app.config['MAIL_PASSWORD'] =  os.getenv('MAIL_PASSWORD')                              # Sender password
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')  # Default sender (same as MAIL_USERNAME)
 mail = Mail(app)
 
 with app.app_context():
@@ -247,22 +248,42 @@ def forgot_password():
         return jsonify({"message": "Reset password link sent to your email"})
 
 # Route for resetting password
-@app.route('/reset-password/<token>', methods=['POST'])
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
-    try:
-        # Decrypt the token to get the user's email
-        email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
-        user = User.query.filter_by(email=email).first()                      # Find the user by email
-        if user is None:
-            return jsonify({"error": "User not found"}), 404
-        new_password = request.json['new_password']                           # Update the user's password
-        hashed_password = bcrypt.generate_password_hash(new_password)
-        user.password = hashed_password
-        db.session.commit()
-        return jsonify({"message": "Password reset successfully"})
+    if request.method == 'GET':
+        # Handle GET request (e.g., render password reset form)
+        return render_template('reset_password_form.html', token=token)
+    elif request.method == 'POST':
+        try:
+            # Decrypt the token to get the user's email
+            email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
+            user = User.query.filter_by(email=email).first()                      # Find the user by email
+            if user is None:
+                return jsonify({"error": "User not found"}), 404
+            
+            # Retrieve new password and confirm new password from the form
+            new_password = request.form['new_password']
+            confirm_new_password = request.form['confirm_new_password']
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+            # Ensure the new password matches the confirm new password
+            if new_password != confirm_new_password:
+                return jsonify({"error": "New passwords do not match"}), 400
+            
+            # Proceed with updating the user's password
+            hashed_password = bcrypt.generate_password_hash(new_password)
+            user.password = hashed_password
+            db.session.commit()
+            return jsonify({"message": "Password reset successfully"})
+        
+########## AT THIS STAGE THE USER SHOULD BE REDIRECTED TO HOME  ##############
+
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+    else:
+        # Handle other HTTP methods
+        return jsonify({"error": "Method not allowed"}), 405
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
