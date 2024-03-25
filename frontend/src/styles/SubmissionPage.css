@@ -9,9 +9,8 @@
   height: auto;
   margin-bottom: 0px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
-  align-items: left;
   position: relative;
 }
 
@@ -33,7 +32,7 @@
 .dropDownContainer{
   display: flex;
   flex-direction: row;
-  margin: auto;
+  margin: auto 0;
   width: 70%;
 }
 
@@ -45,17 +44,19 @@
 }
 
 .fileInputContainer{
-  width: 50%; 
-  height: 20vw; 
+  width: 75%; 
   position: relative;
   margin-bottom: 20px;
   margin-top: 20px;
   margin-left: 100px; 
+  display: flex;
+  align-items: flex-start;
 }
 
 
 .fileDropZone{
-  width: 100%;
+  width: 150%;
+  height: 20px;
   border: 2px dashed black;
   padding: 20px;
   text-align: center;
@@ -65,11 +66,6 @@
 .fileDropZone:hover{
   color:#0F62FE;
   background-color: #FFF;
-}
-
-
-.fileDropZone p {
-  margin: 85px;
 }
 
 .fileInputContainer .fileDropZone input{
@@ -117,8 +113,8 @@
 }
 
 .dropdownMenu {
-  margin-left: 65px;
   margin-bottom: 15px;
+  margin-left: -16%;
   position: relative;
   z-index: 1001;
   >ol{
@@ -303,7 +299,6 @@
 
   .feedBackArea {
     width: calc(70% - 20px); 
-    margin-right: 150px;
     margin-left: 10%;
     padding: none; 
     overflow-y: none; 
