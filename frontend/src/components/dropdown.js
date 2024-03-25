@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
-import '../styles/dropdown.css';
-
-const capitaliseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
-
-const formatUseCase = (useCase) => {
-  return useCase
-    .split('_')
-    .map(capitaliseFirstLetter)
-    .join(' ');
-};
-
-const formatAIModel = (aiModel) => {
-  return capitaliseFirstLetter(aiModel);
-};
+import '../styles/Dropdown.css';
 
 // Dropdown component
-const Dropdown = () => {
+const Dropdown = ({inputType, setInputType, 
+                   useCase, setUseCase, 
+                   aiModel, setAIModel, 
+                   inputLanguage, setInputLanguage, 
+                   outputLanguage, setOutputLanguage}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [inputType, setInputType] = useState('');
-  const [useCase, setUseCase] = useState('code_analysis'); // Default use case
-  const [aiModel, setAIModel] = useState('');
-  const [inputLanguage, setInputLanguage] = useState('');
-  const [outputLanguage, setOutputLanguage] = useState('');
+
+  const capitaliseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+  const formatInputType = (inputType) => {
+    if (inputType === "files") return "File Submission"
+    else return "Text Submission"
+  };
+
+  const formatUseCase = (useCase) => {
+    return useCase
+      .split('_')
+      .map(capitaliseFirstLetter)
+      .join(' ');
+  };
+  
+  const formatAIModel = (aiModel) => {
+    if (aiModel === "openai") return "GPT 3.5"
+    else if (aiModel === "llama") return "Code Llama"
+    return capitaliseFirstLetter(aiModel);
+  };
 
   return (
     <div className='dropDownContainer'>
@@ -31,14 +37,14 @@ const Dropdown = () => {
           <li className='menu-item'>
             <a href='#0' onMouseEnter={() => setIsDropdownOpen(true)}>
               {inputType === "textbox" || inputType === "files" 
-                ? <>{capitaliseFirstLetter(inputType)}</> : <>-Select Input Type-</>}
+                ? <>{formatInputType(inputType)}</> : <>-Select Input Type-</>}
             </a>
             <ol className={isDropdownOpen ? 'sub-menu' : 'hide-dropdown'} onClick={() => setIsDropdownOpen(false)}>
               <li className='menu-item'>
-                <a href="#0" onClick={() => setInputType("textbox")}>Textbox</a>
+                <a href="#0" onClick={() => setInputType("textbox")}>Text Submission</a>
               </li>
               <li className='menu-item'>
-                <a href="#0" onClick={() => setInputType("files")}>File</a>
+                <a href="#0" onClick={() => setInputType("files")}>File Submission</a>
               </li>
             </ol>   
           </li>
@@ -75,7 +81,7 @@ const Dropdown = () => {
         </li>
         <li className="menu-item">
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                {aiModel === "StarCoder" || aiModel === "openai"
+                {aiModel === "StarCoder" || aiModel === "openai" || aiModel === "llama"
                 ? <>AI model: {formatAIModel(aiModel)}</> : <>-Select AI Model-</>}
             </a>
             <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}>
@@ -91,7 +97,7 @@ const Dropdown = () => {
                 </li>
                 <li className="menu-item">
                     <a href="#0" onClick={() => setAIModel("llama")}>
-                        CodeLlama
+                        Code Llama
                     </a>
                 </li>
             </ol>   

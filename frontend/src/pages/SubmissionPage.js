@@ -4,7 +4,8 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Sidebar from '../components/Sidebar';
 import SubmissionBar from '../components/SubmissionBar';
-import Dropdown from '../components/dropdown';
+import Dropdown from '../components/Dropdown';
+import { Button } from '@mui/material'
 import '../styles/SubmissionPage.css';
 import './Home';
 import './LoginSignUp';
@@ -397,7 +398,18 @@ const SubmissionPage = () => {
             <div className="userArea">
 
                 <div className='submissionArea'>
-                <Dropdown />
+                <Dropdown 
+                    inputType={inputType}
+                    setInputType={setInputType}
+                    useCase={useCase}
+                    setUseCase={setUseCase}
+                    aiModel={aiModel}
+                    setAIModel={setAIModel}
+                    inputLanguage={inputLanguage}
+                    setInputLanguage={setInputLanguage}
+                    outputLanguage={outputLanguage}
+                    setOutputLanguage={setOutputLanguage}
+                />
 
 
                     {/* <div className='dropDownContainer'>
@@ -542,34 +554,41 @@ const SubmissionPage = () => {
 
                     {inputType === "textbox" && (
                         <SubmissionBar
-                        input={input}
-                        handleTextBoxChange={handleTextBoxChange}
-                        handleKeyDown={handleKeyDown}
-                        handleSubmit={handleSubmit}
+                            input={input}
+                            handleTextBoxChange={handleTextBoxChange}
+                            handleKeyDown={handleKeyDown}
+                            handleSubmit={handleSubmit}
                         />
                     )}
 
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
-                            <div class='fileDropZone' onDrop={handleFileDrop} onDragOver={handleDragOver} 
-                                onClick={()=> document.getElementById("fileInput").click()}>
+                            <div className='fileDropZone' onDrop={handleFileDrop} onDragOver={handleDragOver} onClick={() => document.getElementById("fileInput").click()}>
+                              { droppedFiles.length > 0 ? 
+                                <a>{droppedFiles.map((file, index) =>
+                                    <li key={index}>{file && file.name}</li>
+                                )}</a> :
                                 <p>Drag files here or Click to select</p>
-                                <input id="fileInput" type="file" onChange={handleFileSelect}></input>
+                              }
+                              <input id="fileInput" type="file" onChange={(e) => {
+                                handleFileSelect(e);
+                              }} />
                             </div>
-                            {droppedFiles.length > 0 && (
-                                <div className='droppedFileContainer'>
-                                    <p>Dropped Files: </p>
-                                    <ul>
-                                        {droppedFiles.map((file, index) =>
-                                        <li key={index}>{file && file.name}</li>)}
-                                    </ul>
-                                </div>
-                            )}
-                            
+                            {/* {droppedFiles.length > 0 && (
+                              <div className='droppedFileContainer'>
+                                <p>Dropped Files:</p>
+                                <ul>
+                                  {droppedFiles.map((file, index) =>
+                                    <li key={index}>{file && file.name}</li>
+                                  )}
+                                </ul>
+                              </div>
+                            )} */}
+                            <Button variant='contained' onClick={handleSubmit} sx={{ ml: 2, height: "64px", padding: "16px 32px"}}>
+                                Submit
+                            </Button>
                         </div>
-
                     )}
-                    {/* <button onClick={() => { handleSubmit(); }} className="submitButton">Submit</button>*/}
                 </div>
 
 
