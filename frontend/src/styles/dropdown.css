@@ -20,7 +20,7 @@
     border: 1px solid #A0A0A0; /* Grey border */
     border-radius: 5px;
   }
-  
+   
   .menu-item a:hover, .menu-item a.active {
     background-color: #C0C0C0; /* Slightly darker grey for hover/active */
     border-color: purple; /* Purple border for the active item */

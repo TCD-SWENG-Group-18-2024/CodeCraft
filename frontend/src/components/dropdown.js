@@ -16,7 +16,7 @@ const Dropdown = ({inputType, setInputType,
     else return "Text Submission"
   };
 
-  const formatUseCase = (useCase) => {
+  const formatUseCase = (useCase) => { 
     return useCase
       .split('_')
       .map(capitaliseFirstLetter)
