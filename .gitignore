@@ -33,3 +33,7 @@ node_modules/
 
 #Ignore volume files
 /MilvusDB/volumes/
+
+#Ignore alchemy
+/instance/
+/instance/database.db
