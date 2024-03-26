@@ -104,6 +104,7 @@
   justify-content: center;
   margin-top: 50px;
   display: flex;
+  flex-direction: column;
   padding: none;
   overflow-y: none; 
   background-color: none; 
@@ -244,12 +245,18 @@
  }
 
 .card-area{
+  height: 700px;
+  width: 100%; /* Ensure the card area takes the full width of its container */
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center; /* Center the cards horizontally */
+  margin-top: 20px; /* Adjust margin as needed */
+  overflow-y: auto; /* Allow vertical scrolling if needed */
 }
+
 .export-button{
-  margin-top:10px;
-  margin-left: -50px;
+  transform: translateY(35px);    
+  margin-left: 660px;
   height: 25px;
   width: 25px;
 }

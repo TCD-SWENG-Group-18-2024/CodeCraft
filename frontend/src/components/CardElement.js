@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardActions, Typography, IconButton, Checkbox, Skeleton, TextField } from '@mui/material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { styled } from '@mui/material/styles';
 import app_logo from "../assets/codecraft.png";
 import { renderToString } from 'react-dom/server';
 
 const CardElement = ({usecase,query,response,isLoading})=>{
+  
   const highlightCodeBlock = (code) => (
     <SyntaxHighlighter language="jsx" style={syntax} >
         {code}
