@@ -37,3 +37,4 @@ my-react-app/
 
 #Ignore volume files
 /MilvusDB/volumes/
+/backend/MilvusDB/volumes/

@@ -167,16 +167,7 @@
     height: 35px;
     width: 85px;
   }
-
-  .feedBackArea {
-    width: calc(70% - 20px); 
-    margin-left: 10%;
-    padding: none; 
-    overflow-y: none; 
-    background-color: none; 
-    border-radius: 5px;
-    z-index: 1000; 
-  }
+  
 }
 
 .submissionArea .submitButton:hover{
