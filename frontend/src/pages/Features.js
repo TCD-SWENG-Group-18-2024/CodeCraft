@@ -1,9 +1,16 @@
-import React from 'react';
-import { useEffect} from 'react';
-import "../styles/Features.css"
-import IBM_white from '../assets/IBM_white.PNG';
+import React, { useEffect, useState } from 'react';
+import Sidebar from '../components/Sidebar'; // Import the Sidebar component
+import "../styles/Features.css";
 
 const Features = () =>{
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Function to toggle the Sidebar
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     useEffect(() => {
         
         const handleScroll = () => {
@@ -39,27 +46,36 @@ const Features = () =>{
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+   // const [isLoggedIn, setIsLoggedInIn] = useState(false);
+   // const [userID, setUserID] = useState(null);
+
+   // const checkAuthentication = () => {
+   //     const storedUserID = localStorage.getItem("userID")
+   //     setIsLoggedInIn(!!storedUserID);
+   //     setUserID(storedUserID);
+  //  };
+
     return(
+        <>
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <div className = "features-container">
-            <div className = "back-to-home">
-                <a href = "/">
-                    <img src={IBM_white} alt="IBM Logo" className="ibm-logo" />
-                </a>
+            <div className="back-to-home">
             </div>
             <div className = "hero-sec">
                 <div className = "hero-container">    
-                    <h1 class="hero-title">Features</h1>
-                    <p class="hero-overview">Experience the future of coding with CodeCraft – an advanced coding platform equipped with cutting-edge AI capabilities. From code translation to intelligent code completion and analysis, CodeCraft empowers developers to write, review, and deploy code with unparalleled efficiency and accuracy.</p>
+                    <h1 className="hero-title">Features</h1>
+                    <p className="hero-overview">Experience the future of coding with CodeCraft – an advanced coding platform equipped with cutting-edge AI capabilities. From code translation to intelligent code completion and analysis, CodeCraft empowers developers to write, review, and deploy code with unparalleled efficiency and accuracy.</p>
                     <a href="#llms-container" className="lm-button">Learn More</a>
                 </div>   
             </div>
             <div className = "fade-container llms-container" id="llms-container">
                 <div className = "llms-column">
-                    <h2>Integration with <span class = "underline-letter">L</span>LMs</h2>
+                    <h2>Integration with <span className = "underline-letter">L</span>LMs</h2>
                 </div>
                 <div className = "llms-content">
                     <p>In an era dominated by artificial intelligence, our Codecraft platform leads the way in innovation. By integration
-                        with leading language models such as <a href="https://openai.com" className="llm-link">OpenAI</a> and <a href="https://www.ibm.com/watsonx" className="llm-link">WatsonX</a>, 
+                        with leading language models such as <a href="https://openai.com" className="llm-link">OpenAI</a>, <a href="https://ai.meta.com/blog/code-llama-large-language-model-coding/" className="llm-link">Code Llama</a> and <a href="https://www.ibm.com/watsonx" className="llm-link">WatsonX</a>, 
                         Codecraft unlocks a new realm of possibilities.<br/>
                         With OpenAI's expertise in natural language understanding and generation, 
                         and WatsonX's advanced natural language processing capabilities, CodeCraft empowers developers like never before.
@@ -71,7 +87,7 @@ const Features = () =>{
             </div>
             <div className = "fade-container file-container">
                 <div className = "file-column">
-                    <h2>File <span class = "underline-letter">M</span>anagement</h2>
+                    <h2>File <span className = "underline-letter">M</span>anagement</h2>
                 </div>
                 <div className = "file-content">
                     <p>
@@ -84,7 +100,7 @@ const Features = () =>{
             </div>
             <div className = "fade-container language-container">
                 <div className = "language-column">
-                    <h2>Comprehensive <span class = "underline-letter-dark">L</span>anguage Support</h2>
+                    <h2>Comprehensive <span className = "underline-letter-dark">L</span>anguage Support</h2>
                 </div>
                 <div className = "language-content">
                     <p>
@@ -99,7 +115,7 @@ const Features = () =>{
             </div>
             <div className = "fade-container toolkit-container">
                 <div className = "toolkit-content">
-                    <h2>Code<span class = "underline-letter">C</span>raft 's <span class = "underline-letter">To</span>olkit</h2>
+                    <h2>Code<span className = "underline-letter">C</span>raft 's <span className = "underline-letter">To</span>olkit</h2>
                     <h3 className = "toolkit-subheading">Code Analysis</h3>
                     <p>
                     CodeCraft provides functionalities to help users analyze their code effectively. 
@@ -136,16 +152,9 @@ const Features = () =>{
             
             </div>
 
-
-
-
-
-
-
-
         </div>
+        </>
     );
-
 };
 
 export default Features;

@@ -81,7 +81,7 @@ const teamMembersData = [
       role: 'Styling Team',
       year: '2nd',
       image: Wang,
-      description: ''
+      description: 'I am Wang Yinghao in 2nd Year CSB, and I am on the Frontend team ( styling team ) for this project. I had experience with Java, HTML and Arm Assembly, Python to this project. Last year I also worked with a team to develop an application using Processing.'
     },
     {
       id: 10,
@@ -97,7 +97,7 @@ const teamMembersData = [
       role: 'Backend Team',
       year: '2nd',
       image: Abdullah,
-      description: ''
+      description: 'I am Abdullah and I am on the backend team for this project. I am a 2nd Year Integrated Computer Science student. I have experience in Python, Java, C, and more. I have worked on several projects in the past, one includes an AI algorithm that can play board games. I also research state estimation on the Formula Trinity Autonomous team!'
     },
   ];
   

@@ -1,6 +1,6 @@
 .sidebar {
-    width: 200px; /* Width of the sidebar */
-    background: none; /* Background color of the sidebar */
+    width: 200px; /* Width of the sidebar. If left aligned 210 otherwise 200*/
+    background: rgb(0, 50, 143, 0.4); /* Background color of the sidebar */
     color: white;
     height: 100%;
     position: fixed;
@@ -21,7 +21,7 @@
     right: -40px; /* Position the toggle tab on the right side of the sidebar */
     top: 0;
     cursor: pointer;
-    margin-top: 60px;
+    margin-top: 10px;
     
     align-items: center;
     justify-content: center;
@@ -30,6 +30,8 @@
 
    .sidebar__nav {
     padding: 20px;
+    /*text-align: left; */
+    /*added for alignment*/
     /* Style your sidebar navigation/content here */
   }
    .sidebar__nav a {
