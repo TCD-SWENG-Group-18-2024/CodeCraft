@@ -17,6 +17,12 @@ body, h1, h2, p, a, button {
     font-weight: 200;
 }
 
+.codecraft-logo {
+  margin-top: 50px;
+  height: 50px;
+  width: 380px;
+}
+
 .welcome-message{
     position: relative;
     left: 50%;
@@ -152,6 +158,7 @@ body, h1, h2, p, a, button {
 .logo{
     width: 200px;
     margin-top: 50px;
+    margin-right: 5px;
     font-weight: bold;
     opacity: 1;
     transition: opacity 1s ease-in-out;

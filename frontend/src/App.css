@@ -34,7 +34,7 @@
 }
 
 body{
-  background: linear-gradient(315deg, #a3c3ff 3%, #9EBEFA 38%, #B1CBFB 68%, #7daaff 98%);
+  background: linear-gradient(315deg, #b6d0ff 3%, #9EBEFA 38%, #B1CBFB 68%, #7daaff 98%);
   animation: gradient 15s ease infinite;
   background-size: 400% 400%;
   background-attachment: fixed;
