@@ -17,6 +17,10 @@ env/
 node_modules/
 /frontend/node_modules/
 
+# Ignore template applications
+my-react-app/
+/frontend/my-react-app/
+
 # Ignore build artifacts for React
 /frontend/build/
 /frontend/dist/
@@ -33,7 +37,10 @@ node_modules/
 
 #Ignore volume files
 /MilvusDB/volumes/
+/backend/MilvusDB/volumes/
 
 #Ignore alchemy
 /instance/
 /instance/database.db
+/backend/instance/
+/backend/instance/database.db

@@ -1,0 +1,216 @@
+.features-container{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height:100%;
+    position: relative;
+}
+.hero-sec{
+    position: relative;
+}
+.hero-sec h1,
+.hero-sec p,
+.hero-sec a {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 100;
+    letter-spacing: -1px;
+}
+.hero-container {
+    background: linear-gradient(rgba(5, 1, 20, 0.5), rgba(10, 8, 148, 0.5)),url('../assets/Features.png')center/cover; 
+    height:1000px;
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-title {
+    margin-top: 150px;
+    font-size: 60px; 
+}
+.hero-overview {
+    align-items: center; /* Center vertically */
+    width:70%; 
+    height:200px;
+    font-size:28px;
+    color:white;
+}
+@media (max-width: 768px) {
+    .hero-overview {
+        display: none; /* Hide the hero overview on smaller screens */
+    }
+}
+.lm-button {
+    position:relative;
+    margin-top: 60px;
+    text-decoration: none;
+    background-color: #242dd4; 
+    color: white;
+    padding: 15px 30px; 
+    border-radius: 5px;
+    font-size: 1.2rem; 
+    transition: background-color 0.3s ease;
+}
+@media (max-width: 768px) {
+    .lm-button{
+        display: none; /* Hide the button on smaller screens */
+    }
+}
+.lm-button:hover {
+    background-color: #32408f; /* Example button hover color */
+    transform: scale(1.1);
+}
+.lm-button:active {
+    background-color: #32408f; /* Example button click color */
+    transform: scale(0.9);
+}
+.llms-container{
+    border: 0.5px solid grey;
+    display: flex;
+    height: 600px;
+    flex-direction: row;
+    background: linear-gradient(rgba(5, 1, 20, 0.5), rgba(10, 8, 148, 0.5)),rgb(13, 98, 254);
+    padding: 1px;
+    min-width: 980px;
+}
+.llms-column{
+    height: 100%;
+    text-align: left;
+    align-items: center;
+    display: flex;
+    position:relative;
+    border-right: 0.5px solid grey;
+}
+.llms-content{
+    display: flex;
+    text-align: left;
+    align-items: center;
+    font-size: 26px;
+    color: aliceblue;
+    letter-spacing: -1px;
+    margin-left: 10px
+}
+.llm-link{
+    font-weight: 500;
+    color: #8284f6; 
+    transition: all 0.3s ease; 
+}
+.llm-link:hover{
+    color: #0b0f83; 
+}
+.underline-letter{
+    border-bottom: 2px solid white
+}
+.underline-letter-dark{
+    border-bottom:2px solid rgb(90, 82, 82);
+}
+.file-container{
+    display: flex;
+    height:600px;
+    flex-direction: row;
+    padding: 1px;
+    min-width: 980px;
+    background: linear-gradient(rgba(3, 3, 3, 0.5), rgba(7, 7, 7, 0.5)),rgb(119, 169, 255);
+    border: 0.5px solid white;
+}
+.file-column{
+    height: 100%;
+    text-align: left;
+    align-items: center;
+    display: flex;
+    position:relative;
+    border-right: 0.5px solid white;
+}
+.file-content{
+    display: flex;
+    text-align: left;
+    align-items: center;
+    font-size: 26px;
+    color: aliceblue;
+    letter-spacing: -1px;
+    margin-left: 10px
+}
+.language-container{
+    display: flex;
+    height:600px;
+    flex-direction: row;
+    padding: 1px;
+    min-width: 980px;
+    background: linear-gradient(rgba(248, 248, 248, 0.5), rgba(245, 243, 243, 0.5)),rgb(176, 178, 180);
+    border: 0.5px solid rgb(10, 10, 10);
+}
+.language-column{
+    height: 100%;
+    text-align: left;
+    align-items: center;
+    display: flex;
+    position:relative;
+    border-right: 0.5px solid rgb(10, 10, 10);
+}
+.language-content{
+    display: flex;
+    text-align: left;
+    align-items: center;
+    font-size: 26px;
+    color: rgb(90, 82, 82);
+    letter-spacing: -1px;
+    margin-left: 10px
+}
+.toolkit-container{
+    display: flex;
+    height:1400px;
+    justify-content: center;
+    padding: 1px;
+    min-width: 980px;
+    background: linear-gradient(rgba(161, 121, 241, 0.5),rgba(45, 32, 228, 0.5)),rgb(0, 29, 108);
+    border: 0.5px solid white;
+}
+.llms-container h2,
+.llms-container p,
+.file-container h2,
+.file-container p,
+.language-container h2,
+.language-container p,
+.toolkit-container h2,
+.toolkit-container p{
+    font-family:'Courier New', Courier, monospace;
+}
+.llms-column h2,
+.file-column h2{
+    width:400px;
+    background: none;
+    font-size: 52px;
+    font-weight: 500;
+}
+.toolkit-content{
+    width: 80%;
+}
+.toolkit-content h2{
+    flex-direction: column;
+    margin-top: 100px;
+    background: none;
+    font-size: 70px;
+    font-weight: 500;
+}
+.toolkit-subheading{
+    text-align: left;
+    color: white;
+    font-size: 35px;
+    font-weight: 300;
+    border-bottom: 1px solid white;
+}
+.toolkit-content p{
+    margin-top: 40px;
+    margin-bottom: 40px;
+    text-align: left;
+    font-size: 26px;
+    color: white;
+}
+.language-column h2{
+    color:rgb(90, 82, 82);
+    width:400px;
+    background: none;
+    font-size: 52px;
+    font-weight:100;
+}
+
