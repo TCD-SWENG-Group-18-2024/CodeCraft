@@ -38,3 +38,9 @@ my-react-app/
 #Ignore volume files
 /MilvusDB/volumes/
 /backend/MilvusDB/volumes/
+
+#Ignore alchemy
+/instance/
+/instance/database.db
+/backend/instance/
+/backend/instance/database.db

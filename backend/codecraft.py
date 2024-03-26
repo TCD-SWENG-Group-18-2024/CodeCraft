@@ -141,6 +141,7 @@ def register_user():
     ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
     email = request.json['email']
     password = request.json['password']
+    confirm_password = request.json['confirm_password']
 
     # Password Requirements:
     if len(password) < 8:
@@ -157,6 +158,8 @@ def register_user():
         return jsonify({"error": "Password should contain at least one lowercase letter"}), 400 # At least one lowercase
     if re.search(r'[^\x00-\x7F]', password):
         return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
+    if password != confirm_password:
+        return jsonify({"error": "Passwords do not match"}), 400  # Ensure password matches the confirm password
 
     # Username Requirements:
     if email == '':
