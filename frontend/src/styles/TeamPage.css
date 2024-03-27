@@ -1,10 +1,10 @@
 /* src/pages/TeamPage.css */
-.team-page-container {
+/* .team-page-container {
   background: linear-gradient(315deg, #006699 3%, #0F62FE 38%, rgb(83, 168, 234) 68%, #689cfa 98%);
   animation: gradient 15s ease infinite;
   background-size: 400% 400%;
   background-attachment: fixed;
-}
+} */
 
 .wave {
   background: rgb(255 255 255 / 25%);
