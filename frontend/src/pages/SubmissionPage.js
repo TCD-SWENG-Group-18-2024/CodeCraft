@@ -381,7 +381,6 @@ const SubmissionPage = () => {
         if (feedback) {
             addCard();
             setTimeout(() => {
-                // Set the loading state to false after a short delay
                 setCards(prevCards => {
                     const updatedCards = [...prevCards];
                     updatedCards[0].isLoading = false; // takes too long so have to set state to false manually.
@@ -394,7 +393,7 @@ const SubmissionPage = () => {
         
         const newCard = {
             usecase: useCase,
-            // query: input,
+            query: input,
             response: feedback,
             isLoading:isLoading
         };
@@ -466,17 +465,9 @@ const SubmissionPage = () => {
                 <div className='feedBackArea'>
                     <div className="card-area">
                         {!isLoading && feedback &&( 
-                            <div>
                             <button className ="export-button"onClick={() => { handleExportClick(feedback); }}>
                                 <img src= {Export} alt="Export Icon" className='export-img'/>
                             </button>
-                            {/* <input
-                            type="text"
-                            value={customFileName}
-                            onChange={(e) => setCustomFileName(e.target.value)}
-                            placeholder="Enter custom file name"
-                            /> */}
-                            </div>
                         )}
                         {/* <div>
                             <CardElement
@@ -489,6 +480,7 @@ const SubmissionPage = () => {
                             <div key={index}>
                                 <CardElement className="card"
                                     usecase={card.usecase}
+                                    query = {card.query}
                                     response={card.response}
                                     isLoading={card.isLoading} // Use the isLoading state from each card
                                 />
@@ -515,3 +507,12 @@ const SubmissionPage = () => {
 };
 
 export default SubmissionPage;
+
+
+// for export file format
+{/* <input
+    type="text"
+    value={customFileName}
+    onChange={(e) => setCustomFileName(e.target.value)}    
+    placeholder="Enter custom file name"
+/> */}
