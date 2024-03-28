@@ -297,6 +297,10 @@ const SubmissionPage = () => {
         setDialogOpen(false);
     };
     const handleYesClick = () => {
+
+        if (cards.length === 0){
+            handleCloseDialog();
+        } else {
         fetch("http://localhost:8080/llm/clearmemory", {
             method: 'POST', 
             //headers: {
@@ -318,6 +322,7 @@ const SubmissionPage = () => {
             console.error('Error calling API:', error);
             handleCloseDialog();
         });
+    }
     };
 
     const capitaliseFirstLetter = (str) => {
