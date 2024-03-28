@@ -1,5 +1,4 @@
-import React, { useState,useEffect } from 'react';
-import { renderToString } from 'react-dom/server';
+import React, { useState,useEffect,useMemo,Suspense } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Sidebar from '../components/Sidebar';
@@ -11,6 +10,8 @@ import './Home';
 import './LoginSignUp';
 import Export from "../assets/export.png";
 import CardElement from "../components/CardElement";
+import ResponsiveDialog from "../components/ConfirmationButton";
+
 
 const SubmissionPage = () => {
 
@@ -26,6 +27,7 @@ const SubmissionPage = () => {
     const [outputLanguage, setOutputLanguage] = useState('');
     const [isDropdownOpen,setIsDropdownopen]=useState(true);
     const [cards, setCards] = useState([]);     // whenever submit is clicked 
+    const [newCard,setNewCard] = useState(null);
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
@@ -151,7 +153,7 @@ const SubmissionPage = () => {
             setTimeout(() => {
                 // Simulate API response
                 setIsLoading(false); 
-            }, 2000);
+            }, 1000);
         }
 
         // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
@@ -269,7 +271,7 @@ const SubmissionPage = () => {
             setTimeout(() => {
                 // Simulate API response
                 setIsLoading(false); 
-            }, 2000);
+            }, 1000);
         }
         console.log("Feedback", feedback);
     }
@@ -284,6 +286,43 @@ const SubmissionPage = () => {
             handleFileSubmit();   
         }
 
+    };
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleNewConversation = () => {
+        setDialogOpen(true);
+    };
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+    const handleYesClick = () => {
+
+        if (cards.length === 0){
+            handleCloseDialog();
+        } else {
+        fetch("http://localhost:8080/llm/clearmemory", {
+            method: 'DELETE', 
+            //headers: {
+            //    'Content-Type': 'application/json',
+            //}, 
+            // Not needed right now but possibly in future
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('API request successful');
+                setCards([]);
+                handleCloseDialog();
+            } else {
+                console.error('API request failed:', response.status);
+                handleCloseDialog();
+            }
+        })
+        .catch(error => {
+            console.error('Error calling API:', error);
+            handleCloseDialog();
+        });
+    }
     };
 
     const capitaliseFirstLetter = (str) => {
@@ -377,23 +416,41 @@ const SubmissionPage = () => {
         document.body.removeChild(a);
         
       };
-    useEffect(() => {
+      useEffect(() => {    // have to wait for feedback to update before you can add card
         if (feedback) {
             addCard();
+            setTimeout(() => {
+                setCards(prevCards => {
+                    const updatedCards = [...prevCards];
+                    updatedCards[0].isLoading = false; // takes too long so have to set state to false manually.
+                    return updatedCards;
+                });
+            }, 500); // Adjust the delay time as needed
         }
     }, [feedback]);
-
     const addCard = () => {
         
         const newCard = {
-            id:"0",
             usecase: useCase,
             query: input,
-            response: feedback
+            response: feedback,
+            isLoading:isLoading
         };
-        setCards([newCard]); // Add the new card to the dictionary,for now only 1
-        
+        setCards(prevCards => [newCard,...prevCards]); // Add the new card to the dictionary
     };
+
+    // const pastCards = useMemo(() => {
+    //     return cards.slice(1).map((card, index) => (
+    //         <div key={index}>
+    //             <CardElement
+    //                 usecase={card.usecase}
+    //                 response={card.response}
+    //                 isLoading={false} // Set isLoading to false for all cards except the most recent one
+    //             />
+    //         </div>
+    //     ));
+    // }, [cards, isLoading]);
+
     return [
     <>
 
@@ -416,12 +473,18 @@ const SubmissionPage = () => {
                         setOutputLanguage={setOutputLanguage}
                     />
                     {inputType === "textbox" && (
+                        <div>
                         <SubmissionBar
                             input={input}
                             handleTextBoxChange={handleTextBoxChange}
                             handleKeyDown={handleKeyDown}
                             handleSubmit={handleSubmit}
                         />
+                        <Button variant='contained' onClick={handleNewConversation} sx={{ ml: 4, height: "60px", padding: "16px 32px"}}>
+                                New Conversation
+                        </Button>
+                        <ResponsiveDialog open={dialogOpen} handleClose={handleCloseDialog} handleYesClick={handleYesClick}/>
+                        </div>
                     )}
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
@@ -446,29 +509,28 @@ const SubmissionPage = () => {
 
                 <div className='feedBackArea'>
                     <div className="card-area">
-                        {cards.map((card) => (
-                            <div key={"0"}>
+                        {!isLoading && feedback &&( 
+                            <button className ="export-button"onClick={() => { handleExportClick(feedback); }}>
+                                <img src= {Export} alt="Export Icon" className='export-img'/>
+                            </button>
+                        )}
+                        {/* <div>
                             <CardElement
-                                usecase={card.usecase}
-                                query={card.query}
-                                response={card.response}
-                                isLoading={isLoading}
+                                usecase={useCase}
+                                response={feedback}
+                                isLoading={isLoading} // Set isLoading to false for all cards except the most recent one
                             />
+                        </div> */}
+                        {cards.map((card, index) => (
+                            <div key={index}>
+                                <CardElement className="card"
+                                    usecase={card.usecase}
+                                    query = {card.query}
+                                    response={card.response}
+                                    isLoading={card.isLoading} // Use the isLoading state from each card
+                                />
                             </div>
                         ))}
-                        {!isLoading && feedback &&( 
-                        <div>
-                         <button className ="export-button"onClick={() => { handleExportClick(feedback); }}>
-                            <img src= {Export} alt="Export Icon" className='export-img'/>
-                        </button>
-                         {/* <input
-                         type="text"
-                         value={customFileName}
-                         onChange={(e) => setCustomFileName(e.target.value)}
-                         placeholder="Enter custom file name"
-                         /> */}
-                        </div>
-                    )}
                     </div>
                     
                     
@@ -490,3 +552,12 @@ const SubmissionPage = () => {
 };
 
 export default SubmissionPage;
+
+
+// for export file format
+{/* <input
+    type="text"
+    value={customFileName}
+    onChange={(e) => setCustomFileName(e.target.value)}    
+    placeholder="Enter custom file name"
+/> */}

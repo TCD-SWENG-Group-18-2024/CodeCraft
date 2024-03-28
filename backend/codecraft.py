@@ -1,6 +1,6 @@
 import json, re, time , secrets, os, dotenv
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session, url_for, render_template
+from flask import Flask, request, jsonify, send_file, session, redirect
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -55,8 +55,7 @@ def llm_text_request():
         return jsonify({'error': 'No user input provided'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,
-                          input_language, output_language)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language)
 
     return jsonify(result)
 
@@ -221,18 +220,15 @@ def login_user():
         "email": user.email
     })
 
+# serializer = URLSafeTimedSerializer(app.secret_key)
 
-# Initialize the serializer with your app's secret key
-app.secret_key = 'your_secret_key_here'                    
-serializer = URLSafeTimedSerializer(app.secret_key)
-
-# Function to generate a reset token
-def generate_reset_token(user):
-    return serializer.dumps(user.email, salt='reset-password')
+# # Function to generate a reset token
+# def generate_reset_token(user):
+#     return serializer.dumps(user.email, salt='reset_password')
 
 # Function to send reset password email
-def send_reset_password_email(email, token):
-    reset_url = url_for('reset_password', token=token, _external=True)
+def send_reset_password_email(email):
+    reset_url = "http://localhost:3000/reset"
     msg = Message("Reset Your Password", recipients=[email])
     msg.body = f"Click the following link to reset your password: {reset_url}"
     mail.send(msg)
@@ -246,58 +242,31 @@ def forgot_password():
     if user is None:
         return jsonify({"error": "User does not exist"}), 404
     else:
-        token = generate_reset_token(user)       # Generate a reset token
-        send_reset_password_email(email, token) # Send reset password email
+#        token = generate_reset_token(user)       # Generate a reset token
+        send_reset_password_email(email)#, token) # Send reset password email
         return jsonify({"message": "Reset password link sent to your email"})
 
 # Route for resetting password
-@app.route('/reset-password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    if request.method == 'GET':
-        # Handle GET request (e.g., render password reset form)
-        return render_template('reset_password_form.html', token=token)
-    elif request.method == 'POST':
-        try:
-            # Decrypt the token to get the user's email
-            email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
-            user = User.query.filter_by(email=email).first()                      # Find the user by email
-            if user is None:
-                return jsonify({"error": "User not found"}), 404
-            
-            # Retrieve new password and confirm new password from the form
-            new_password = request.form['new_password']
-            confirm_new_password = request.form['confirm_new_password']
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        email = request.json['email']
+        user = User.query.filter_by(email=email).first()
+        new_password = request.json['new_password']
+        confirm_new_password = request.json['confirm_new_password']
 
-            # Password Requirements:
-            if len(new_password) < 8:
-                return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
-            if len(new_password) > 20:
-                return jsonify({"error": "Password should be less than 20 characters long"}), 400 # Max length of password
-            if not re.search(r'\d', new_password):
-                return jsonify({"error": "Password should contain at least one number"}), 400 # At least one number
-            if re.search(r'[\s`¬¦~\t\n*#\'/|\\]', new_password):
-                return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No dodgy chars / standard disallowed password chars
-            if not re.search(r'[A-Z]', new_password):
-                return jsonify({"error": "Password should contain at least one capital letter"}), 400 # At least one capital
-            if not re.search(r'[a-z]', new_password):
-                return jsonify({"error": "Password should contain at least one lowercase letter"}), 400 # At least one lowercase
-            if re.search(r'[^\x00-\x7F]', new_password):
-                return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
-            # Ensure the new password matches the confirm new password
-            if new_password != confirm_new_password:
-                return jsonify({"error": "New passwords do not match"}), 400
+        # Ensure the new password matches the confirm new password
+        if new_password != confirm_new_password:
+            return jsonify({"error": "New passwords do not match"}), 400
             
-            # Proceed with updating the user's password
-            hashed_password = bcrypt.generate_password_hash(new_password)
-            user.password = hashed_password
-            db.session.commit()
-            return jsonify({"message": "Password reset successfully"})
-        except Exception as e:
-            return jsonify({"error": str(e)}), 400
-    else:
-        # Handle other HTTP methods
-        return jsonify({"error": "Method not allowed"}), 405
+        # Proceed with updating the user's password
+        hashed_password = bcrypt.generate_password_hash(new_password)
+        user.password = hashed_password
+        db.session.commit()
+        return jsonify({"message": "Password reset successfully"})
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)

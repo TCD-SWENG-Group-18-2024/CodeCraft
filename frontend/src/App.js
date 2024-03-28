@@ -12,6 +12,7 @@ import LoginSignUp from './pages/LoginSignUp';
 import SubmissionPage from './pages/SubmissionPage';
 import TeamPage from './pages/TeamPage';
 import Footer from './components/Footer'
+import ResetPassword from './pages/ResetPasswordPage';
 // move the logo to the indivdual pages
 // import IBM from "./assets/IBM.PNG"
 // import IBM_White from "./assets/IBM_white.PNG"
@@ -52,6 +53,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/reset" element={<ResetPassword/>} />
             {/* Add more routes as needed */}
           </Routes>
         </div>

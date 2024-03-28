@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import AboutPage from './AboutPage'; 
+import AboutPage from '../pages/AboutPage'; 
 
 test('renders CodeCraft text', () => {
   render(
@@ -34,8 +34,9 @@ test('renders project description', () => {
   render(<MemoryRouter>
     <AboutPage />
     </MemoryRouter>);
-  const projectDescriptionElement = screen.getByText(/CodeCraft: Revolutionizing Software Engineering with AI/i);
-  expect(projectDescriptionElement).toBeInTheDocument();
+  const projectTextElement = screen.getByText(/"CodeCraft" combines artificial intelligence with software engineering/i
+  );
+  expect(projectTextElement).toBeInTheDocument();
 });
 
 test('renders IBM description', () => {
@@ -58,7 +59,7 @@ test('renders Hero Image', () => {
   render(<MemoryRouter>
     <AboutPage />
     </MemoryRouter>);
-  const heroImageElement = screen.getByAltText('Hero');
+  const heroImageElement = screen.getByAltText('The CodeCraft Team');
   expect(heroImageElement).toBeInTheDocument();
-  expect(heroImageElement).toHaveAttribute('src', 'HeroImage.png');
+  expect(heroImageElement).toHaveAttribute('src', 'Team.png');
 });
