@@ -460,6 +460,7 @@ const SubmissionPage = () => {
             <div className="userArea">
 
                 <div className='submissionArea'>
+                    
                     <Dropdown 
                         inputType={inputType}
                         setInputType={setInputType}
@@ -472,20 +473,23 @@ const SubmissionPage = () => {
                         outputLanguage={outputLanguage}
                         setOutputLanguage={setOutputLanguage}
                     />
-                    {inputType === "textbox" && (
-                        <div>
-                        <SubmissionBar
-                            input={input}
-                            handleTextBoxChange={handleTextBoxChange}
-                            handleKeyDown={handleKeyDown}
-                            handleSubmit={handleSubmit}
-                        />
-                        <Button variant='contained' onClick={handleNewConversation} sx={{ ml: 4, height: "60px", padding: "16px 32px"}}>
-                                New Conversation
-                        </Button>
-                        <ResponsiveDialog open={dialogOpen} handleClose={handleCloseDialog} handleYesClick={handleYesClick}/>
-                        </div>
-                    )}
+                    <div >
+                        {inputType === "textbox" && (
+                            <div className = "submission">
+                            <SubmissionBar
+                                input={input}
+                                handleTextBoxChange={handleTextBoxChange}
+                                handleKeyDown={handleKeyDown}
+                                handleSubmit={handleSubmit}
+                            />
+                            <ResponsiveDialog open={dialogOpen} handleClose={handleCloseDialog} handleYesClick={handleYesClick}/>
+                            <Button variant='contained' onClick={handleNewConversation} sx={{ ml: 4, height: "56px", padding: "16px 32px"}}>
+                                    New Conversation
+                            </Button>
+                            </div>
+                            
+                        )}
+                    </div>
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
                             <div className='fileDropZone' onDrop={handleFileDrop} onDragOver={handleDragOver} onClick={() => document.getElementById("fileInput").click()}>
