@@ -10,6 +10,8 @@ import './Home';
 import './LoginSignUp';
 import Export from "../assets/export.png";
 import CardElement from "../components/CardElement";
+import ResponsiveDialog from "../components/ConfirmationButton";
+
 
 const SubmissionPage = () => {
 
@@ -286,6 +288,38 @@ const SubmissionPage = () => {
 
     };
 
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleNewConversation = () => {
+        setDialogOpen(true);
+    };
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+    const handleYesClick = () => {
+        fetch("http://localhost:8080/llm/clearmemory", {
+            method: 'POST', 
+            //headers: {
+            //    'Content-Type': 'application/json',
+            //}, 
+            // Not needed right now but possibly in future
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('API request successful');
+                setCards([]);
+                handleCloseDialog();
+            } else {
+                console.error('API request failed:', response.status);
+                handleCloseDialog();
+            }
+        })
+        .catch(error => {
+            console.error('Error calling API:', error);
+            handleCloseDialog();
+        });
+    };
+
     const capitaliseFirstLetter = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     };
@@ -434,12 +468,18 @@ const SubmissionPage = () => {
                         setOutputLanguage={setOutputLanguage}
                     />
                     {inputType === "textbox" && (
+                        <div>
                         <SubmissionBar
                             input={input}
                             handleTextBoxChange={handleTextBoxChange}
                             handleKeyDown={handleKeyDown}
                             handleSubmit={handleSubmit}
                         />
+                        <Button variant='contained' onClick={handleNewConversation} sx={{ ml: 4, height: "60px", padding: "16px 32px"}}>
+                                New Conversation
+                        </Button>
+                        <ResponsiveDialog open={dialogOpen} handleClose={handleCloseDialog} handleYesClick={handleYesClick}/>
+                        </div>
                     )}
                     {inputType === "files" && (
                         <div className='fileInputContainer'>
