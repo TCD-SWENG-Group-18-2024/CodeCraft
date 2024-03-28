@@ -40,25 +40,41 @@ def allowed_file(filename):
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
 
-@app.route('/llm/text', methods=['POST'])
+@app.route('/llm/text', methods=['GET','POST'])
 def llm_text_request():
     # Extract parameters from the request JSON
-    data = request.get_json()
-    use_case = data.get('use_case')
-    ai_model = data.get('ai_model')
-    input_language = data.get('input_language')
-    output_language = data.get('output_language')
-    user_input = data.get('user_input')
+    if request.method == 'GET':
+        # Check if the Authorization header is present
+        if 'Authorization' in request.headers:
+            # Extract the token
+            token = request.headers['Authorization'].split('Bearer ')[1]
+            # Do something with the token
+            print("Token:", token)
+        else:
+            print("No token provided")
 
-    # Throws error if empty request
-    if user_input is None:
-        return jsonify({'error': 'No user input provided'}), 400
+        # Your other backend logic here
 
-    # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,
-                          input_language, output_language)
+        return jsonify({'message': 'Endpoint reached'}), 200
 
-    return jsonify(result)
+    elif request.method == 'POST':
+        data = request.get_json()
+        use_case = data.get('use_case')
+        ai_model = data.get('ai_model')
+        input_language = data.get('input_language')
+        output_language = data.get('output_language')
+        user_input = data.get('user_input')
+        email = data.get('email', '')  # Extract user's email from JSON or set it to empty string if not provided
+
+        # Throws error if empty request
+        if user_input is None:
+            return jsonify({'error': 'No user input provided'}), 400
+
+        # Call the appropriate function based on use_case and ai_model
+        result = process_data(user_input, use_case, ai_model,
+                            input_language, output_language,email)
+
+        return jsonify(result)
 
 
 @app.route('/llm/file', methods=['POST'])
@@ -108,7 +124,7 @@ def clear_memory():
     # Should be 200 whether the collection exists or not
     return jsonify({'success': 'Cleared the Milvus collection.'})
 
-def process_data(user_input, use_case, ai_model, input_language, output_language):
+def process_data(user_input, use_case, ai_model, input_language, output_language,email):
     input_string = {"input": user_input}
     if use_case is not None:
         use_case = use_case.lower()
