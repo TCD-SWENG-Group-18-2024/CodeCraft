@@ -302,7 +302,7 @@ const SubmissionPage = () => {
             handleCloseDialog();
         } else {
         fetch("http://localhost:8080/llm/clearmemory", {
-            method: 'POST', 
+            method: 'DELETE', 
             //headers: {
             //    'Content-Type': 'application/json',
             //}, 
