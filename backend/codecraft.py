@@ -240,7 +240,7 @@ def send_reset_password_email(email, token):
 # Route for forgot password
 @app.route('/forgot-password', methods=['POST'])
 def forgot_password():
-    email = request.json.get('email')  # Extract email from user input
+    email = request.json['email']  # Extract email from user input
     # Check if the user exists
     user = User.query.filter_by(email=email).first()
     if user is None:
