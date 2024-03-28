@@ -4,8 +4,6 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.llms import HuggingFaceHub
-from langchain.schema import HumanMessage, SystemMessage
-import openai
 from milvus import default_server
 from pymilvus import utility, connections
 from langchain.vectorstores import Milvus
@@ -15,11 +13,11 @@ from langchain.memory import VectorStoreRetrieverMemory
 
 # For this to work, you need to create a file called '.env' and input the following:
 # OPENAI_API_KEY=YOUR_KEY_HERE
+# HUGGINGFACE_TOKEN=YOUR_KEY_HERE
 dotenv.load_dotenv()
-
-# You need to put the hugging face token in .env as well
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
 
+# Start the VectorDB
 default_server.start()
 embeddings = OpenAIEmbeddings()
 connections.connect(host="127.0.0.1", port=default_server.listen_port)
@@ -27,7 +25,7 @@ utility.drop_collection('LangChainCollection')
 vectordb = Milvus.from_documents(
     {},
     embeddings,
-    connection_args={"host":"127.0.0.1", "port":default_server.listen_port}
+    connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
 )
 retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
 memory = VectorStoreRetrieverMemory(retriever=retriever)
