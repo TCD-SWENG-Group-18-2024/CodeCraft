@@ -223,7 +223,7 @@ def login_user():
 
 
 # Initialize the serializer with your app's secret key
-app.secret_key = 'your_secret_key_here'                     #TEMPORARY!!!!!!! WILL NEED ANOTHER KEY FOR THIS
+app.secret_key = 'your_secret_key_here'                    
 serializer = URLSafeTimedSerializer(app.secret_key)
 
 # Function to generate a reset token
@@ -277,10 +277,6 @@ def reset_password(token):
             user.password = hashed_password
             db.session.commit()
             return jsonify({"message": "Password reset successfully"})
-        
-########## AT THIS STAGE THE USER SHOULD BE REDIRECTED TO HOME  ##############
-
-
         except Exception as e:
             return jsonify({"error": str(e)}), 400
     else:
