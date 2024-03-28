@@ -1,6 +1,6 @@
 import json, re, time , secrets, os, dotenv
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session, url_for, render_template
+from flask import Flask, request, jsonify, send_file, session, url_for, redirect
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -232,7 +232,7 @@ def generate_reset_token(user):
 
 # Function to send reset password email
 def send_reset_password_email(email, token):
-    reset_url = url_for('reset_password', token=token, _external=True)
+    reset_url = "http://localhost:3000/reset/" + token  # Update the URL here
     msg = Message("Reset Your Password", recipients=[email])
     msg.body = f"Click the following link to reset your password: {reset_url}"
     mail.send(msg)
@@ -255,7 +255,8 @@ def forgot_password():
 def reset_password(token):
     if request.method == 'GET':
         # Handle GET request (e.g., render password reset form)
-        return render_template('reset_password_form.html', token=token)
+        reset_url = f"http://localhost:3000/reset/{token}"
+        return redirect(reset_url)
     elif request.method == 'POST':
         try:
             # Decrypt the token to get the user's email
