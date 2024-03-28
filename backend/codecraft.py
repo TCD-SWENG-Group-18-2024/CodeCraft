@@ -268,6 +268,21 @@ def reset_password(token):
             new_password = request.form['new_password']
             confirm_new_password = request.form['confirm_new_password']
 
+            # Password Requirements:
+            if len(new_password) < 8:
+                return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
+            if len(new_password) > 20:
+                return jsonify({"error": "Password should be less than 20 characters long"}), 400 # Max length of password
+            if not re.search(r'\d', new_password):
+                return jsonify({"error": "Password should contain at least one number"}), 400 # At least one number
+            if re.search(r'[\s`¬¦~\t\n*#\'/|\\]', new_password):
+                return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No dodgy chars / standard disallowed password chars
+            if not re.search(r'[A-Z]', new_password):
+                return jsonify({"error": "Password should contain at least one capital letter"}), 400 # At least one capital
+            if not re.search(r'[a-z]', new_password):
+                return jsonify({"error": "Password should contain at least one lowercase letter"}), 400 # At least one lowercase
+            if re.search(r'[^\x00-\x7F]', new_password):
+                return jsonify({"error": "Password contains special characters that are not allowed"}), 400 # No non-ASCII chars
             # Ensure the new password matches the confirm new password
             if new_password != confirm_new_password:
                 return jsonify({"error": "New passwords do not match"}), 400
