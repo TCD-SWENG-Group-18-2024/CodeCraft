@@ -365,6 +365,11 @@ def get_submission(token : str) -> dict:
     # GET request
     response = requests.get(url, headers=headers, params=querystring)
 
+    # GET request again if it is still processing
+    while (response.json()['status_id'] == 2):
+        time.sleep(0.5)
+        response = requests.get(url, headers=headers, params=querystring)
+
     # Return response
     return response.json()
 
