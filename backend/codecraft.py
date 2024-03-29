@@ -274,14 +274,24 @@ def reset_password():
 
 
 @app.route('/execute', methods=['POST'])
-def execute(code, language) -> dict:
-    submission_token = create_submission(code, language)
-    code_status = get_submission(submission_token)
+def execute():
+    code = request.json['code']
+    language = request.json['language']
 
-    return jsonify(code_status)
+    if code is None or code == '':
+        return jsonify({"error": "No code was entered"}), 400
+    
+    if language is None or language == '':
+        return jsonify({"error": "No programming language was entered"}), 400
+
+    submission_token = create_submission(code, language)
+    output = get_submission(submission_token)
+
+    return output
 
 
 def create_submission(code : str, language : str) -> str:
+    # Set language id
     language = language.lower()
     language_id = 43 # Default is plain text
 
@@ -347,8 +357,8 @@ def get_submission(token : str) -> dict:
     # GET request
     response = requests.get(url, headers=headers, params=querystring)
 
-    # Return response status
-    return response.json()['status']
+    # Return response
+    return response.json()
 
 
 if __name__ == "__main__":
