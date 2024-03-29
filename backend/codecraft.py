@@ -281,7 +281,29 @@ def execute(code, language) -> dict:
     return jsonify(code_status)
 
 
-def create_submission(code, language) -> str:
+def create_submission(code : str, language : str) -> str:
+    language = language.lower()
+    language_id = 43 # Default is plain text
+
+    if language == "assembly":
+        language_id = 45
+    elif language == "c":
+        language_id = 50
+    elif language == "c#":
+        language_id = 51
+    elif language == "c++":
+        language_id = 54
+    elif language == "java":
+        language_id = 62
+    elif language == "javascript":
+        language_id = 63
+    elif language == "php":
+        language_id = 68
+    elif language == "python":
+        language_id = 71
+    elif language == "ruby":
+        language_id = 72
+
     # API endpoint
     url = "https://judge0-ce.p.rapidapi.com/submissions"
     
@@ -290,7 +312,7 @@ def create_submission(code, language) -> str:
 
     # Request payload
     payload = {
-        "language_id": 71,
+        "language_id": language_id,
         "source_code": code
     }
 
@@ -298,13 +320,14 @@ def create_submission(code, language) -> str:
     headers = {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),
+        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),        # TODO: Generate API Keys
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
     # POST request
     response = requests.post(url, json=payload, headers=headers, params=querystring)
 
+    # Return response token
     return response.json()['token']
 
 
@@ -317,13 +340,14 @@ def get_submission(token : str) -> dict:
 
     # Define key and host
     headers = {
-        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),
+        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),        # TODO: Generate API Keys
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
     # GET request
     response = requests.get(url, headers=headers, params=querystring)
 
+    # Return response status
     return response.json()['status']
 
 
