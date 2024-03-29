@@ -14,7 +14,6 @@ from itsdangerous import URLSafeTimedSerializer
 
 # Load environment varibles
 dotenv.load_dotenv()
-os.environ['X-RapidAPI-Key'] = os.getenv('CODE_EXE_KEY')
 
 # Create Flask app
 app = Flask(__name__)
@@ -275,20 +274,43 @@ def reset_password():
 
 
 @app.route('/execute', methods=['POST'])
-def execute(code):
+def execute(code, language) -> dict:
+    submission_token = create_submission(code, language)
+    code_status = get_submission(submission_token)
+
+    return jsonify({
+        "status": 1
+    })
+
+
+def create_submission(code, language) -> str:
     # API endpoint
     url = "https://judge0-ce.p.rapidapi.com/submissions"
-
+    
     # Additional Parameters
     querystring = {"base64_encoded": "false", "fields": "*"}
 
     # Request payload
     payload = {
-	    "language_id": 71,
-	    "so
-        urce_code": code,
+        "language_id": 71,
+        "source_code": code
     }
 
+    # Define key and host
+    headers = {
+        "content-type": "application/json",
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+    }
+
+    response = requests.post(url, json=payload, headers=headers, params=querystring)
+
+    return response.json()['token']
+
+
+def get_submission(token : str) -> dict:
+    pass
 
 
 
