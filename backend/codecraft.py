@@ -268,5 +268,11 @@ def reset_password():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+
+@app.route('/execute', methods=['GET', 'POST'])
+def execute():
+    pass
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
