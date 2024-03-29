@@ -29,10 +29,10 @@
     list-style-type: none;
     display: flex;
     align-items: center;
-    margin-left: auto; 
+    /* margin-left:auto */
 }
 
-.App-nav-links a, .App-sign-up {
+.App-nav-links a, .App-sign-up, .Account{
     color: #ffffff; 
     text-decoration: none;
     margin: 0 1rem;
@@ -40,12 +40,14 @@
 }
 
 .App-nav-links a:hover,
-.App-sign-up:hover {
+.App-sign-up:hover, 
+.Account:hover {
     color: #bbebff;
     transition: 0.3s;
 }
 
-.App-sign-up {
+.App-sign-up, 
+.Account{
     display:inline;
     border: none;
     padding: 0 1rem;
@@ -53,6 +55,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
 }
+
 .logo-container{
   max-width: 150px;
   height: 40px;
