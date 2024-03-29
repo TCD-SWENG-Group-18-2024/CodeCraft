@@ -12,6 +12,10 @@ from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
 
+# Load environment varibles
+dotenv.load_dotenv()
+os.environ['X-RapidAPI-Key'] = os.getenv('CODE_EXE_KEY')
+
 # Create Flask app
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -270,10 +274,20 @@ def reset_password():
         return jsonify({"error": str(e)}), 400
 
 
-@app.route('/execute', methods=['GET', 'POST'])
-def execute():
+@app.route('/execute', methods=['POST'])
+def execute(code):
     # API endpoint
     url = "https://judge0-ce.p.rapidapi.com/submissions"
+
+    # Additional Parameters
+    querystring = {"base64_encoded": "false", "fields": "*"}
+
+    # Request payload
+    payload = {
+	    "language_id": 71,
+	    "so
+        urce_code": code,
+    }
 
 
 
