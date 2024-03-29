@@ -1,6 +1,10 @@
-import json, re, time , secrets, os, dotenv
+import dotenv
+import os
+import re
+import requests
+import time
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session, redirect
+from flask import Flask, request, jsonify, session, redirect
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -8,6 +12,7 @@ from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
 
+# Create Flask app
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
@@ -22,11 +27,11 @@ bcrypt = Bcrypt(app)
 db.init_app(app)
 
 # Configuration for Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'              # Gmail SMTP server
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'                    # Gmail SMTP server
 app.config['MAIL_PORT'] = 587                                   # Gmail SMTP port (use 587 for TLS)
 app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
-app.config['MAIL_USERNAME'] =  os.getenv('MAIL_USERNAME')                              # Sender email
-app.config['MAIL_PASSWORD'] =  os.getenv('MAIL_PASSWORD')                              # Sender password
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')        # Sender email
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')        # Sender password
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')  # Default sender (same as MAIL_USERNAME)
 mail = Mail(app)
 
@@ -108,10 +113,9 @@ def clear_memory():
     return jsonify({'success': 'Cleared the Milvus collection.'})
 
 def process_data(user_input, use_case, ai_model, input_language, output_language):
-    input_string = {"input": user_input}
     if use_case is not None:
         use_case = use_case.lower()
-    count =0
+    
     if use_case == 'code_analysis':
         result = code_analysis(user_input, ai_model)
     elif use_case == 'code_generation':
@@ -121,16 +125,10 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     elif use_case == 'code_translation':
         result = code_translation(input_language, output_language, user_input, ai_model)
     elif use_case == '':
-        # general model for no specified operation
+        # General model for no specified operation
         result = AIModel(user_input, ai_model)
     else:
         result = {"error": "Invalid use case"}
-        count =1
-    #if(count ==0):
-    #    memory.save_context(input_string, result)
-
-    # TODO: Add more conditions for other AI models
-    # TODO: Can add more conditions for other use cases
 
     return result
 
@@ -226,12 +224,14 @@ def login_user():
 # def generate_reset_token(user):
 #     return serializer.dumps(user.email, salt='reset_password')
 
+
 # Function to send reset password email
 def send_reset_password_email(email):
     reset_url = "http://localhost:3000/reset"
     msg = Message("Reset Your Password", recipients=[email])
     msg.body = f"Click the following link to reset your password: {reset_url}"
     mail.send(msg)
+
 
 # Route for forgot password
 @app.route('/forgot-password', methods=['POST'])
@@ -242,9 +242,10 @@ def forgot_password():
     if user is None:
         return jsonify({"error": "User does not exist"}), 404
     else:
-#        token = generate_reset_token(user)       # Generate a reset token
+    #   token = generate_reset_token(user) # Generate a reset token
         send_reset_password_email(email)#, token) # Send reset password email
         return jsonify({"message": "Reset password link sent to your email"})
+
 
 # Route for resetting password
 @app.route('/reset-password', methods=['POST'])
@@ -271,7 +272,10 @@ def reset_password():
 
 @app.route('/execute', methods=['GET', 'POST'])
 def execute():
-    pass
+    # API endpoint
+    url = "https://judge0-ce.p.rapidapi.com/submissions"
+
+
 
 
 if __name__ == "__main__":
