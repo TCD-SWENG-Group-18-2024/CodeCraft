@@ -285,9 +285,17 @@ def execute():
         return jsonify({"error": "No programming language was entered"}), 400
 
     submission_token = create_submission(code, language)
-    output = get_submission(submission_token)
+    submission_info = get_submission(submission_token)
 
-    return output
+    return jsonify({
+        "exit_code": submission_info['exit_code'],
+        "language":submission_info['language'],
+        "message": submission_info['message'],
+        "source_code": submission_info['source_code'],
+        "status": submission_info['status'],
+        "stderr": submission_info['stderr'],
+        "stdout": submission_info['stdout'],
+    })
 
 
 def create_submission(code : str, language : str) -> str:
@@ -330,7 +338,7 @@ def create_submission(code : str, language : str) -> str:
     headers = {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),        # TODO: Generate API Keys
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
@@ -350,7 +358,7 @@ def get_submission(token : str) -> dict:
 
     # Define key and host
     headers = {
-        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),        # TODO: Generate API Keys
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
