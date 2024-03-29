@@ -278,9 +278,7 @@ def execute(code, language) -> dict:
     submission_token = create_submission(code, language)
     code_status = get_submission(submission_token)
 
-    return jsonify({
-        "status": 1
-    })
+    return jsonify(code_status)
 
 
 def create_submission(code, language) -> str:
@@ -304,14 +302,29 @@ def create_submission(code, language) -> str:
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
+    # POST request
     response = requests.post(url, json=payload, headers=headers, params=querystring)
 
     return response.json()['token']
 
 
 def get_submission(token : str) -> dict:
-    pass
+    # API endpoint
+    url = "https://judge0-ce.p.rapidapi.com/submissions/" + token
 
+    # Additional Parameters
+    querystring = {"base64_encoded": "false", "fields": "*"}
+
+    # Define key and host
+    headers = {
+        "X-RapidAPI-Key": os.getenv('CODE_EXE_KEY'),
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+    }
+
+    # GET request
+    response = requests.get(url, headers=headers, params=querystring)
+
+    return response.json()['status']
 
 
 if __name__ == "__main__":
