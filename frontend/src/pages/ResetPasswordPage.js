@@ -31,7 +31,7 @@ const ResetPassword = () => {
       const handleSubmit = async () => {
         const userData = { email, password, confirm_password };
         try {
-          const response = await fetch("http://localhost:8080/reset", {
+          const response = await fetch("http://localhost:8080/reset-password", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),

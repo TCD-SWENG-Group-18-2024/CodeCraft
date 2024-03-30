@@ -256,8 +256,8 @@ def reset_password():
     try:
         email = request.json['email']
         user = User.query.filter_by(email=email).first()
-        new_password = request.json['new_password']
-        confirm_new_password = request.json['confirm_new_password']
+        new_password = request.json['password']
+        confirm_new_password = request.json['confirm_password']
 
         # Ensure the new password matches the confirm new password
         if new_password != confirm_new_password:
