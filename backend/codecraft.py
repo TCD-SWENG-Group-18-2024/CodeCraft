@@ -1,6 +1,10 @@
-import json, re, time , secrets, os, dotenv
+import dotenv
+import os
+import re
+import requests
+import time
 from config import ApplicationConfig
-from flask import Flask, request, jsonify, send_file, session, url_for, render_template
+from flask import Flask, request, jsonify, session, redirect
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -8,6 +12,10 @@ from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
 
+# Load environment varibles
+dotenv.load_dotenv()
+
+# Create Flask app
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
@@ -22,11 +30,11 @@ bcrypt = Bcrypt(app)
 db.init_app(app)
 
 # Configuration for Flask-Mail
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'              # Gmail SMTP server
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'                    # Gmail SMTP server
 app.config['MAIL_PORT'] = 587                                   # Gmail SMTP port (use 587 for TLS)
 app.config['MAIL_USE_TLS'] = True                               # Enable TLS encryption
-app.config['MAIL_USERNAME'] =  os.getenv('MAIL_USERNAME')                              # Sender email
-app.config['MAIL_PASSWORD'] =  os.getenv('MAIL_PASSWORD')                              # Sender password
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')        # Sender email
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')        # Sender password
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')  # Default sender (same as MAIL_USERNAME)
 mail = Mail(app)
 
@@ -55,8 +63,7 @@ def llm_text_request():
         return jsonify({'error': 'No user input provided'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,
-                          input_language, output_language)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language)
 
     return jsonify(result)
 
@@ -109,10 +116,9 @@ def clear_memory():
     return jsonify({'success': 'Cleared the Milvus collection.'})
 
 def process_data(user_input, use_case, ai_model, input_language, output_language):
-    input_string = {"input": user_input}
     if use_case is not None:
         use_case = use_case.lower()
-    count =0
+    
     if use_case == 'code_analysis':
         result = code_analysis(user_input, ai_model)
     elif use_case == 'code_generation':
@@ -122,16 +128,10 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
     elif use_case == 'code_translation':
         result = code_translation(input_language, output_language, user_input, ai_model)
     elif use_case == '':
-        # general model for no specified operation
+        # General model for no specified operation
         result = AIModel(user_input, ai_model)
     else:
         result = {"error": "Invalid use case"}
-        count =1
-    #if(count ==0):
-    #    memory.save_context(input_string, result)
-
-    # TODO: Add more conditions for other AI models
-    # TODO: Can add more conditions for other use cases
 
     return result
 
@@ -221,71 +221,157 @@ def login_user():
         "email": user.email
     })
 
+# serializer = URLSafeTimedSerializer(app.secret_key)
 
-# Initialize the serializer with your app's secret key
-app.secret_key = 'your_secret_key_here'                     #TEMPORARY!!!!!!! WILL NEED ANOTHER KEY FOR THIS
-serializer = URLSafeTimedSerializer(app.secret_key)
+# # Function to generate a reset token
+# def generate_reset_token(user):
+#     return serializer.dumps(user.email, salt='reset_password')
 
-# Function to generate a reset token
-def generate_reset_token(user):
-    return serializer.dumps(user.email, salt='reset-password')
 
 # Function to send reset password email
-def send_reset_password_email(email, token):
-    reset_url = url_for('reset_password', token=token, _external=True)
+def send_reset_password_email(email):
+    reset_url = "http://localhost:3000/reset"
     msg = Message("Reset Your Password", recipients=[email])
     msg.body = f"Click the following link to reset your password: {reset_url}"
     mail.send(msg)
 
+
 # Route for forgot password
 @app.route('/forgot-password', methods=['POST'])
 def forgot_password():
-    email = request.json.get('email')  # Extract email from user input
+    email = request.json['email']  # Extract email from user input
     # Check if the user exists
     user = User.query.filter_by(email=email).first()
     if user is None:
         return jsonify({"error": "User does not exist"}), 404
     else:
-        token = generate_reset_token(user)       # Generate a reset token
-        send_reset_password_email(email, token) # Send reset password email
+    #   token = generate_reset_token(user) # Generate a reset token
+        send_reset_password_email(email)#, token) # Send reset password email
         return jsonify({"message": "Reset password link sent to your email"})
 
+
 # Route for resetting password
-@app.route('/reset-password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    if request.method == 'GET':
-        # Handle GET request (e.g., render password reset form)
-        return render_template('reset_password_form.html', token=token)
-    elif request.method == 'POST':
-        try:
-            # Decrypt the token to get the user's email
-            email = serializer.loads(token, salt='reset-password', max_age=3600)  # Token expires in 1 hour
-            user = User.query.filter_by(email=email).first()                      # Find the user by email
-            if user is None:
-                return jsonify({"error": "User not found"}), 404
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        email = request.json['email']
+        user = User.query.filter_by(email=email).first()
+        new_password = request.json['password']
+        confirm_new_password = request.json['confirm_password']
+
+        # Ensure the new password matches the confirm new password
+        if new_password != confirm_new_password:
+            return jsonify({"error": "New passwords do not match"}), 400
             
-            # Retrieve new password and confirm new password from the form
-            new_password = request.form['new_password']
-            confirm_new_password = request.form['confirm_new_password']
+        # Proceed with updating the user's password
+        hashed_password = bcrypt.generate_password_hash(new_password)
+        user.password = hashed_password
+        db.session.commit()
+        return jsonify({"message": "Password reset successfully"})
 
-            # Ensure the new password matches the confirm new password
-            if new_password != confirm_new_password:
-                return jsonify({"error": "New passwords do not match"}), 400
-            
-            # Proceed with updating the user's password
-            hashed_password = bcrypt.generate_password_hash(new_password)
-            user.password = hashed_password
-            db.session.commit()
-            return jsonify({"message": "Password reset successfully"})
-        
-########## AT THIS STAGE THE USER SHOULD BE REDIRECTED TO HOME  ##############
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 
-        except Exception as e:
-            return jsonify({"error": str(e)}), 400
-    else:
-        # Handle other HTTP methods
-        return jsonify({"error": "Method not allowed"}), 405
+@app.route('/execute', methods=['POST'])
+def execute():
+    code = request.json['code']
+    language = request.json['language']
+
+    if code is None or code == '':
+        return jsonify({"error": "No code was entered"}), 400
+    
+    if language is None or language == '':
+        return jsonify({"error": "No programming language was entered"}), 400
+
+    submission_token = create_submission(code, language)
+    submission_info = get_submission(submission_token)
+
+    return jsonify({
+        "exit_code": submission_info['exit_code'],
+        "language":submission_info['language'],
+        "message": submission_info['message'],
+        "source_code": submission_info['source_code'],
+        "status": submission_info['status'],
+        "stderr": submission_info['stderr'],
+        "stdout": submission_info['stdout'],
+    })
+
+
+def create_submission(code : str, language : str) -> str:
+    # Set language id
+    language = language.lower()
+    language_id = 43 # Default is plain text
+
+    if language == "assembly":
+        language_id = 45
+    elif language == "c":
+        language_id = 50
+    elif language == "c#":
+        language_id = 51
+    elif language == "c++":
+        language_id = 54
+    elif language == "java":
+        language_id = 62
+    elif language == "javascript":
+        language_id = 63
+    elif language == "php":
+        language_id = 68
+    elif language == "python":
+        language_id = 71
+    elif language == "ruby":
+        language_id = 72
+
+    # API endpoint
+    url = "https://judge0-ce.p.rapidapi.com/submissions"
+    
+    # Additional Parameters
+    querystring = {"base64_encoded": "false", "fields": "*"}
+
+    # Request payload
+    payload = {
+        "language_id": language_id,
+        "source_code": code
+    }
+
+    # Define key and host
+    headers = {
+        "content-type": "application/json",
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+    }
+
+    # POST request
+    response = requests.post(url, json=payload, headers=headers, params=querystring)
+
+    # Return response token
+    return response.json()['token']
+
+
+def get_submission(token : str) -> dict:
+    # API endpoint
+    url = "https://judge0-ce.p.rapidapi.com/submissions/" + token
+
+    # Additional Parameters
+    querystring = {"base64_encoded": "false", "fields": "*"}
+
+    # Define key and host
+    headers = {
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+    }
+
+    # GET request
+    response = requests.get(url, headers=headers, params=querystring)
+
+    # GET request again if it is still processing
+    while (response.json()['status_id'] == 2):
+        time.sleep(0.5)
+        response = requests.get(url, headers=headers, params=querystring)
+
+    # Return response
+    return response.json()
 
 
 if __name__ == "__main__":
