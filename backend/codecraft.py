@@ -7,7 +7,8 @@ from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
-
+import subprocess
+email = "ben10feeney@gmail.com"
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
@@ -201,41 +202,47 @@ def register_user():
     })
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST','GET'])
 def login_user():
-    email = request.json['email']
-    password = request.json['password']
+    if request.method == 'GET':
+        data = request.get_json()
+        boolean = data.get('isLoggedIn')
+        email = data.get('email')
+        return jsonify({'message': 'Endpoint reached'}), 200
+    elif request.method == 'POST':
+        email = request.json['email']
+        password = request.json['password']
 
-    email = email.lower()
-    user = User.query.filter_by(email=email).first()
+        email = email.lower()
+        user = User.query.filter_by(email=email).first()
 
-    if user is None:
-        return jsonify({"error": "User does not exist"}), 401
-    
-    if 'last_login_attempt' in session:  # if a last login attempt exists
-        last_login_attempt_time = session['last_login_attempt']     # find out when
-        elapsed_time_since_last_attempt = time.time() - last_login_attempt_time
+        if user is None:
+            return jsonify({"error": "User does not exist"}), 401
+        
+        if 'last_login_attempt' in session:  # if a last login attempt exists
+            last_login_attempt_time = session['last_login_attempt']     # find out when
+            elapsed_time_since_last_attempt = time.time() - last_login_attempt_time
 
-        if elapsed_time_since_last_attempt < 300:  # Lock the account for 5 minutes (300 seconds)
-            return jsonify({"error": "Your account is locked. Please try again later."}), 403
+            if elapsed_time_since_last_attempt < 300:  # Lock the account for 5 minutes (300 seconds)
+                return jsonify({"error": "Your account is locked. Please try again later."}), 403
 
-    login_attempts = session.get('login_attempts', 0) #Get current login attempts, or initialise to zero
+        login_attempts = session.get('login_attempts', 0) #Get current login attempts, or initialise to zero
 
-    if login_attempts >= 3:
-        session['last_login_attempt'] = time.time()  # Update the last login attempt time
-        return jsonify({"error": "Your account is frozen. Please contact support."}), 403 #403: server understood request but refused to authorise
+        if login_attempts >= 3:
+            session['last_login_attempt'] = time.time()  # Update the last login attempt time
+            return jsonify({"error": "Your account is frozen. Please contact support."}), 403 #403: server understood request but refused to authorise
 
-    if not bcrypt.check_password_hash(user.password, password):
-        session['login_attempts'] = login_attempts + 1
-        return jsonify({"error": "Incorrect password"}), 401
-    
-    session.pop('login_attempts', None) #Reset counter after the correct password is given
-    session.pop('last_login_attempt', None)  # Reset the last login attempt time upon successful login
+        if not bcrypt.check_password_hash(user.password, password):
+            session['login_attempts'] = login_attempts + 1
+            return jsonify({"error": "Incorrect password"}), 401
+        
+        session.pop('login_attempts', None) #Reset counter after the correct password is given
+        session.pop('last_login_attempt', None)  # Reset the last login attempt time upon successful login
 
-    return jsonify({
-        "id": user.id,
-        "email": user.email
-    })
+        return jsonify({
+            "id": user.id,
+            "email": user.email
+        })
 
 
 # Initialize the serializer with your app's secret key

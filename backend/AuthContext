@@ -1,25 +1,43 @@
-const isLoggedIn = true; // or false, based on your logic
-const userEmail = 'user@example.com'; // Fetch the user's email from wherever it's stored when logged in
+import React, { createContext, useState } from 'react';
+import email from "../pages/LoginSignUp";
+// Create the context
+export const AuthContext = createContext();
 
-// JSON data to send in the request
-const requestData = {
-  use_case: 'your_use_case',
-  ai_model: 'your_ai_model',
-  input_language: 'your_input_language',
-  output_language: 'your_output_language',
-  user_input: 'user_input_text',
-  email: isLoggedIn ? userEmail : '' // Include user's email if logged in
+// Create the context provider
+export const AuthProvider = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // const login = () => {
+  //  console.log("Setting isLoggedIn to true");
+//    setIsLoggedIn(true);
+ // };
+
+const login = async () => {
+    setIsLoggedIn(true);
+     const data = {isLoggedIn, email}
+     try{
+       const response = await fetch("http://localhost:8080/login", {
+         method: "POST",
+        headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(data),
+      });
+    }
+  catch(error){
+    console.error("Error:", error.message);
+    toast.error("Please Enter Valid inputs");
+  }
+
+
+  const logout = () => {
+    console.log("Setting logged in to false");
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-// Make a request to the Flask backend
-fetch('/llm/text', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': isLoggedIn ? 'Bearer token' : '' // Send token if logged in
-  },
-  body: JSON.stringify(requestData)
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));
+}
