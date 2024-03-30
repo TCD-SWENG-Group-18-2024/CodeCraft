@@ -250,11 +250,10 @@
 
 .card-area{
   height: 700px;
-  width: 100%; /* Ensure the card area takes the full width of its container */
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the cards horizontally */
-  overflow-y: auto; /* Allow vertical scrolling if needed */
+  align-items: center;
 }
 .export-button{
   transform: translateY(35px);    
