@@ -513,12 +513,24 @@ const SubmissionPage = () => {
                     }}
                   />
                 </div>
+                <ResponsiveDialog
+                  open={dialogOpen}
+                  handleClose={handleCloseDialog}
+                  handleYesClick={handleYesClick}
+                />
                 <Button
                   variant="contained"
                   onClick={handleSubmit}
                   sx={{ ml: 2, height: "64px", padding: "16px 32px" }}
                 >
                   Submit
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleNewConversation}
+                  sx={{ ml: 2, height: "64px", padding: "16px 48px" }}
+                >
+                  New Conversation
                 </Button>
               </div>
             )}
