@@ -7,18 +7,30 @@ import { renderToString } from 'react-dom/server';
 
 const CardElement = ({usecase,query,response,isLoading})=>{
   
-  const highlightCodeBlock = (code) => (
-    <SyntaxHighlighter language="jsx" style={syntax} >
-        {code}
-    </SyntaxHighlighter>
-);
+  const highlightCodeBlock = (string) => {
+    const lines = string.trim().split('\n');
+    let language = 'jsx';
+    const firstLine = lines[0].trim();
+    const languageRegex = /^(python|java|c|c\+\+|c\#|assembly|javascript|jsx|html|css|ruby|php|kotlin|r|perl|json|plaintext)\b/i;
+    // If the first line matches, extract the language and remove it from the code
+    if (languageRegex.test(firstLine)) {
+      language = firstLine.match(languageRegex)[0].toLowerCase();
+      lines.shift();
+    }
+    const code = lines.join('\n');
+    return (
+      <SyntaxHighlighter language={language} style={syntax} >
+          {code}
+      </SyntaxHighlighter>
+    );
+  };
   const tempResponse = `<code>${response}</code>`
   const modifiedFeedback = tempResponse.replace(/```([\s\S]*?)```/g, (match, code) => {
         return `<pre class="code-block"><code>${renderToString( highlightCodeBlock(code))}</code></pre>`;
     });
   const formattedUsecase = usecase.split('_').join(' ').toUpperCase();
   return (
-    <Card variant="outlined" sx={{ width: '700px' }}>
+    <Card variant="outlined" sx={{ width: '700px', marginBottom: '25px' }}>
         <CardContent>
             {isLoading ? (
                 <>

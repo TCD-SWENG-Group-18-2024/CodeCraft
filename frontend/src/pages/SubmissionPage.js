@@ -10,6 +10,7 @@ import "../styles/SubmissionPage.css";
 import "./Home";
 import "./LoginSignUp";
 import Export from "../assets/export.png";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
 
@@ -27,6 +28,7 @@ const SubmissionPage = () => {
   const [isDropdownOpen, setIsDropdownopen] = useState(true);
   const [cards, setCards] = useState([]); // whenever submit is clicked
   const [newCard, setNewCard] = useState(null);
+  const [copied, setCopied] = useState(false);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -377,6 +379,7 @@ const SubmissionPage = () => {
       "c#": ".cs",
       assembly: ".S",
       javascript: ".js",
+      jsx: ".jsx",
       html: ".html",
       css: ".css",
       ruby: "ruby",
@@ -384,6 +387,8 @@ const SubmissionPage = () => {
       kotlin: ".kt",
       r: ".R",
       perl: ".pl",
+      json: ".json",
+      plaintext: ".txt"
       // Add more mappings for other languages as needed
     };
 
@@ -431,6 +436,34 @@ const SubmissionPage = () => {
       isLoading: isLoading,
     };
     setCards((prevCards) => [newCard, ...prevCards]); // Add the new card to the dictionary
+  };
+
+  const copyToClipboard = (feedback) => {
+    const lines = feedback.split("\n");
+    let codeBlock = "";
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("```")) {
+        line.substring(3).trim();
+        for (let j = i + 1; j < lines.length; j++) {
+          const codeLine = lines[j].trim();
+          if (codeLine.endsWith("```")) {
+            codeBlock = lines.slice(i + 1, j).join("\n");
+            feedback = codeBlock;
+            break;
+          }
+        }
+        break;
+      }
+    }
+    navigator.clipboard.writeText(feedback)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+      })
+      .catch((error) => {
+        console.error('Failed to copy:', error);
+      });
   };
 
   // const pastCards = useMemo(() => {
@@ -481,7 +514,7 @@ const SubmissionPage = () => {
                   <Button
                     variant="contained"
                     onClick={handleNewConversation}
-                    sx={{ ml: 4, height: "56px", padding: "15px" }}
+                    sx={{ ml: 2, height: "56px", padding: "15px" }}
                   >
                     New Conversation
                   </Button>
@@ -538,15 +571,25 @@ const SubmissionPage = () => {
 
           <div className="feedBackArea">
             <div className="card-area">
-              {!isLoading && feedback && (
-                <button
-                  className="export-button"
-                  onClick={() => {
-                    handleExportClick(feedback);
-                  }}
-                >
-                  <img src={Export} alt="Export Icon" className="export-img" />
-                </button>
+              {!isLoading && feedback && cards.length !== 0 && (
+                <div className="button-container">
+                  <button
+                    className="copy-button"
+                    onClick={() => {
+                      copyToClipboard(feedback);
+                    }}
+                  >
+                    <ContentCopyIcon sx={{height: "20px", width: "20px"}}/>
+                  </button>
+                  <button
+                    className="export-button"
+                    onClick={() => {
+                      handleExportClick(feedback);
+                    }}
+                  >
+                    <img src={Export} alt="Export Icon" className="export-img" />
+                  </button>
+                </div>
               )}
               {/* <div>
                             <CardElement
