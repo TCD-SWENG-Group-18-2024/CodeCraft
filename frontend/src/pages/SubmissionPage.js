@@ -1,18 +1,23 @@
-import React, { useState, useEffect, useMemo, Suspense } from "react";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Button } from "@mui/material";
+import Switch from '@mui/material/Switch'; // Import from `@mui/material` not `@mui/joy`
+import Typography from '@mui/material/Typography'; // Import from `@mui/material`
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { toast } from "react-hot-toast";
+import Export from "../assets/export.png";
+import CardElement from "../components/CardElement";
+import ResponsiveDialog from "../components/ConfirmationButton";
+import Dropdown from "../components/Dropdown";
 import Sidebar from "../components/Sidebar";
 import SubmissionBar from "../components/SubmissionBar";
-import Dropdown from "../components/Dropdown";
-import { Button } from "@mui/material";
 import "../styles/SubmissionPage.css";
 import "./Home";
 import "./LoginSignUp";
-import Export from "../assets/export.png";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CardElement from "../components/CardElement";
-import ResponsiveDialog from "../components/ConfirmationButton";
+
+// ... rest of your code
+
 
 const SubmissionPage = () => {
   const [inputType, setInputType] = useState("textbox");
@@ -466,6 +471,10 @@ const SubmissionPage = () => {
       });
   };
 
+  const handleInputTypeToggle = (event) => {
+    setInputType(event.target.checked ? "files" : "textbox");
+  };
+
   // const pastCards = useMemo(() => {
   //     return cards.slice(1).map((card, index) => (
   //         <div key={index}>
@@ -481,10 +490,28 @@ const SubmissionPage = () => {
   return [
     <>
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-
+ 
+ 
       <div className={`main-content ${isSidebarOpen ? "with-sidebar" : ""}`}>
         <div className="userArea">
           <div className="submissionArea">
+           
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}> {/* Adjust styling as needed */}
+            <Typography component="div" level="body2">
+              Text
+            </Typography>
+            <Switch
+              checked={inputType === "files"}
+              onChange={handleInputTypeToggle}
+              sx={{
+                margin: '0 10px', // Adjust as necessary
+              }}
+            />
+            <Typography component="div" level="body2">
+              File
+            </Typography>
+          </div>
+       
             <Dropdown
               inputType={inputType}
               setInputType={setInputType}
@@ -568,7 +595,8 @@ const SubmissionPage = () => {
               </div>
             )}
           </div>
-
+ 
+ 
           <div className="feedBackArea">
             <div className="card-area">
               {!isLoading && feedback && cards.length !== 0 && (
@@ -613,7 +641,8 @@ const SubmissionPage = () => {
           </div>
         </div>
       </div>
-
+ 
+ 
       <div className="wave_container">
         <div className="wave"></div>
         <div className="wave"></div>
@@ -621,16 +650,19 @@ const SubmissionPage = () => {
       </div>
     </>,
   ];
-};
-
-export default SubmissionPage;
-
-// for export file format
-{
+ };
+ 
+ 
+ export default SubmissionPage;
+ 
+ 
+ // for export file format
+ {
   /* <input
     type="text"
     value={customFileName}
-    onChange={(e) => setCustomFileName(e.target.value)}    
+    onChange={(e) => setCustomFileName(e.target.value)}   
     placeholder="Enter custom file name"
-/> */
-}
+ /> */
+ }
+ 
