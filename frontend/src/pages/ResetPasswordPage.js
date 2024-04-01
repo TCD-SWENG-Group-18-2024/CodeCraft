@@ -30,7 +30,7 @@ const ResetPassword = () => {
   const handleSubmit = async () => {
     const userData = { email, password, confirm_password };
     try {
-      const response = await fetch("http://localhost:8080/reset-password", {
+      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

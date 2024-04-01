@@ -25,7 +25,7 @@ const SignUp = () => {
   const handleSignUp = async () => {
     const userData = { email, password, confirm_password };
     try {
-      const response = await fetch("http://localhost:8080/register", {
+      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -53,7 +53,7 @@ const SignUp = () => {
   const handleLogin = async () => {
     const userData = { email, password };
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -82,7 +82,7 @@ const SignUp = () => {
 
     const userEmail = { email };
     try {
-      const response = await fetch("http://localhost:8080/forgot-password", {
+      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userEmail),
