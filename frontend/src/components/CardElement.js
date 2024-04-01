@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardActions, Typography, IconButton, Checkbox, Skeleton, TextField } from '@mui/material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {nord as syntax} from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { styled } from '@mui/material/styles';
 import app_logo from "../assets/codecraft.png";
 import { renderToString } from 'react-dom/server';
 
 const CardElement = ({usecase,query,response,isLoading})=>{
-  const highlightCodeBlock = (code) => (
-    <SyntaxHighlighter language="jsx" style={syntax} >
-        {code}
-    </SyntaxHighlighter>
-);
+  
+  const highlightCodeBlock = (string) => {
+    const lines = string.trim().split('\n');
+    let language = 'jsx';
+    const firstLine = lines[0].trim();
+    const languageRegex = /^(python|java|c|c\+\+|c\#|assembly|javascript|jsx|html|css|ruby|php|kotlin|r|perl|json|plaintext)\b/i;
+    // If the first line matches, extract the language and remove it from the code
+    if (languageRegex.test(firstLine)) {
+      language = firstLine.match(languageRegex)[0].toLowerCase();
+      lines.shift();
+    }
+    const code = lines.join('\n');
+    return (
+      <SyntaxHighlighter language={language} style={syntax} >
+          {code}
+      </SyntaxHighlighter>
+    );
+  };
   const tempResponse = `<code>${response}</code>`
   const modifiedFeedback = tempResponse.replace(/```([\s\S]*?)```/g, (match, code) => {
         return `<pre class="code-block"><code>${renderToString( highlightCodeBlock(code))}</code></pre>`;
     });
   const formattedUsecase = usecase.split('_').join(' ').toUpperCase();
   return (
-    <Card variant="outlined" sx={{ width: '700px' }}>
+    <Card variant="outlined" sx={{ width: '700px', marginBottom: '25px' }}>
         <CardContent>
             {isLoading ? (
                 <>
@@ -32,9 +44,13 @@ const CardElement = ({usecase,query,response,isLoading})=>{
                         <img src={app_logo} alt="App Logo" style={{ width: '15px', height: '15px', marginTop: "3px", marginRight: "3px" }} />
                         <div>{formattedUsecase? formattedUsecase : 'Code Analysis'}</div>
                     </Typography>
-                    {/* <Typography sx={{ mb: 1.5 }} style={{ marginTop: "20px",marginBottom: "40px", textAlign: "left" }} color="text.secondary">
-                        {query}
-                    </Typography> */}
+                    <Typography
+                      sx={{ mb: 1.5 }}
+                      style={{ marginTop: "20px", marginBottom: "40px", textAlign: "left" }}
+                      color="text.secondary"
+                    >
+                      {query.length > 90 ? query.slice(0, 90) + "..." : query}
+                    </Typography>
                     {response.includes('```') && response.split('```').length >= 1 ? (
                       <Typography sx={{ fontSize: 11 }} style={{ textAlign: "left" }} variant="body2">
                         <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />

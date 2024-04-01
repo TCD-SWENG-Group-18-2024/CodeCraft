@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Features from './Features';
+import Features from '../pages/Features';
 import { MemoryRouter } from 'react-router-dom';
 
 describe('Features Component', () => {

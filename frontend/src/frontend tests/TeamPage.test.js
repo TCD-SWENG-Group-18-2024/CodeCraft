@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import TeamPage from './TeamPage';
+import TeamPage from '../pages/TeamPage';
 
 describe('TeamPage component', () => {
   test('renders page title and description', () => {

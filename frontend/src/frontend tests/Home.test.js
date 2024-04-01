@@ -1,7 +1,7 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Home from './Home';
+import Home from '../pages/Home';
 
 describe('Home component', () => {
     test('renders IBM logo', () => {

@@ -1,4 +1,3 @@
-from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from uuid import uuid4
 
@@ -11,5 +10,5 @@ def get_uuid():
 class User(db.Model):
     __tablename__ = "emails"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
-    email = db.Column(db.String(32), nullable=False, unique=True) # TRY db.Column(db.Text, nullable=False, unique=True)
+    email = db.Column(db.String(32), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)

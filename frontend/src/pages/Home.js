@@ -26,10 +26,12 @@ function Home() {
         <>
             <div className="App">
                 <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-                <a href='https://www.ibm.com/us-en' target='_blank' rel="noreferrer" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-                    <img src={IBM_White} alt="IBM Logo" className={`logo ${isLogoLoaded ? 'loaded' : ''}`} />
-                    <img src={HeaderImage} alt="CodeCraft Logo" className="codecraft-logo"/>
-                </a>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <a href='https://www.ibm.com/us-en' target='_blank' rel="noreferrer" style={{ width: "20%" }}>
+                        <img src={IBM_White} alt="IBM Logo" className={`logo ${isLogoLoaded ? 'loaded' : ''}`} />
+                    </a>
+                </div>
+                <img src={HeaderImage} alt="CodeCraft Logo" className="codecraft-logo"/>
                 <h3 className="welcome-message">Brought to you by Group 18</h3>
                 <Link to="/SubmissionPage" className="tab-link">
                     <button className="StartAnalysisButton">
