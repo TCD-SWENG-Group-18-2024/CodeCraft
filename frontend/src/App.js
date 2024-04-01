@@ -54,7 +54,6 @@ function App() {
             <Route path="/team" element={<TeamPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/reset" element={<ResetPassword/>} />
-            {/* Add more routes as needed */}
           </Routes>
         </div>
       </AuthProvider>
