@@ -6,6 +6,29 @@
     width: 100%;
   }
 
-.footer {
-  margin-bottom: 5px;
+.footer{
+  
+  background: rgb(255 255 255 / 50%);
+  height: 150px;
+  text-align: center;
+  
 }
+
+.linkedInLink{
+  margin: 25px;
+  transition: transform 0.3s ease;
+}
+
+.linkedInLink:hover{
+  transform: translateY(-10px);
+}
+
+.instagramLink{
+  margin: 25px;
+  transition: transform 0.3s ease;
+}
+
+.instagramLink:hover{
+  transform: translateY(-10px);
+}
+
