@@ -15,7 +15,7 @@ const Footer = () => {
         <FontAwesomeIcon
           className="linkedInLink"
           icon={faLinkedin}
-          size="2x"
+          size="3x"
           color="#0762C8"
         />
       </a>
@@ -28,7 +28,7 @@ const Footer = () => {
         <FontAwesomeIcon
           className="instagramLink"
           icon={faInstagram}
-          size="2x"
+          size="3x"
           color="purple"
         />
       </a>
