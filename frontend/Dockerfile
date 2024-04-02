@@ -11,6 +11,7 @@ RUN npm install
 # Copy and install application
 COPY src src
 COPY public public
+ENV REACT_APP_BACKEND_URL="https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud"
 RUN npm run build
 
 # Step 2: Production image
