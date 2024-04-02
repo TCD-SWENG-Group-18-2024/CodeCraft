@@ -24,7 +24,10 @@ const SubmissionPage = () => {
   const [inputLanguage, setInputLanguage] = useState("java");
   const [outputLanguage, setOutputLanguage] = useState("");
   const [isDropdownOpen, setIsDropdownopen] = useState(true);
-  const [cards, setCards] = useState([]); // whenever submit is clicked
+  const [cards, setCards] = useState(() => {
+    const storedCards = localStorage.getItem("cards");
+    return storedCards ? JSON.parse(storedCards) : [];
+  });
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -337,7 +340,9 @@ const SubmissionPage = () => {
       return "StarCoder";
     } else return "GPT3.5";
   };
-
+  useEffect(() => {
+    localStorage.setItem("cards", JSON.stringify(cards));
+  }, [cards]);
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {
@@ -358,7 +363,12 @@ const SubmissionPage = () => {
       response: feedback,
       isLoading: isLoading,
     };
-    setCards((prevCards) => [newCard, ...prevCards]); // Add the new card to the dictionary
+  
+    // Only store the latest 10 cards
+    setCards((prevCards) => {
+      const updatedCards = [newCard, ...prevCards.slice(0, 9)];
+      return updatedCards;
+    });
   };
 
 
