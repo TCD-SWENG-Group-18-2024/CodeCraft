@@ -10,7 +10,6 @@ import "../styles/SubmissionPage.css";
 import "./Home";
 import "./LoginSignUp";
 import Export from "../assets/export.png";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
 
@@ -27,8 +26,6 @@ const SubmissionPage = () => {
   const [outputLanguage, setOutputLanguage] = useState("");
   const [isDropdownOpen, setIsDropdownopen] = useState(true);
   const [cards, setCards] = useState([]); // whenever submit is clicked
-  const [newCard, setNewCard] = useState(null);
-  const [copied, setCopied] = useState(false);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -342,79 +339,6 @@ const SubmissionPage = () => {
     } else return "GPT3.5";
   };
 
-  const handleExportClick = (feedback) => {
-    const lines = feedback.split("\n");
-
-    let codeBlock = "";
-    let language = "";
-
-    // Loop through each line to find the starting marker
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-
-      if (line.startsWith("```")) {
-        // Extract the language from the line
-        language = line.substring(3).trim();
-
-        // Start capturing the code block from the next line
-        for (let j = i + 1; j < lines.length; j++) {
-          const codeLine = lines[j].trim();
-
-          // Check if the line is the ending marker
-          if (codeLine.endsWith("```")) {
-            // Extract the code block content
-            codeBlock = lines.slice(i + 1, j).join("\n");
-            feedback = codeBlock;
-            break; // Exit the loop once the ending marker is found
-          }
-        }
-        break; // Exit the loop once the starting marker is found
-      }
-    }
-    const extensionMap = {
-      python: ".py",
-      java: ".java",
-      c: ".c",
-      "c++": ".cpp",
-      "c#": ".cs",
-      assembly: ".S",
-      javascript: ".js",
-      jsx: ".jsx",
-      html: ".html",
-      css: ".css",
-      ruby: "ruby",
-      php: "php",
-      kotlin: ".kt",
-      r: ".R",
-      perl: ".pl",
-      json: ".json",
-      plaintext: ".txt"
-      // Add more mappings for other languages as needed
-    };
-
-    const fileExtension = extensionMap[language] || ".txt";
-
-    // Call the export function with the determined file extension
-    exportFeedback(feedback, fileExtension);
-  };
-
-  const exportFeedback = (feedback, fileExtension) => {
-    const fileName = customFileName || "feedback";
-
-    const blob = new Blob([feedback], { type: "text/plain;charset=utf-8" });
-
-    const a = document.createElement("a");
-    a.style.display = "none";
-
-    a.href = window.URL.createObjectURL(blob);
-
-    a.download = fileName + fileExtension;
-
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-  };
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {
@@ -438,33 +362,7 @@ const SubmissionPage = () => {
     setCards((prevCards) => [newCard, ...prevCards]); // Add the new card to the dictionary
   };
 
-  const copyToClipboard = (feedback) => {
-    const lines = feedback.split("\n");
-    let codeBlock = "";
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line.startsWith("```")) {
-        line.substring(3).trim();
-        for (let j = i + 1; j < lines.length; j++) {
-          const codeLine = lines[j].trim();
-          if (codeLine.endsWith("```")) {
-            codeBlock = lines.slice(i + 1, j).join("\n");
-            feedback = codeBlock;
-            break;
-          }
-        }
-        break;
-      }
-    }
-    navigator.clipboard.writeText(feedback)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
-      })
-      .catch((error) => {
-        console.error('Failed to copy:', error);
-      });
-  };
+
 
   // const pastCards = useMemo(() => {
   //     return cards.slice(1).map((card, index) => (
@@ -571,26 +469,6 @@ const SubmissionPage = () => {
 
           <div className="feedBackArea">
             <div className="card-area">
-              {!isLoading && feedback && cards.length !== 0 && (
-                <div className="button-container">
-                  <button
-                    className="copy-button"
-                    onClick={() => {
-                      copyToClipboard(feedback);
-                    }}
-                  >
-                    <ContentCopyIcon sx={{height: "20px", width: "20px"}}/>
-                  </button>
-                  <button
-                    className="export-button"
-                    onClick={() => {
-                      handleExportClick(feedback);
-                    }}
-                  >
-                    <img src={Export} alt="Export Icon" className="export-img" />
-                  </button>
-                </div>
-              )}
               {/* <div>
                             <CardElement
                                 usecase={useCase}
