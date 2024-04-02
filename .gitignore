@@ -40,8 +40,8 @@ my-react-app/
 /backend/MilvusDB/volumes/
 
 #ignore package jsons in the root
-package-lock.json
-package.json
+/package-lock.json
+/package.json
 
 #Ignore alchemy
 /instance/
