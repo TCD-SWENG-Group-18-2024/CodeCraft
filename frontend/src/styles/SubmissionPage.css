@@ -350,3 +350,15 @@
   z-index: -1;
 }
 
+.submissionSwitchContainer {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.submissionSwitchContainer > div {
+  flex-shrink: 0;
+  margin-right: 0px;
+}
+
+

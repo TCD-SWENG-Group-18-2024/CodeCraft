@@ -35,7 +35,7 @@ const Dropdown = ({inputType, setInputType,
       <div className="arrow-down"></div> 
         <ol>
 
-        <li className='menu-item'>
+        {/* <li className='menu-item'>
             <a href='#0' onMouseEnter={() => setIsDropdownOpen(true)}>
                 {inputType === "textbox" || inputType === "files" 
                     ? <>{formatInputType(inputType)}</> : <>-Select Input Type-</>}
@@ -48,7 +48,7 @@ const Dropdown = ({inputType, setInputType,
                     <a href="#0" onClick={() => setInputType("files")}>File Submission</a>
                 </li>
             </ol>   
-        </li>
+        </li> */}
 
         <li className='menu-item'>
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>

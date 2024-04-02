@@ -9,7 +9,6 @@ import { Button } from "@mui/material";
 import "../styles/SubmissionPage.css";
 import "./Home";
 import "./LoginSignUp";
-import Export from "../assets/export.png";
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
 
