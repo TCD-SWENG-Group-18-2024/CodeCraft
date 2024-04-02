@@ -131,7 +131,7 @@ const SubmissionPage = () => {
     console.log(data);
 
     try {
-      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/llm/text", {
+      const response = await fetch("https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/llm/text", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -251,7 +251,7 @@ const SubmissionPage = () => {
     // console.log(...formDataTest);
 
     try {
-      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/llm/file", {
+      const response = await fetch("https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/llm/file", {
         method: "POST",
         body: formData,
         // headers: {
@@ -300,7 +300,7 @@ const SubmissionPage = () => {
     if (cards.length === 0) {
       handleCloseDialog();
     } else {
-      fetch("http://backend.1f106c1j1agn.svc.cluster.local/llm/clearmemory", {
+      fetch("https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/llm/clearmemory", {
         method: "DELETE",
         //headers: {
         //    'Content-Type': 'application/json',
