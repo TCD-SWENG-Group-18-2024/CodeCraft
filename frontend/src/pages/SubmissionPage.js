@@ -14,6 +14,9 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const SubmissionPage = () => {
   const [inputType, setInputType] = useState("textbox");
   const [input, setInput] = useState("");
@@ -131,7 +134,7 @@ const SubmissionPage = () => {
     console.log(data);
 
     try {
-      const response = await fetch("https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/llm/text", {
+      const response = await fetch(backendURL + "/llm/text", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -218,9 +221,6 @@ const SubmissionPage = () => {
     return formattedFeedback;
   };
 
-  // need a function that handles submitting a file to backend.
-  // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-
   const handleFileSubmit = async () => {
     // haven't test if it works or not
     if (droppedFiles.length === 0) {
@@ -251,7 +251,7 @@ const SubmissionPage = () => {
     // console.log(...formDataTest);
 
     try {
-      const response = await fetch("https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/llm/file", {
+      const response = await fetch(backendURL + "/llm/file", {
         method: "POST",
         body: formData,
         // headers: {
@@ -300,7 +300,7 @@ const SubmissionPage = () => {
     if (cards.length === 0) {
       handleCloseDialog();
     } else {
-      fetch("https://backend.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/llm/clearmemory", {
+      fetch(backendURL + "/llm/clearmemory", {
         method: "DELETE",
         //headers: {
         //    'Content-Type': 'application/json',

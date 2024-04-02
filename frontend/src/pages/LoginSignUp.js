@@ -7,6 +7,9 @@ import Password from "../assets/password.png";
 import Sidebar from "../components/Sidebar";
 import "../styles/LoginSignUp.css";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const SignUp = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
@@ -25,7 +28,7 @@ const SignUp = () => {
   const handleSignUp = async () => {
     const userData = { email, password, confirm_password };
     try {
-      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/register", {
+      const response = await fetch(backendURL + "/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -53,7 +56,7 @@ const SignUp = () => {
   const handleLogin = async () => {
     const userData = { email, password };
     try {
-      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/login", {
+      const response = await fetch(backendURL + "/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -82,7 +85,7 @@ const SignUp = () => {
 
     const userEmail = { email };
     try {
-      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/forgot-password", {
+      const response = await fetch(backendURL + "/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userEmail),

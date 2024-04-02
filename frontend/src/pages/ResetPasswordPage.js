@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import "../styles/ResetPasswordPage.css";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +33,7 @@ const ResetPassword = () => {
   const handleSubmit = async () => {
     const userData = { email, password, confirm_password };
     try {
-      const response = await fetch("http://backend.1f106c1j1agn.svc.cluster.local/reset-password", {
+      const response = await fetch(backendURL + "/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

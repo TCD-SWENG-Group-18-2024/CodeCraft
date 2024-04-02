@@ -39,6 +39,10 @@ my-react-app/
 /MilvusDB/volumes/
 /backend/MilvusDB/volumes/
 
+#ignore package jsons in the root
+package-lock.json
+package.json
+
 #Ignore alchemy
 /instance/
 /instance/database.db
