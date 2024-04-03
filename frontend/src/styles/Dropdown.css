@@ -35,7 +35,7 @@
   position: absolute;
   left: 0;
   z-index: 1001; /* Ensure it appears above other content */
-  background-color: #fff;
+  
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
 }
 
@@ -62,7 +62,7 @@
     flex-direction: row;
 
     >li{
-      background:none;
+      background-color: transparent;
       border-left: 5px;
       position: relative;
       transition: .5s;
@@ -75,7 +75,7 @@
         left: 0;
         height: 5px; /* Adjust the height of the line */
         width: 100%;
-        background-color: var(--accent-color); /* Set the line color */
+         /* Set the line color */
         display: block; 
         transition: transform 0.3s ease;
       }
@@ -105,6 +105,7 @@
       }
       &:nth-child(5){
         --accent-color: rgb(253, 253, 253);
+        
       }
       a{
         color: rgb(0, 0, 0);
@@ -144,7 +145,7 @@
       }
 
       .sub-menu{
-        border-left:1px solid #0F62FE;
+        
         margin-left:22.5px;
         list-style:none;
         max-height:0px;
