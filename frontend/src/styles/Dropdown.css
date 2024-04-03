@@ -35,8 +35,6 @@
   position: absolute;
   left: 0;
   z-index: 1001; /* Ensure it appears above other content */
-  
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .menu-item:hover .sub-menu {
