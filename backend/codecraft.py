@@ -9,6 +9,8 @@ from response import code_generation, code_completion, code_translation, code_an
 from itsdangerous import URLSafeTimedSerializer
 import subprocess
 email = "ben10feeney@gmail.com"
+
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
@@ -41,39 +43,27 @@ def allowed_file(filename):
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
 
-@app.route('/llm/text', methods=['GET','POST'])
+@app.route('/llm/text', methods=['POST'])
 def llm_text_request():
-    # Extract parameters from the request JSON
-    if request.method == 'GET':
-        # Check if the Authorization header is present
-        if 'Authorization' in request.headers:
-            # Extract the token
-            token = request.headers['Authorization'].split('Bearer ')[1]
-            # Do something with the token
-            print("Token:", token)
-        else:
-            print("No token provided")
-
-        # Your other backend logic here
-
-        return jsonify({'message': 'Endpoint reached'}), 200
-
-    elif request.method == 'POST':
         data = request.get_json()
         use_case = data.get('use_case')
         ai_model = data.get('ai_model')
         input_language = data.get('input_language')
         output_language = data.get('output_language')
         user_input = data.get('user_input')
-        email = data.get('email', '')  # Extract user's email from JSON or set it to empty string if not provided
-
+        if(isLoggedIn==True):
+            email = data.get('email', '')
+            print(email)# Extract user's email from JSON or set it to empty string if not provided
+        else:
+            email = ''
         # Throws error if empty request
         if user_input is None:
             return jsonify({'error': 'No user input provided'}), 400
 
         # Call the appropriate function based on use_case and ai_model
-        result = process_data(user_input, use_case, ai_model,
+            result = process_data(user_input, use_case, ai_model,
                             input_language, output_language,email)
+ 
 
         return jsonify(result)
 
@@ -156,9 +146,9 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
 @app.route('/register', methods=['POST'])
 def register_user():
     ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
-    email = request.json['email']
+    email = request.json['username']
     password = request.json['password']
-    confirm_password = request.json['confirm_password']
+    confirm_password = request.json['password']
 
     # Password Requirements:
     if len(password) < 8:
@@ -206,11 +196,12 @@ def register_user():
 def login_user():
     if request.method == 'GET':
         data = request.get_json()
-        boolean = data.get('isLoggedIn')
+        global isLoggedIn
+        isLoggedIn = data.get('isLoggedIn')
         email = data.get('email')
         return jsonify({'message': 'Endpoint reached'}), 200
     elif request.method == 'POST':
-        email = request.json['email']
+        email = request.json['username']
         password = request.json['password']
 
         email = email.lower()
