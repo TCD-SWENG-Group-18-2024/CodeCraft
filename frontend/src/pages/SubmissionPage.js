@@ -11,8 +11,9 @@ import "./Home";
 import "./LoginSignUp";
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
-
+import email from "../components/AuthContext"
 const SubmissionPage = () => {
+  const userID = localStorage.getItem("userID");
   const [inputType, setInputType] = useState("textbox");
   const [input, setInput] = useState("");
   const [useCase, setUseCase] = useState(""); // set default cases
@@ -25,7 +26,7 @@ const SubmissionPage = () => {
   const [outputLanguage, setOutputLanguage] = useState("");
   const [isDropdownOpen, setIsDropdownopen] = useState(true);
   const [cards, setCards] = useState(() => {
-    const storedCards = localStorage.getItem("cards");
+    const storedCards= localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
   });
   const toggleSidebar = () => {
@@ -341,8 +342,8 @@ const SubmissionPage = () => {
     } else return "GPT3.5";
   };
   useEffect(() => {
-    localStorage.setItem("cards", JSON.stringify(cards));
-  }, [cards]);
+      localStorage.setItem(userID, JSON.stringify(cards));
+  }, [cards,userID]);
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {

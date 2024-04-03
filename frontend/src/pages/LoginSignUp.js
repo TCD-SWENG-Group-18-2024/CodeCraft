@@ -17,7 +17,6 @@ const SignUp = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -68,7 +67,7 @@ const SignUp = () => {
       const data = await response.json();
       // If login is successful:
       console.log("Login Successful", data);
-      localStorage.setItem("userID", data.id); // Save userID
+        localStorage.setItem("userID", data.id); // Save userID
 
       login();
       navigate("/"); // Navigate to the home page using react-router
@@ -76,7 +75,6 @@ const SignUp = () => {
       console.error("Error:", error);
     }
   };
-
   const handleForgotPassword = async () => {
     console.log("Forgot Password Pressed");
 
