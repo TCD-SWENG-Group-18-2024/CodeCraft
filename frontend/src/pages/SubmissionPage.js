@@ -140,48 +140,6 @@ const SubmissionPage = () => {
     }
   };
 
-  const formatFeedback = (responseData) => {
-    let formattedFeedback = "";
-
-    if (useCase === "code_generation") {
-      const formattedText = responseData.text
-        ? `\n${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    } else if (useCase === "code_completion") {
-      const formattedCode = responseData.text
-        ? `Completed Code:\n${JSON.stringify(responseData.text, null, 2)}`
-        : "";
-
-      formattedFeedback = [formattedCode].filter(Boolean).join("\n\n");
-    } else if (useCase === "code_analysis") {
-      const formattedText = responseData.text
-        ? `Analysis:\n${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    } else if (useCase === "code_translation") {
-      const formattedText = responseData.text
-        ? `Translated Code: \n${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    } else {
-      // empty use case: just generic LLM response
-      const formattedText = responseData.text
-        ? `${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    }
-
-    return formattedFeedback;
-  };
-
-  // need a function that handles submitting a file to backend.
-  // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-
   const handleFileSubmit = async () => {
     // haven't test if it works or not
     if (droppedFiles.length === 0) {
@@ -225,7 +183,7 @@ const SubmissionPage = () => {
         setFeedback(responseData.text);
       } else {
         setFeedback(
-          `File Submission failed, Server return ${response.status} status`
+          `File Submission failed, Server returned ${response.status} status`
         );
       }
     } catch (error) {
@@ -291,25 +249,6 @@ const SubmissionPage = () => {
         });
     }
   };
-
-  const capitaliseFirstLetter = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
-  const formatUseCase = (str) => {
-    const words = str.split("_");
-    const capitalizedWords = words.map(
-      (word) => word.charAt(0).toUpperCase() + word.slice(1)
-    );
-    return capitalizedWords.join(" ");
-  };
-
-  const formatAIModel = (str) => {
-    if (str === "StarCoder") {
-      return "StarCoder";
-    } else return "GPT3.5";
-  };
-
   
   useEffect(() => {
     // have to wait for feedback to update before you can add card
@@ -349,18 +288,6 @@ const SubmissionPage = () => {
     setChecked(event.target.checked);
     setInputType(event.target.checked ? "files" : "textbox");
   };
-
-  // const pastCards = useMemo(() => {
-  //     return cards.slice(1).map((card, index) => (
-  //         <div key={index}>
-  //             <CardElement
-  //                 usecase={card.usecase}
-  //                 response={card.response}
-  //                 isLoading={false} // Set isLoading to false for all cards except the most recent one
-  //             />
-  //         </div>
-  //     ));
-  // }, [cards, isLoading]);
 
   return [
     <>
