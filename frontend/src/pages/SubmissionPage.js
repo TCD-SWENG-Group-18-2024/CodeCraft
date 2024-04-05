@@ -354,9 +354,8 @@ const SubmissionPage = () => {
       return "StarCoder";
     } else return "GPT3.5";
   };
-  useEffect(() => {
-    localStorage.setItem(userID, JSON.stringify(cards));
-  }, [cards, userID]);
+
+  
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {

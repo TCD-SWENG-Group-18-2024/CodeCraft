@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../components/AuthContext";
@@ -9,7 +9,7 @@ import "../styles/LoginSignUp.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login, isLoggedIn} = useContext(AuthContext);
   const [userAction, setUserAction] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,14 +67,17 @@ const SignUp = () => {
       const data = await response.json();
       // If login is successful:
       console.log("Login Successful", data);
-        localStorage.setItem("userID", data.id); // Save userID
-
+      localStorage.setItem("userID", data.id); // Save userID
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  useEffect(() => {
+    console.log(isLoggedIn);
+  
+}, [isLoggedIn]);
   const handleForgotPassword = async () => {
     console.log("Forgot Password Pressed");
 
