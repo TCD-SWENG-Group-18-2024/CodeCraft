@@ -8,6 +8,7 @@ function Account() {
     const {logout } = useContext(AuthContext);
     const userEmail = localStorage.getItem("userEmail");
     const handleSignout = () => {
+        localStorage.setItem("userID", "");
         logout();
         console.log("Signing out...");
         navigate('/');
