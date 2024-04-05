@@ -56,6 +56,10 @@
   margin-top: -5px;
 }
 
+.fileDropZone li {
+  margin-top: -5px;
+}
+
 .fileDropZone:hover{
   color:#0F62FE;
   background-color: #FFF;

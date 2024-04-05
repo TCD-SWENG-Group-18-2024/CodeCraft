@@ -14,14 +14,16 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
 import app_logo from "../assets/codecraft.png";
 import Export from "../assets/export.png";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CopyCode from "@mui/icons-material/ContentCopy";
 import ExecuteCode from "@mui/icons-material/PlayCircleFilled";
 import { renderToString } from "react-dom/server";
+import ReactMarkdown from 'react-markdown';
 import "../styles/CardElement.css";
 
 const CardElement = ({ usecase, query, response, isLoading }) => {
   const [copied, setCopied] = useState(false);
   const [customFileName, setCustomFileName] = useState("");
+
   const copyToClipboard = (response) => {
     const lines = response.split("\n");
     let codeBlock = "";
@@ -43,8 +45,9 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     navigator.clipboard
       .writeText(response)
       .then(() => {
+        if (!copied) toast.success("Code Copied to Clipboard!");
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+        setTimeout(() => setCopied(false), 3000); // Reset copied state after 3 seconds
       })
       .catch((error) => {
         console.error("Failed to copy:", error);
@@ -126,10 +129,10 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
 
   const highlightCodeBlock = (string) => {
     const lines = string.trim().split("\n");
-    let language = "jsx";
+    let language = "txt";
     const firstLine = lines[0].trim();
     const languageRegex =
-      /^(python|java|c|c\+\+|c\#|assembly|javascript|jsx|html|css|ruby|php|kotlin|r|perl|json|plaintext)\b/i;
+      /^(python|java|c|cpp|cs|assembly|javascript|jsx|html|css|ruby|php|kotlin|r|perl|json|plaintext)\b/i;
     // If the first line matches, extract the language and remove it from the code
     if (languageRegex.test(firstLine)) {
       language = firstLine.match(languageRegex)[0].toLowerCase();
@@ -142,7 +145,9 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
       </SyntaxHighlighter>
     );
   };
+
   const tempResponse = `<code>${response}</code>`;
+
   const modifiedFeedback = tempResponse.replace(
     /```([\s\S]*?)```/g,
     (match, code) => {
@@ -151,6 +156,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
       )}</code></pre>`;
     }
   );
+  
   const formattedUsecase = usecase.split("_").join(" ").toUpperCase();
 
   const parseCodeResponse = (response) => {
@@ -159,7 +165,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     const codeBlocks = response.match(/```(\w*)\s*([\s\S]*?)\s*```/g);
 
     if (!codeBlocks) {
-      toast.error("Code was not executed. Please check Code Block. (Error 1)");
+      toast.error("Code was not executed: No Code Block Detected");
       return null;
     }
 
@@ -195,11 +201,11 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
 
         toast.success("Code has been successfully executed");
       } else {
-        toast.error("Code sent to backend but no response came back");
+        toast.error("Code was not executed: Error Code " + status.status);
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Code was not executed. Please check Code Block. (Error 3)");
+      toast.error("Code was not executed: " + error);
     }
   };
   return (
@@ -220,7 +226,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                   copyToClipboard(response);
                 }}
               >
-                <ContentCopyIcon sx={{ height: "20px", width: "20px" }} />
+                <CopyCode sx={{ height: "20px", width: "20px" }} />
               </button>
               <button
                 className="export-button"
@@ -267,7 +273,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
               sx={{ mb: 1.5 }}
               style={{
                 marginTop: "20px",
-                marginBottom: "40px",
+                marginBottom: "20px",
                 textAlign: "left",
               }}
               color="text.secondary"
@@ -289,7 +295,12 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                 style={{ textAlign: "left" }}
                 variant="body2"
               >
-                <pre className="code-block">{highlightCodeBlock(response)}</pre>
+                {usecase !== "code_analysis" ? (
+                    <pre className="code-block">{highlightCodeBlock(response)}</pre>
+                  ) : (
+                    <ReactMarkdown>{response}</ReactMarkdown>
+                  )
+                }
                 <br />
               </Typography>
             )}

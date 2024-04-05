@@ -21,7 +21,7 @@ export default function ResponsiveDialog({ open, handleClose, handleYesClick }) 
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title" sx={{ color: 'black' }}>
+        <DialogTitle id="responsive-dialog-title" sx={{ color: 'black', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'}}>
           {"Confirmation"}
         </DialogTitle>
         <DialogContent>

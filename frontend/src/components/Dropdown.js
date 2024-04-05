@@ -36,21 +36,6 @@ const Dropdown = ({inputType, setInputType,
       <div className="arrow-down"></div> 
         <ol>
 
-        {/* <li className='menu-item'>
-            <a href='#0' onMouseEnter={() => setIsDropdownOpen(true)}>
-                {inputType === "textbox" || inputType === "files" 
-                    ? <>{formatInputType(inputType)}</> : <>-Select Input Type-</>}
-            </a>
-            <ol className={isDropdownOpen ? 'sub-menu' : 'hide-dropdown'} onClick={() => setIsDropdownOpen(false)}>
-                <li className='menu-item'>
-                    <a href="#0" onClick={() => setInputType("textbox")}>Text Submission</a>
-                </li>
-                <li className='menu-item'>
-                    <a href="#0" onClick={() => setInputType("files")}>File Submission</a>
-                </li>
-            </ol>   
-        </li> */}
-
         <li className='menu-item'>
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
                 {useCase === "code_generation" || useCase === "code_completion"
@@ -70,12 +55,12 @@ const Dropdown = ({inputType, setInputType,
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => {setUseCase("code_completion"); setChecked(true); setInputType("files");}}>
+                    <a href="#0" onClick={() => {setUseCase("code_completion"); setChecked(false); setInputType("textbox");}}>
                         Code Completion
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => {setUseCase("code_translation"); setChecked(false); setInputType("textbox");}}>
+                    <a href="#0" onClick={() => {setUseCase("code_translation"); setChecked(true); setInputType("files");}}>
                         Code Translation
                     </a>
                 </li>

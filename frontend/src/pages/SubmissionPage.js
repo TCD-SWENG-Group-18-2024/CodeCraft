@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Switch from "@mui/material/Switch"; // Import from `@mui/material` not `@mui/joy`
 import Typography from "@mui/material/Typography"; // Import from `@mui/material`
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { toast } from "react-hot-toast";
-import Export from "../assets/export.png";
 import Sidebar from "../components/Sidebar";
 import SubmissionBar from "../components/SubmissionBar";
 import Dropdown from "../components/Dropdown";
@@ -15,7 +11,7 @@ import "./Home";
 import "./LoginSignUp";
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
-import email from "../components/AuthContext";
+
 const SubmissionPage = () => {
   const userID = localStorage.getItem("userID");
   const [inputType, setInputType] = useState("files");
@@ -29,6 +25,7 @@ const SubmissionPage = () => {
   const [inputLanguage, setInputLanguage] = useState("");
   const [outputLanguage, setOutputLanguage] = useState("");
   const [checked, setChecked] = React.useState(true);
+  const [fileName, setFileName] = React.useState("");
   const [cards, setCards] = useState(() => {
     const storedCards = localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
@@ -40,37 +37,6 @@ const SubmissionPage = () => {
   const handleTextBoxChange = (event) => {
     setInput(event.target.value);
   };
-
-  /*Handle the dropdowns */
-  const handleUseCaseChange = (event) => {
-    setUseCase(event.target.value);
-  };
-
-  const handleAiModelChange = (event) => {
-    setAIModel(event.target.value);
-  };
-
-  const handleInputTypeChange = (event) => {
-    setInputType(event.target.value);
-    setInput(""); // clear the input when changing between drop file and input text
-    setDroppedFiles([]);
-  };
-
-  const handleInputLanguageChange = (event) => {
-    setInputLanguage(event.target.value);
-  };
-
-  const handleOutputLanguageChange = (event) => {
-    setOutputLanguage(event.target.value);
-  };
-
-  const [customFileName, setCustomFileName] = useState("");
-
-  const highlightCodeBlock = (code) => (
-    <SyntaxHighlighter language="jsx" style={syntax}>
-      {code}
-    </SyntaxHighlighter>
-  );
   // takes input - files
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -99,9 +65,10 @@ const SubmissionPage = () => {
     );
     if (filteredFiles.length > 0) {
       setDroppedFiles(selectFile);
+      setFileName(selectFile[0].name);
       console.log("Selected File: ", selectFile);
     } else {
-      toast.error("Selected File(s) exceed the size limit of 10KB");
+      toast.error("Selected File exceeds the size limit of " + MAX_FILE_SIZE/1000 + "KB");
     }
   };
 
@@ -113,8 +80,7 @@ const SubmissionPage = () => {
             return;
         }*/
     if (input.trim() === "" && inputType === "textbox") {
-      // alert("Please Enter some code before submitting");
-      toast.error("Please Enter some code before submitting");
+      toast.error("Please enter some code before submitting");
       return;
     }
 
@@ -219,8 +185,7 @@ const SubmissionPage = () => {
   const handleFileSubmit = async () => {
     // haven't test if it works or not
     if (droppedFiles.length === 0) {
-      //   alert("Please select or drop some files before submitting");
-      toast.error("Please select or drop some files before submitting");
+      toast.error("Please select or drop a file before submitting");
       return;
     }
 
@@ -278,25 +243,15 @@ const SubmissionPage = () => {
         handleTextSubmit(),
         {
           loading: "Loading...",
-          success: "Loaded Successfully",
-          error: "Oh no something went wrong, please try again",
-        },
-        {
-          style: {
-            minWidth: "250px",
-            minHeight: "50px"
-          },
-          success: {
-            duration: 5000,
-            icon: '🔥',
-          }
+          success: "Success!",
+          error: "Something went wrong, please try again",
         }
       );
     } else if (inputType === "files") {
       toast.promise(handleFileSubmit(), {
         loading: "Loading...",
-        success: "Loaded Successfully",
-        error: "Oh no something went wrong, please try again",
+        success: "Success!",
+        error: "Something went wrong, please try again",
       });
     }
   };
@@ -371,12 +326,18 @@ const SubmissionPage = () => {
     }
   }, [feedback]);
   const addCard = () => {
-    const newCard = {
-      usecase: useCase,
-      query: input,
-      response: feedback,
-      isLoading: isLoading,
-    };
+    const newCard = 
+      inputType === "files" ? ({
+        usecase: useCase,
+        query: fileName,
+        response: feedback,
+        isLoading: isLoading,
+      }) : ({
+        usecase: useCase,
+        query: input,
+        response: feedback,
+        isLoading: isLoading,
+      });
 
     // Only store the latest 10 cards
     setCards((prevCards) => {
@@ -541,13 +502,3 @@ const SubmissionPage = () => {
 };
 
 export default SubmissionPage;
-
-// for export file format
-{
-  /* <input
-    type="text"
-    value={customFileName}
-    onChange={(e) => setCustomFileName(e.target.value)}    
-    placeholder="Enter custom file name"
-/> */
-}
