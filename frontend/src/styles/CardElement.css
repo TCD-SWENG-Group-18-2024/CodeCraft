@@ -39,6 +39,12 @@
       color: white;
       background-color: #0F62FE;
 }
+.executeCode-button{
+    transform: translateY(10px);  
+    height: 25px;
+    width: 25px;
+    margin: 5px;
+}
 .cardStyle {
     position: relative;
     width: 50vw;

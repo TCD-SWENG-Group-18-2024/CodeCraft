@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Switch from '@mui/material/Switch'; // Import from `@mui/material` not `@mui/joy`
-import Typography from '@mui/material/Typography'; // Import from `@mui/material`
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Switch from "@mui/material/Switch"; // Import from `@mui/material` not `@mui/joy`
+import Typography from "@mui/material/Typography"; // Import from `@mui/material`
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { toast } from "react-hot-toast";
@@ -15,7 +15,7 @@ import "./Home";
 import "./LoginSignUp";
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
-import email from "../components/AuthContext"
+import email from "../components/AuthContext";
 const SubmissionPage = () => {
   const userID = localStorage.getItem("userID");
   const [inputType, setInputType] = useState("files");
@@ -30,7 +30,7 @@ const SubmissionPage = () => {
   const [outputLanguage, setOutputLanguage] = useState("");
   const [checked, setChecked] = React.useState(true);
   const [cards, setCards] = useState(() => {
-    const storedCards= localStorage.getItem(userID);
+    const storedCards = localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
   });
   const toggleSidebar = () => {
@@ -148,10 +148,7 @@ const SubmissionPage = () => {
     } catch (error) {
       setFeedback(`Error occurred while submitting: ${error.message}`);
     } finally {
-      setTimeout(() => {
-        // Simulate API response
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     }
 
     // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
@@ -222,7 +219,7 @@ const SubmissionPage = () => {
   const handleFileSubmit = async () => {
     // haven't test if it works or not
     if (droppedFiles.length === 0) {
-    //   alert("Please select or drop some files before submitting");
+      //   alert("Please select or drop some files before submitting");
       toast.error("Please select or drop some files before submitting");
       return;
     }
@@ -269,10 +266,7 @@ const SubmissionPage = () => {
     } catch (error) {
       setFeedback(`Error occurred while submitting files: ${error.message}`);
     } finally {
-      setTimeout(() => {
-        // Simulate API response
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     }
     console.log("Feedback", feedback);
   };
@@ -280,9 +274,18 @@ const SubmissionPage = () => {
   const handleSubmit = () => {
     setIsLoading(true);
     if (inputType === "textbox") {
-      handleTextSubmit();
+      toast.promise(handleTextSubmit(), {
+        loading: "Loading...",
+        success: "Loaded Successfully",
+        error: "Oh no something went wrong, please try again",
+      });
+      
     } else if (inputType === "files") {
-      handleFileSubmit();
+      toast.promise(handleFileSubmit(), {
+        loading: "Loading...",
+        success: "Loaded Successfully",
+        error: "Oh no something went wrong, please try again",
+      });
     }
   };
 
@@ -340,8 +343,8 @@ const SubmissionPage = () => {
     } else return "GPT3.5";
   };
   useEffect(() => {
-      localStorage.setItem(userID, JSON.stringify(cards));
-  }, [cards,userID]);
+    localStorage.setItem(userID, JSON.stringify(cards));
+  }, [cards, userID]);
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {
@@ -362,7 +365,7 @@ const SubmissionPage = () => {
       response: feedback,
       isLoading: isLoading,
     };
-  
+
     // Only store the latest 10 cards
     setCards((prevCards) => {
       const updatedCards = [newCard, ...prevCards.slice(0, 9)];
@@ -408,15 +411,18 @@ const SubmissionPage = () => {
               checked={checked}
               setChecked={setChecked}
             />
-            <div style={{display: 'flex'}}>
-              <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginRight: "10px",
+                }}
+              >
                 <Typography component="div" level="body2">
                   Text
                 </Typography>
-                <Switch
-                  checked={checked}
-                  onChange={handleInputTypeToggle}
-                />
+                <Switch checked={checked} onChange={handleInputTypeToggle} />
                 <Typography component="div" level="body2">
                   File
                 </Typography>
@@ -517,12 +523,6 @@ const SubmissionPage = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="wave_container">
-        <div className="wave"></div>
-        <div className="wave"></div>
-        <div className="wave"></div>
       </div>
     </>,
   ];
