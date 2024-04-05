@@ -274,12 +274,24 @@ const SubmissionPage = () => {
   const handleSubmit = () => {
     setIsLoading(true);
     if (inputType === "textbox") {
-      toast.promise(handleTextSubmit(), {
-        loading: "Loading...",
-        success: "Loaded Successfully",
-        error: "Oh no something went wrong, please try again",
-      });
-      
+      toast.promise(
+        handleTextSubmit(),
+        {
+          loading: "Loading...",
+          success: "Loaded Successfully",
+          error: "Oh no something went wrong, please try again",
+        },
+        {
+          style: {
+            minWidth: "250px",
+            minHeight: "50px"
+          },
+          success: {
+            duration: 5000,
+            icon: '🔥',
+          }
+        }
+      );
     } else if (inputType === "files") {
       toast.promise(handleFileSubmit(), {
         loading: "Loading...",
