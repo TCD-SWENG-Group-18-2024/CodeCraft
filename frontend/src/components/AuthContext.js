@@ -8,10 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(
     () => localStorage.getItem("isLoggedIn") === "true"
   );
-  // if its not logged in, set local userID to " "
-  if(!isLoggedIn){
-    localStorage.setItem("userID","");
-  }
   const login = () => {
     // can be set to any string
     localStorage.setItem("isLoggedIn","true");

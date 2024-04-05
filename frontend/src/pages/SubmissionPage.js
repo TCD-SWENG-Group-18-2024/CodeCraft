@@ -27,6 +27,9 @@ const SubmissionPage = () => {
   const [checked, setChecked] = React.useState(true);
   const [fileName, setFileName] = React.useState("");
   const [cards, setCards] = useState(() => {
+    if(userID===""){
+      return [];
+    }
     const storedCards = localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
   });
@@ -249,7 +252,11 @@ const SubmissionPage = () => {
         });
     }
   };
-  
+
+  useEffect(() => {
+    localStorage.setItem(userID, JSON.stringify(cards));
+  }, [cards, userID])
+
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {
