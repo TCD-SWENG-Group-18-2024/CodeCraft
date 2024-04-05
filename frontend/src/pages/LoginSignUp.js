@@ -9,21 +9,20 @@ import "../styles/LoginSignUp.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login,logout,isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const [userAction, setUserAction] = useState("Sign Up");
-  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showMessage, setShowMessage] = useState(false);
+  const [confirm_password, setConfirmPassword] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   const handleSignUp = async () => {
-    const userData = { username, password }; // username = email
+    const userData = { email, password, confirm_password };
     try {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
@@ -42,16 +41,17 @@ const SignUp = () => {
       // If sign up is successful:
       console.log(data);
 
-      setShowMessage(true);
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
       console.error("Error:", error.message);
+      toast.error("Please Enter Valid inputs");
     }
   };
 
   const handleLogin = async () => {
-    const userData = { username, password }; // username = email
+    login();
+    const userData = { email, password,isLoggedIn };
     try {
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
@@ -68,21 +68,19 @@ const SignUp = () => {
       const data = await response.json();
       // If login is successful:
       console.log("Login Successful", data);
-      localStorage.setItem("userID", data.id); // Save userID
+        localStorage.setItem("userID", data.id); // Save userID
 
-      setShowMessage(true);
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
+      logout();
       console.error("Error:", error);
     }
   };
-
   const handleForgotPassword = async () => {
     console.log("Forgot Password Pressed");
-    // the endpoint url : http://localhost:8080/forgot-password
-    // Toaster.notify (the response message)
-    const userEmail = username;
+
+    const userEmail = { email };
     try {
       const response = await fetch("http://localhost:8080/forgot-password", {
         method: "POST",
@@ -95,13 +93,11 @@ const SignUp = () => {
         console.log(errorData);
         toast.error(errorData.error);
         throw new Error(errorData.error);
+      } else {
+        toast.success("Reset password link sent to your email");
       }
-      else {
-        toast.success(response.message);
-      }
-    
     } catch (error) {
-        console.error("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -144,8 +140,8 @@ const SignUp = () => {
             <input
               type="email"
               placeholder="Email"
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleEmailEnter}
               ref={emailRef}
             />
@@ -164,6 +160,20 @@ const SignUp = () => {
               />
             </div>
           )}
+
+          {userAction === "Sign Up" ? (
+            <div className="input">
+              <img src={Password} alt="Confirm your Password" />
+              <input
+                type="password"
+                placeholder="Confirm your Password"
+                value={confirm_password}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyDown={handlePasswordEnter}
+                ref={passwordRef}
+              />
+            </div>
+          ) : null}
         </div>
 
         <div className="submitContainer">
@@ -209,12 +219,6 @@ const SignUp = () => {
             </>
           )}
         </div>
-
-        {showMessage && (
-          <div className="popup-message">
-            Successful, Redirecting to Home Page...
-          </div>
-        )}
       </div>
     </>
   );

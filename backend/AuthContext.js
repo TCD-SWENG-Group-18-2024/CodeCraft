@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import email from "../pages/LoginSignUp";
+import email from loginSignUp;
 // Create the context
 export const AuthContext = createContext();
 
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
 const login = async () => {
     setIsLoggedIn(true);
-     const data = {isLoggedIn, email}
+     const data = {isLoggedIn, email,password}
      try{
        const response = await fetch("http://localhost:8080/login", {
          method: "POST",

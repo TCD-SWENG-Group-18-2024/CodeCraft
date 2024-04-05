@@ -61,8 +61,8 @@ def llm_text_request():
             return jsonify({'error': 'No user input provided'}), 400
 
         # Call the appropriate function based on use_case and ai_model
-            result = process_data(user_input, use_case, ai_model,
-                            input_language, output_language,email)
+        result = process_data(user_input, use_case, ai_model,
+                            input_language, output_language,email)        
  
 
         return jsonify(result)
@@ -192,18 +192,29 @@ def register_user():
     })
 
 
-@app.route('/login', methods=['POST','GET'])
+@app.route('/login', methods=['POST'])
 def login_user():
-    if request.method == 'GET':
-        data = request.get_json()
+    # if request.method == 'GET':
+    #     data = request.get_json()
+    #     global isLoggedIn
+    #     isLoggedIn = data.get('isLoggedIn')
+    #     print("Checking if the user is logged in ",isLoggedIn)
+    #     email = data.get('email')
+    #     return jsonify({'message': 'Endpoint reached'}), 200
+     if request.method == 'POST':
+        data = request.json
+        global email
+        email = data.get('email')
+        print(email)
+        password = data.get('password')
+        print(password)
         global isLoggedIn
         isLoggedIn = data.get('isLoggedIn')
-        email = data.get('email')
-        return jsonify({'message': 'Endpoint reached'}), 200
-    elif request.method == 'POST':
-        email = request.json['username']
-        password = request.json['password']
-
+        print(isLoggedIn)
+    # elif request.method == 'POST':
+        # email = request.json['username']
+        # password = request.json['password']
+        # isLoggedIn = True
         email = email.lower()
         user = User.query.filter_by(email=email).first()
 

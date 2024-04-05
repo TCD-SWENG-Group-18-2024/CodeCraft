@@ -9,7 +9,7 @@ import "../styles/LoginSignUp.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login ,isLoggedIn} = useContext(AuthContext);
   const [userAction, setUserAction] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,7 +51,7 @@ const SignUp = () => {
   };
 
   const handleLogin = async () => {
-    const userData = { email, password };
+    const userData = { email, password,isLoggedIn };
     try {
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
