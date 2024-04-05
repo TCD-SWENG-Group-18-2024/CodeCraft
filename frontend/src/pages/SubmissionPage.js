@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import Switch from '@mui/material/Switch'; // Import from `@mui/material` not `@mui/joy`
+import Typography from '@mui/material/Typography'; // Import from `@mui/material`
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { toast } from "react-hot-toast";
+import Export from "../assets/export.png";
 import Sidebar from "../components/Sidebar";
 import SubmissionBar from "../components/SubmissionBar";
 import Dropdown from "../components/Dropdown";
@@ -22,7 +26,7 @@ const SubmissionPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [droppedFiles, setDroppedFiles] = useState([]);
-  const [inputLanguage, setInputLanguage] = useState("java");
+  const [inputLanguage, setInputLanguage] = useState("");
   const [outputLanguage, setOutputLanguage] = useState("");
   const [isDropdownOpen, setIsDropdownopen] = useState(true);
   const [cards, setCards] = useState(() => {
@@ -82,28 +86,22 @@ const SubmissionPage = () => {
     event.stopPropagation();
 
     const droppedFiles = Array.from(event.dataTransfer.files);
-    setDroppedFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // deconstruct array into separate variables
+    setDroppedFiles(droppedFiles);
     console.log("Dropped Files: ", droppedFiles);
   };
 
-  // need to set max size
   const MAX_FILE_SIZE = 10000;
 
   const handleFileSelect = (event) => {
     const selectFile = Array.from(event.target.files);
-    // if (selectFile){
-    //     setDroppedFiles([...droppedFiles, selectFile]);
-    // }
     const filteredFiles = selectFile.filter(
       (file) => file.size <= MAX_FILE_SIZE
     );
-
     if (filteredFiles.length > 0) {
-      setDroppedFiles((prevFiles) => [...prevFiles, ...selectFile]);
+      setDroppedFiles(selectFile);
       console.log("Selected File: ", selectFile);
     } else {
-      // alert("Selected File(s) to exceeded the size limit of 10000 bytes");
-      toast.error("Selected File(s) to exceeded the size limit of 10000 bytes");
+      toast.error("Selected File(s) exceed the size limit of 10KB");
     }
   };
 
@@ -231,7 +229,7 @@ const SubmissionPage = () => {
 
     const formData = new FormData();
     droppedFiles.forEach((file) => {
-      formData.append(`file`, file);
+      formData.set(`file`, file);
     });
 
     formData.append("use_case", useCase);
@@ -372,7 +370,9 @@ const SubmissionPage = () => {
     });
   };
 
-
+  const handleInputTypeToggle = (event) => {
+    setInputType(event.target.checked ? "files" : "textbox");
+  };
 
   // const pastCards = useMemo(() => {
   //     return cards.slice(1).map((card, index) => (
@@ -393,6 +393,23 @@ const SubmissionPage = () => {
       <div className={`main-content ${isSidebarOpen ? "with-sidebar" : ""}`}>
         <div className="userArea">
           <div className="submissionArea">
+
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+              <Typography component="div" level="body2">
+                Text
+              </Typography>
+              <Switch
+                checked={inputType === "files"}
+                onChange={handleInputTypeToggle}
+                sx={{
+                  margin: '0 10px',
+                }}
+              />
+              <Typography component="div" level="body2">
+                File
+              </Typography>
+            </div>
+
             <Dropdown
               inputType={inputType}
               setInputType={setInputType}

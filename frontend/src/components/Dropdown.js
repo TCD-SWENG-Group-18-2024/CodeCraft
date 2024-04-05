@@ -54,7 +54,7 @@ const Dropdown = ({inputType, setInputType,
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
                 {useCase === "code_generation" || useCase === "code_completion"
                 || useCase === "code_analysis" || useCase === "code_translation"
-                ? <>Use Case: {formatUseCase(useCase)}</> : <>Code Analysis</>}
+                ? <>Use Case: {formatUseCase(useCase)}</> : <>Use Case: Code Analysis</>}
             </a>
             <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}> 
 
@@ -108,8 +108,8 @@ const Dropdown = ({inputType, setInputType,
         {useCase === "code_completion" || useCase === "code_translation" ? (<>
             <li className="menu-item">
                 <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                    {inputLanguage !== " " 
-                ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
+                    {inputLanguage === "java" || inputLanguage === "python" || inputLanguage === "c"
+                ? <>Input Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
                     
                 </a>
                 <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}>
@@ -135,8 +135,8 @@ const Dropdown = ({inputType, setInputType,
         {useCase === "code_translation" ? (<>
             <li className="menu-item">
                 <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                    {outputLanguage !== " " 
-                ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
+                    {outputLanguage === "java" || outputLanguage === "python" || outputLanguage === "c" 
+                ? <>Output Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
                     
                 
                 </a>
