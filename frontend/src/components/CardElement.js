@@ -45,7 +45,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     navigator.clipboard
       .writeText(response)
       .then(() => {
-        if (!copied) toast.success("Code Copied to Clipboard!");
+        if (!copied) toast.success("Content Copied to Clipboard!");
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // Reset copied state after 3 seconds
       })
