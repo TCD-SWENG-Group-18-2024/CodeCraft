@@ -6,7 +6,8 @@ const Dropdown = ({inputType, setInputType,
                    useCase, setUseCase, 
                    aiModel, setAIModel, 
                    inputLanguage, setInputLanguage, 
-                   outputLanguage, setOutputLanguage}) => {
+                   outputLanguage, setOutputLanguage,
+                   checked, setChecked}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const capitaliseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
@@ -59,22 +60,22 @@ const Dropdown = ({inputType, setInputType,
             <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}> 
 
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_analysis")}>
+                    <a href="#0" onClick={() => {setUseCase("code_analysis"); setChecked(true); setInputType("files");}}>
                         Code Analysis
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_generation")}>
+                    <a href="#0" onClick={() => {setUseCase("code_generation"); setChecked(false); setInputType("textbox");}}>
                         Code Generation
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_completion")}>
+                    <a href="#0" onClick={() => {setUseCase("code_completion"); setChecked(true); setInputType("files");}}>
                         Code Completion
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_translation")}>
+                    <a href="#0" onClick={() => {setUseCase("code_translation"); setChecked(false); setInputType("textbox");}}>
                         Code Translation
                     </a>
                 </li>

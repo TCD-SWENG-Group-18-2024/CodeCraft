@@ -37,21 +37,23 @@
 }
 
 .fileInputContainer{
-  width: 75%; 
+  width: 100%; 
   position: relative;
-  margin-bottom: 20px;
-  margin-top: 20px;
   display: flex;
   align-items: flex-start;
 }
 
 .fileDropZone{
-  width: 150%;
-  height: 20px;
+  width: 482.5px;
+  height: 12px;
   border: 2px dashed black;
   padding: 20px;
   text-align: center;
   cursor: pointer;
+}
+
+.fileDropZone p {
+  margin-top: -5px;
 }
 
 .fileDropZone:hover{

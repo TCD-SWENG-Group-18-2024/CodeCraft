@@ -18,9 +18,9 @@ import ResponsiveDialog from "../components/ConfirmationButton";
 import email from "../components/AuthContext"
 const SubmissionPage = () => {
   const userID = localStorage.getItem("userID");
-  const [inputType, setInputType] = useState("textbox");
+  const [inputType, setInputType] = useState("files");
   const [input, setInput] = useState("");
-  const [useCase, setUseCase] = useState(""); // set default cases
+  const [useCase, setUseCase] = useState("code_analysis"); // set default cases
   const [aiModel, setAIModel] = useState("openai"); //set default AI model
   const [feedback, setFeedback] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const SubmissionPage = () => {
   const [droppedFiles, setDroppedFiles] = useState([]);
   const [inputLanguage, setInputLanguage] = useState("");
   const [outputLanguage, setOutputLanguage] = useState("");
-  const [isDropdownOpen, setIsDropdownopen] = useState(true);
+  const [checked, setChecked] = React.useState(true);
   const [cards, setCards] = useState(() => {
     const storedCards= localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
@@ -371,6 +371,7 @@ const SubmissionPage = () => {
   };
 
   const handleInputTypeToggle = (event) => {
+    setChecked(event.target.checked);
     setInputType(event.target.checked ? "files" : "textbox");
   };
 
@@ -393,23 +394,6 @@ const SubmissionPage = () => {
       <div className={`main-content ${isSidebarOpen ? "with-sidebar" : ""}`}>
         <div className="userArea">
           <div className="submissionArea">
-
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-              <Typography component="div" level="body2">
-                Text
-              </Typography>
-              <Switch
-                checked={inputType === "files"}
-                onChange={handleInputTypeToggle}
-                sx={{
-                  margin: '0 10px',
-                }}
-              />
-              <Typography component="div" level="body2">
-                File
-              </Typography>
-            </div>
-
             <Dropdown
               inputType={inputType}
               setInputType={setInputType}
@@ -421,16 +405,71 @@ const SubmissionPage = () => {
               setInputLanguage={setInputLanguage}
               outputLanguage={outputLanguage}
               setOutputLanguage={setOutputLanguage}
+              checked={checked}
+              setChecked={setChecked}
             />
-            <div>
-              {inputType === "textbox" && (
-                <div className="submission">
-                  <SubmissionBar
-                    input={input}
-                    handleTextBoxChange={handleTextBoxChange}
-                    handleKeyDown={handleKeyDown}
-                    handleSubmit={handleSubmit}
-                  />
+            <div style={{display: 'flex'}}>
+              <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+                <Typography component="div" level="body2">
+                  Text
+                </Typography>
+                <Switch
+                  checked={checked}
+                  onChange={handleInputTypeToggle}
+                />
+                <Typography component="div" level="body2">
+                  File
+                </Typography>
+              </div>
+              <div>
+                {inputType === "textbox" && (
+                  <div className="submission">
+                    <SubmissionBar
+                      input={input}
+                      handleTextBoxChange={handleTextBoxChange}
+                      handleKeyDown={handleKeyDown}
+                      handleSubmit={handleSubmit}
+                    />
+                    <ResponsiveDialog
+                      open={dialogOpen}
+                      handleClose={handleCloseDialog}
+                      handleYesClick={handleYesClick}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={handleNewConversation}
+                      sx={{ ml: 2, height: "56px", padding: "15px" }}
+                    >
+                      New Conversation
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {inputType === "files" && (
+                <div className="fileInputContainer">
+                  <div
+                    className="fileDropZone"
+                    onDrop={handleFileDrop}
+                    onDragOver={handleDragOver}
+                    onClick={() => document.getElementById("fileInput").click()}
+                  >
+                    {droppedFiles.length > 0 ? (
+                      <a>
+                        {droppedFiles.map((file, index) => (
+                          <li key={index}>{file && file.name}</li>
+                        ))}
+                      </a>
+                    ) : (
+                      <p>Drag files here or Click to select</p>
+                    )}
+                    <input
+                      id="fileInput"
+                      type="file"
+                      onChange={(e) => {
+                        handleFileSelect(e);
+                      }}
+                    />
+                  </div>
                   <ResponsiveDialog
                     open={dialogOpen}
                     handleClose={handleCloseDialog}
@@ -438,60 +477,21 @@ const SubmissionPage = () => {
                   />
                   <Button
                     variant="contained"
+                    onClick={handleSubmit}
+                    sx={{ ml: 2, height: "56px", padding: "16px 32px" }}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    variant="contained"
                     onClick={handleNewConversation}
-                    sx={{ ml: 2, height: "56px", padding: "15px" }}
+                    sx={{ ml: 2, height: "56px", padding: "16px 48px" }}
                   >
                     New Conversation
                   </Button>
                 </div>
               )}
             </div>
-            {inputType === "files" && (
-              <div className="fileInputContainer">
-                <div
-                  className="fileDropZone"
-                  onDrop={handleFileDrop}
-                  onDragOver={handleDragOver}
-                  onClick={() => document.getElementById("fileInput").click()}
-                >
-                  {droppedFiles.length > 0 ? (
-                    <a>
-                      {droppedFiles.map((file, index) => (
-                        <li key={index}>{file && file.name}</li>
-                      ))}
-                    </a>
-                  ) : (
-                    <p>Drag files here or Click to select</p>
-                  )}
-                  <input
-                    id="fileInput"
-                    type="file"
-                    onChange={(e) => {
-                      handleFileSelect(e);
-                    }}
-                  />
-                </div>
-                <ResponsiveDialog
-                  open={dialogOpen}
-                  handleClose={handleCloseDialog}
-                  handleYesClick={handleYesClick}
-                />
-                <Button
-                  variant="contained"
-                  onClick={handleSubmit}
-                  sx={{ ml: 2, height: "64px", padding: "16px 32px" }}
-                >
-                  Submit
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleNewConversation}
-                  sx={{ ml: 2, height: "64px", padding: "16px 48px" }}
-                >
-                  New Conversation
-                </Button>
-              </div>
-            )}
           </div>
 
           <div className="feedBackArea">
