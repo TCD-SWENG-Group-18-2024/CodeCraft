@@ -9,7 +9,7 @@ from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
-from response import code_generation, code_completion, code_translation, code_analysis, AIModel
+from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
 
 # Load environment varibles
