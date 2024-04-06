@@ -6,7 +6,8 @@ const Dropdown = ({inputType, setInputType,
                    useCase, setUseCase, 
                    aiModel, setAIModel, 
                    inputLanguage, setInputLanguage, 
-                   outputLanguage, setOutputLanguage}) => {
+                   outputLanguage, setOutputLanguage,
+                   checked, setChecked}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const capitaliseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
@@ -36,45 +37,30 @@ const Dropdown = ({inputType, setInputType,
         <ol>
 
         <li className='menu-item'>
-            <a href='#0' onMouseEnter={() => setIsDropdownOpen(true)}>
-                {inputType === "textbox" || inputType === "files" 
-                    ? <>{formatInputType(inputType)}</> : <>-Select Input Type-</>}
-            </a>
-            <ol className={isDropdownOpen ? 'sub-menu' : 'hide-dropdown'} onClick={() => setIsDropdownOpen(false)}>
-                <li className='menu-item'>
-                    <a href="#0" onClick={() => setInputType("textbox")}>Text Submission</a>
-                </li>
-                <li className='menu-item'>
-                    <a href="#0" onClick={() => setInputType("files")}>File Submission</a>
-                </li>
-            </ol>   
-        </li>
-
-        <li className='menu-item'>
             <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
                 {useCase === "code_generation" || useCase === "code_completion"
                 || useCase === "code_analysis" || useCase === "code_translation"
-                ? <>Use Case: {formatUseCase(useCase)}</> : <>Code Analysis</>}
+                ? <>Use Case: {formatUseCase(useCase)}</> : <>Use Case: Code Analysis</>}
             </a>
             <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}> 
 
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_analysis")}>
+                    <a href="#0" onClick={() => {setUseCase("code_analysis"); setChecked(true); setInputType("files");}}>
                         Code Analysis
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_generation")}>
+                    <a href="#0" onClick={() => {setUseCase("code_generation"); setChecked(false); setInputType("textbox");}}>
                         Code Generation
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_completion")}>
+                    <a href="#0" onClick={() => {setUseCase("code_completion"); setChecked(false); setInputType("textbox");}}>
                         Code Completion
                     </a>
                 </li>
                 <li className="menu-item">
-                    <a href="#0" onClick={() => setUseCase("code_translation")}>
+                    <a href="#0" onClick={() => {setUseCase("code_translation"); setChecked(true); setInputType("files");}}>
                         Code Translation
                     </a>
                 </li>
@@ -108,8 +94,8 @@ const Dropdown = ({inputType, setInputType,
         {useCase === "code_completion" || useCase === "code_translation" ? (<>
             <li className="menu-item">
                 <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                    {inputLanguage !== " " 
-                ? <>Selected Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
+                    {inputLanguage === "java" || inputLanguage === "python" || inputLanguage === "c"
+                ? <>Input Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
                     
                 </a>
                 <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}>
@@ -135,8 +121,8 @@ const Dropdown = ({inputType, setInputType,
         {useCase === "code_translation" ? (<>
             <li className="menu-item">
                 <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                    {outputLanguage !== " " 
-                ? <>Selected Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
+                    {outputLanguage === "java" || outputLanguage === "python" || outputLanguage === "c" 
+                ? <>Output Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
                     
                 
                 </a>

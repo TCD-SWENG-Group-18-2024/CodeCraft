@@ -43,7 +43,7 @@ function App() {
       <Router>
       <AuthProvider>
         <div className="App">
-        <Toaster position='top-center' toastOptions={{duration: 4500}}/>
+        <Toaster position='top-center'/>
         <Header /> 
           <Routes>
             <Route path="/" element={<Home />} />
@@ -54,7 +54,6 @@ function App() {
             <Route path="/team" element={<TeamPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/reset" element={<ResetPassword/>} />
-            {/* Add more routes as needed */}
           </Routes>
         </div>
       </AuthProvider>
