@@ -4,9 +4,9 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_community.llms import HuggingFaceHub
-#from milvus import default_server
-#from pymilvus import utility, connections
-#from langchain.vectorstores import Milvus
+from milvus import default_server
+from pymilvus import utility, connections
+from langchain.vectorstores import Milvus
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import VectorStoreRetrieverMemory
 
@@ -18,17 +18,17 @@ dotenv.load_dotenv()
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
 
 # Start the VectorDB
-#default_server.start()
-#embeddings = OpenAIEmbeddings()
-#connections.connect(host="127.0.0.1", port=default_server.listen_port)
-#utility.drop_collection('LangChainCollection')
-#vectordb = Milvus.from_documents(
-#    {},
-#    embeddings,
-#    connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
-#)
-#retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
-#memory = VectorStoreRetrieverMemory(retriever=retriever)
+default_server.start()
+embeddings = OpenAIEmbeddings()
+connections.connect(host=r"https://milvusdb.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/", port=19530)
+utility.drop_collection('LangChainCollection')
+vectordb = Milvus.from_documents(
+    {},
+    embeddings,
+    connection_args={"host": r"https://milvusdb.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/", "port": 19530}
+)
+retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
+memory = VectorStoreRetrieverMemory(retriever=retriever)
 
 # AI Models
 gpt = ChatOpenAI()
@@ -218,21 +218,21 @@ def code_translation(input_language: str, output_language: str, user_input: str,
     return response
 
 
-#def initialise_vectordb():
+def initialise_vectordb():
     """
     Initialises an empty VectorDB.
     This function is inelegant but seemingly necessary because of Python's weirdness with variable scope
     """
     # Implicitly declare new collection
-    #vectordb = Milvus.from_documents(
-    #    {},
-    #    embeddings,
-    #    connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
-    #)
+    vectordb = Milvus.from_documents(
+        {},
+        embeddings,
+        connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
+    )
 
-    #retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
-    #global memory
-    #memory = VectorStoreRetrieverMemory(retriever=retriever, input_key='input')
+    retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
+    global memory
+    memory = VectorStoreRetrieverMemory(retriever=retriever, input_key='input')
 
 
 if __name__ == "__main__":
