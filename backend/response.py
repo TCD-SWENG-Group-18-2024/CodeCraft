@@ -88,7 +88,7 @@ general_ai_model_template = PromptTemplate(
 )
 
 # AI Model Functions
-def AIModel(user_input: str, ai_model: str,user_email:str) -> dict:
+def AIModel(user_input: str, ai_model: str) -> dict:
     # GPT by default
     llm = gpt
 
@@ -101,11 +101,11 @@ def AIModel(user_input: str, ai_model: str,user_email:str) -> dict:
             llm = llama
 
     # If the collection had been deleted, it needs to be re-initialised
-    if user_email not in utility.list_collections():
-        initialise_vectordb(user_email)
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
     
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True,collection_name=user_email)
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
     response = code_analysis_chain.invoke({'input': user_input})
 
     # Save the prompt/response pair in the Milvus collection
@@ -114,7 +114,7 @@ def AIModel(user_input: str, ai_model: str,user_email:str) -> dict:
     return response 
 
 
-def code_generation(user_input: str, ai_model: str,user_email:str) -> dict:
+def code_generation(user_input: str, ai_model: str) -> dict:
     # GPT by default
     llm = gpt
 
@@ -127,11 +127,11 @@ def code_generation(user_input: str, ai_model: str,user_email:str) -> dict:
             llm = llama
     
     # If the collection had been deleted, it needs to be re-initialised
-    if user_email not in utility.list_collections():
-        initialise_vectordb(user_email)
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True,collection_name =user_email)
+    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
     response = code_generation_chain.invoke({'input': user_input})
 
     # Save the prompt/response pair in the Milvus collection
@@ -140,7 +140,7 @@ def code_generation(user_input: str, ai_model: str,user_email:str) -> dict:
     return response
 
 
-def code_analysis(user_input: str, ai_model: str,user_email:str) -> dict:
+def code_analysis(user_input: str, ai_model: str) -> dict:
     # GPT by default
     llm = gpt
 
@@ -153,11 +153,11 @@ def code_analysis(user_input: str, ai_model: str,user_email:str) -> dict:
             llm = llama
 
     # If the collection had been deleted, it needs to be re-initialised
-    if user_email not in utility.list_collections():
-        initialise_vectordb(user_email)
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True,collection_name=user_email)
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
     response = code_analysis_chain.invoke({'input': user_input})
 
     # Save the prompt/response pair in the Milvus collection
@@ -166,7 +166,7 @@ def code_analysis(user_input: str, ai_model: str,user_email:str) -> dict:
     return response
 
 
-def code_completion(user_input: str, ai_model: str, input_language: str,user_email:str) -> dict:
+def code_completion(user_input: str, ai_model: str, input_language: str) -> dict:
     # llama by default
     llm = llama
 
@@ -179,11 +179,11 @@ def code_completion(user_input: str, ai_model: str, input_language: str,user_ema
             llm = gpt
     
     # If the collection had been deleted, it needs to be re-initialised
-    if user_email not in utility.list_collections():
-        initialise_vectordb(user_email)
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, memory=memory, verbose=True,collection_name =user_email)
+    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, memory=memory, verbose=True)
     response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
     # Save the prompt/response pair in the Milvus collection
@@ -192,7 +192,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str,user_ema
     return response
 
 
-def code_translation(input_language: str, output_language: str, user_input: str, ai_model: str,user_email:str) -> dict:
+def code_translation(input_language: str, output_language: str, user_input: str, ai_model: str) -> dict:
     # starcoder by default
     llm = starcoder
 
@@ -205,11 +205,11 @@ def code_translation(input_language: str, output_language: str, user_input: str,
             llm = gpt
     
     # If the collection had been deleted, it needs to be re-initialised
-    if user_email not in utility.list_collections():
-        initialise_vectordb(user_email)
+    if 'LangChainCollection' not in utility.list_collections():
+        initialise_vectordb()
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, memory=memory, verbose=True,collection_name = user_email)
+    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, memory=memory, verbose=True)
     response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})
 
     # Save the prompt/response pair in the Milvus collection
@@ -218,7 +218,7 @@ def code_translation(input_language: str, output_language: str, user_input: str,
     return response
 
 
-def initialise_vectordb(user_email):
+def initialise_vectordb():
     """
     Initialises an empty VectorDB.
     This function is inelegant but seemingly necessary because of Python's weirdness with variable scope
@@ -232,7 +232,7 @@ def initialise_vectordb(user_email):
 
     retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
     global memory
-    memory = VectorStoreRetrieverMemory(retriever=retriever, input_key='input',collectoion_name=user_email)
+    memory = VectorStoreRetrieverMemory(retriever=retriever, input_key='input')
 
 
 if __name__ == "__main__":

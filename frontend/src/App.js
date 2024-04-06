@@ -12,6 +12,7 @@ import LoginSignUp from './pages/LoginSignUp';
 import SubmissionPage from './pages/SubmissionPage';
 import TeamPage from './pages/TeamPage';
 import Footer from './components/Footer'
+import ResetPassword from './pages/ResetPasswordPage';
 // move the logo to the indivdual pages
 // import IBM from "./assets/IBM.PNG"
 // import IBM_White from "./assets/IBM_white.PNG"
@@ -42,7 +43,7 @@ function App() {
       <Router>
       <AuthProvider>
         <div className="App">
-        <Toaster position='top-center' toastOptions={{duration: 4500}}/>
+        <Toaster position='top-center'/>
         <Header /> 
           <Routes>
             <Route path="/" element={<Home />} />
@@ -52,7 +53,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/team" element={<TeamPage />} />
             <Route path="/account" element={<Account />} />
-            {/* Add more routes as needed */}
+            <Route path="/reset" element={<ResetPassword/>} />
           </Routes>
         </div>
       </AuthProvider>

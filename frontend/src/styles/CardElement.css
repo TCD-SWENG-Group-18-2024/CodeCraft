@@ -11,6 +11,37 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15); /* Glow effect on hover */
 }
 
+.buttons-container{
+    height: 0px;
+    display: flex; /* Ensure the buttons are displayed in a row */
+    align-items: center; /* Center the buttons vertically */
+    justify-content: flex-end;
+}
+
+.export-button{
+    transform: translateY(10px);    
+    height: 25px;
+    width: 25px;
+}
+.export-img{
+    height: 20px;
+    width: 20px;
+}
+
+.copy-button{
+    margin-right: 5px;
+    transform: translateY(10px);  
+    height: 25px;
+    width: 25px;
+}
+
+.executeCode-button{
+    transform: translateY(10px);  
+    height: 25px;
+    width: 25px;
+    margin: 5px;
+}
+
 .cardStyle {
     position: relative;
     width: 50vw;

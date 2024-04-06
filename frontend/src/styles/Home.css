@@ -204,7 +204,7 @@ body, h1, h2, p, a, button {
 .wave_container{
     display: flex;
     flex-direction: column;
-    min-height: 60vh;
+    min-height: 50vh;
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -219,7 +219,7 @@ body, h1, h2, p, a, button {
     transform: translate3d(0, 0, 0);
     opacity: 0.8;
     bottom: 0;
-    left: 0;
+    left: 1;
     z-index: -1;
     
 }
