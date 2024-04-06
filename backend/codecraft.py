@@ -11,8 +11,8 @@ from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
-global email 
-global isLoggedIn
+email = ''
+isLoggedIn = False
 
 # Load environment varibles
 dotenv.load_dotenv()
@@ -59,9 +59,8 @@ def llm_text_request():
     input_language = data.get('input_language')
     output_language = data.get('output_language')
     user_input = data.get('user_input')
-    
-    isLoggedIn = session.get('isLoggedIn')
-    if(isLoggedIn ==True):
+
+    if isLoggedIn:
         email = session.get('email')
         print(isLoggedIn)
         print(email)
@@ -151,7 +150,8 @@ def register_user():
     email = request.json['email']
     password = request.json['password']
     confirm_password = request.json['confirm_password']
-    isLoggedIn=request.json['isLoggedIn']
+    global isLoggedIn
+    isLoggedIn = request.json['isLoggedIn']
     # Password Requirements:
     if len(password) < 8:
         return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
@@ -200,7 +200,8 @@ def login_user():
     print(email)
     password = request.json['password']
     print(password)
-    isLoggedIn=request.json['isLoggedIn']
+    global isLoggedIn
+    isLoggedIn = request.json['isLoggedIn']
     print(isLoggedIn)
     
     email = email.lower()
