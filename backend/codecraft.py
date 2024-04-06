@@ -135,16 +135,16 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
         use_case = use_case.lower()
     
     if use_case == 'code_analysis':
-        result = code_analysis(user_input, ai_model)
+        result = code_analysis(user_input, ai_model, email)
     elif use_case == 'code_generation':
-        result = code_generation(user_input, ai_model)
+        result = code_generation(user_input, ai_model,email)
     elif use_case == 'code_completion':
-        result = code_completion(user_input, ai_model, input_language)
+        result = code_completion(user_input, ai_model, input_language,email)
     elif use_case == 'code_translation':
-        result = code_translation(input_language, output_language, user_input, ai_model)
+        result = code_translation(input_language, output_language, user_input, ai_model,email)
     elif use_case == '':
         # General model for no specified operation
-        result = AIModel(user_input, ai_model)
+        result = AIModel(user_input, ai_model,email)
     else:
         result = {"error": "Invalid use case"}
 
