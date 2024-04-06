@@ -9,7 +9,7 @@ import "../styles/LoginSignUp.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { login, isLoggedIn} = useContext(AuthContext);
+  const { login, logout, isLoggedIn } = useContext(AuthContext);
   const [userAction, setUserAction] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,10 +22,13 @@ const SignUp = () => {
   };
 
   const handleSignUp = async () => {
-    const userData = { email, password, confirm_password };
+    const userData = { email, password, confirm_password,isLoggedIn };
+    login();
+    console.log(localStorage.getItem("isLoggedIn") === "true")
     try {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
@@ -40,20 +43,23 @@ const SignUp = () => {
       const data = await response.json();
       // If sign up is successful:
       console.log(data);
-
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
+      logout();
       console.error("Error:", error.message);
       toast.error("Please Enter Valid inputs");
     }
   };
 
   const handleLogin = async () => {
-    const userData = { email, password };
+    login();
+    const userData = { email, password,isLoggedIn:localStorage.getItem("isLoggedIn") === "true" };
+    console.log(localStorage.getItem("isLoggedIn") === "true")
     try {
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
@@ -72,6 +78,7 @@ const SignUp = () => {
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
       console.error("Error:", error);
+      logout();
     }
   };
   useEffect(() => {
@@ -85,6 +92,7 @@ const SignUp = () => {
     try {
       const response = await fetch("http://localhost:8080/forgot-password", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userEmail),
       });

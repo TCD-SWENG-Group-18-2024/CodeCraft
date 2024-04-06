@@ -202,6 +202,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
         console.log(responseData);
 
         toast.success("Code has been successfully executed");
+        
         setCodeStatus(responseData.exit_code);
         setCodeOutput(responseData.stdout);
       } else {
@@ -300,12 +301,11 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                 variant="body2"
               >
                 {usecase !== "code_analysis" ? (
-                  <pre className="code-block">
-                    {highlightCodeBlock(response)}
-                  </pre>
-                ) : (
-                  <ReactMarkdown>{response}</ReactMarkdown>
-                )}
+                    <pre className="code-block">{highlightCodeBlock(response)}</pre>
+                  ) : (
+                    <ReactMarkdown>{response}</ReactMarkdown>
+                  )
+                }
                 <br />
               </Typography>
             )}
