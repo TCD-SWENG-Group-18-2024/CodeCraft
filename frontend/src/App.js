@@ -13,9 +13,9 @@ import SubmissionPage from './pages/SubmissionPage';
 import TeamPage from './pages/TeamPage';
 import Footer from './components/Footer'
 import ResetPassword from './pages/ResetPasswordPage';
-// move the logo to the indivdual pages
-// import IBM from "./assets/IBM.PNG"
-// import IBM_White from "./assets/IBM_white.PNG"
+
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
 
 function App() {
 

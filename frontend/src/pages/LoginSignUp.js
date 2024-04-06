@@ -7,6 +7,9 @@ import Password from "../assets/password.png";
 import Sidebar from "../components/Sidebar";
 import "../styles/LoginSignUp.css";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const SignUp = () => {
   const navigate = useNavigate();
   const { login, logout, isLoggedIn } = useContext(AuthContext);
@@ -26,7 +29,7 @@ const SignUp = () => {
     login();
     console.log(localStorage.getItem("isLoggedIn") === "true")
     try {
-      const response = await fetch("http://localhost:8080/register", {
+      const response = await fetch(backendURL + "/register", {
         method: "POST",
         credentials: 'include',
         headers: { "Content-Type": "application/json" },
@@ -57,7 +60,7 @@ const SignUp = () => {
     const userData = { email, password,isLoggedIn:localStorage.getItem("isLoggedIn") === "true" };
     console.log(localStorage.getItem("isLoggedIn") === "true")
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch(backendURL + "/login", {
         method: "POST",
         credentials: 'include',
         headers: { "Content-Type": "application/json" },
@@ -90,7 +93,7 @@ const SignUp = () => {
 
     const userEmail = { email };
     try {
-      const response = await fetch("http://localhost:8080/forgot-password", {
+      const response = await fetch(backendURL + "/forgot-password", {
         method: "POST",
         credentials: 'include',
         headers: { "Content-Type": "application/json" },
