@@ -35,7 +35,7 @@
 .App-nav-links a, .App-sign-up, .Account{
     color: #ffffff; 
     text-decoration: none;
-    margin: 0 1rem;
+    margin: 30px;
     transition: 0.3s;
 }
 

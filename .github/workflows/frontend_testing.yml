@@ -28,6 +28,3 @@ jobs:
        cd frontend
        npm test
        a
-
-      
-    

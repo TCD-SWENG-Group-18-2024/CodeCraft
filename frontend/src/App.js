@@ -43,7 +43,7 @@ function App() {
       <Router>
       <AuthProvider>
         <div className="App">
-        <Toaster position='top-center' toastOptions={{duration: 4500}}/>
+        <Toaster position='top-center'/>
         <Header /> 
           <Routes>
             <Route path="/" element={<Home />} />

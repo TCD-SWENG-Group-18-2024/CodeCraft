@@ -2,14 +2,14 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Dropdown from '../components/Dropdown';
 
-test('renders dropdown with input type selection', () => {
+test('renders dropdown with AI model selection', () => {
   const { getByText } = render(<Dropdown />);
 
-  const inputTypeDropdownButton = getByText('-Select Input Type-');
+ const aiModelDropdownButton = getByText(/-Select AI Model-/);
 
-  expect(inputTypeDropdownButton).toBeInTheDocument();
+  expect(aiModelDropdownButton).toBeInTheDocument();
 
-  fireEvent.click(inputTypeDropdownButton);
+  fireEvent.click(aiModelDropdownButton);
 });
 
 test('renders dropdown with use case selection', () => {

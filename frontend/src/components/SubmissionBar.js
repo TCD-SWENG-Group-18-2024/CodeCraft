@@ -9,13 +9,19 @@ const SubmissionBar = ({ input, handleTextBoxChange, handleKeyDown, handleSubmit
         id='code-submission'
         label='Submission Area'
         multiline
-        rows={1}
+        minRows={1}
+        maxRows={4}
         variant='outlined'
         value={input}
         onChange={handleTextBoxChange}
         onKeyDown={handleKeyDown}
         fullWidth
-        sx={{ flex: 1 }}
+        sx={{
+          flex: 1,
+          '& .MuiInputBase-input': {
+            fontFamily: 'monospace',
+          },
+        }}
       />
       <Button variant='contained' onClick={handleSubmit} sx={{ ml: 2, height: '56px' }}>
         Submit
