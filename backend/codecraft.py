@@ -85,9 +85,9 @@ def llm_file_request():
     input_language = request.form.get('input_language')
     output_language = request.form.get('output_language')
 
-    if isLoggedIn:
+    if session['isLoggedIn']:
         email = session.get('email')
-        print(isLoggedIn)
+        print(session.get('isLoggedIn'))
         print(email)
     else:
         email = None
@@ -193,6 +193,9 @@ def register_user():
 
     db.session.add(new_user)
     db.session.commit()
+
+    session['email'] = email
+    session['isLoggedIn'] = True
 
 
     return jsonify({
