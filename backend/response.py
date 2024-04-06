@@ -17,18 +17,24 @@ from langchain.memory import VectorStoreRetrieverMemory
 dotenv.load_dotenv()
 os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
 
-# Start the VectorDB
-default_server.start()
 embeddings = OpenAIEmbeddings()
-connections.connect(host=r"https://milvusdb.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/", port=19530)
+milvus_uri = os.getenv('MILVUS_URI')
+milvus_token = os.getenv('MILVUS_TOKEN')
+
+connections.connect("default",
+                    uri=milvus_uri,
+                    token=milvus_token)
+
 utility.drop_collection('LangChainCollection')
 vectordb = Milvus.from_documents(
     {},
     embeddings,
-    connection_args={"host": r"https://milvusdb.1f106c1j1agn.eu-gb.codeengine.appdomain.cloud/", "port": 19530}
+    connection_args={"uri": milvus_uri, "token": milvus_token}
 )
+
 retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
 memory = VectorStoreRetrieverMemory(retriever=retriever)
+
 
 # AI Models
 gpt = ChatOpenAI()
@@ -41,49 +47,49 @@ llama = HuggingFaceHub(
 
 # Templates
 code_analysis_template = PromptTemplate(
-    input_variables=['input'],
+    input_variables=['history', 'input'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
              ' Please tell me what my code does and give feedback and tips on how to improve it.'
              ' You will help me identify potential bugs in this code, give important suggestions'
              ' on improving the code quality and maintainability, and check if it adheres to coding'
              ' standards and best practices.'
-             ' Relevant pieces of previous information: '
+             ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_generation_template = PromptTemplate(
-    input_variables=['input'],
+    input_variables=['history', 'input'],
     template='You are a code generation tool. Please generate code based on the explanation being given.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
-             ' Relevant pieces of previous information:'
+             ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_completion_template = PromptTemplate(
-    input_variables=['input_language', 'input'],
+    input_variables=['history','input_language', 'input'],
     template='You are a code completion tool. The input will be incompleted code in {input_language}.'
              ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
              ' parenthesis, curly braces, etc. where needed. Please ensure that the code is correct'
              ' and follows best practices or standards set in programming language mentioned above.'
              ' The output should only be a completed version of the inputted code.'
-             ' Relevant pieces of previous information:'
+             ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 code_translation_template = PromptTemplate(
-    input_variables=['input_language', 'output_language', 'input'],
+    input_variables=['history', 'input_language', 'output_language', 'input'],
     template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
              ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
-             ' Relevant pieces of previous information:'
+             ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
 general_ai_model_template = PromptTemplate(
-    input_variables=['input'],
+    input_variables=['history', 'input'],
     template='You are a coding assistant tool designed to help users with various coding tasks.'
              ' Please assist the user with their request by providing relevant information,'
              ' generating code snippets, analyzing code, completing code segments, or offering advice.'
-             ' Relevant pieces of previous information:'
+             ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
@@ -103,7 +109,7 @@ def AIModel(user_input: str, ai_model: str) -> dict:
     # If the collection had been deleted, it needs to be re-initialised
     if 'LangChainCollection' not in utility.list_collections():
         initialise_vectordb()
-    
+
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
     response = code_analysis_chain.invoke({'input': user_input})
@@ -111,7 +117,7 @@ def AIModel(user_input: str, ai_model: str) -> dict:
     # Save the prompt/response pair in the Milvus collection
     memory.save_context({'input': user_input}, {'output': response['text']})
 
-    return response 
+    return response
 
 
 def code_generation(user_input: str, ai_model: str) -> dict:
@@ -125,7 +131,7 @@ def code_generation(user_input: str, ai_model: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
-    
+
     # If the collection had been deleted, it needs to be re-initialised
     if 'LangChainCollection' not in utility.list_collections():
         initialise_vectordb()
@@ -177,7 +183,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
             llm = starcoder
         elif ai_model == 'openai':
             llm = gpt
-    
+
     # If the collection had been deleted, it needs to be re-initialised
     if 'LangChainCollection' not in utility.list_collections():
         initialise_vectordb()
@@ -188,7 +194,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str) -> dict
 
     # Save the prompt/response pair in the Milvus collection
     memory.save_context({'input': user_input}, {'output': response['text']})
-    
+
     return response
 
 
@@ -203,7 +209,7 @@ def code_translation(input_language: str, output_language: str, user_input: str,
             llm = llama
         elif ai_model == 'openai':
             llm = gpt
-    
+
     # If the collection had been deleted, it needs to be re-initialised
     if 'LangChainCollection' not in utility.list_collections():
         initialise_vectordb()
@@ -214,7 +220,7 @@ def code_translation(input_language: str, output_language: str, user_input: str,
 
     # Save the prompt/response pair in the Milvus collection
     memory.save_context({'input': user_input}, {'output': response['text']})
-    
+
     return response
 
 
@@ -227,7 +233,7 @@ def initialise_vectordb():
     vectordb = Milvus.from_documents(
         {},
         embeddings,
-        connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
+        connection_args={"uri": milvus_uri, "token": milvus_token}
     )
 
     retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
