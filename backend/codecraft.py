@@ -71,7 +71,7 @@ def llm_text_request():
         return jsonify({'error': 'No user input provided'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language,email)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language, email)
 
     return jsonify(result)
 
@@ -85,6 +85,13 @@ def llm_file_request():
     input_language = request.form.get('input_language')
     output_language = request.form.get('output_language')
 
+    if isLoggedIn:
+        email = session.get('email')
+        print(isLoggedIn)
+        print(email)
+    else:
+        email = None
+    
     # Check if 'file' is in the request files
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
@@ -110,7 +117,7 @@ def llm_file_request():
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language, email)
     return jsonify(result)
 
 
