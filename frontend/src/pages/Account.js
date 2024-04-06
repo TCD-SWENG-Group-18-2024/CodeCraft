@@ -6,8 +6,9 @@ import '../styles/Account.css';
 function Account() {
     const navigate = useNavigate();
     const {logout } = useContext(AuthContext);
-
+    const userEmail = localStorage.getItem("userEmail");
     const handleSignout = () => {
+        localStorage.setItem("userID", "");
         logout();
         console.log("Signing out...");
         navigate('/');

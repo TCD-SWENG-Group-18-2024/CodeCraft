@@ -35,6 +35,7 @@ const ResetPassword = () => {
     try {
       const response = await fetch(backendURL + "/reset-password", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });

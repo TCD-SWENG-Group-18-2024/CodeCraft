@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../components/AuthContext";
@@ -12,7 +12,7 @@ console.log("backend URL: " + backendURL);
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login, logout, isLoggedIn } = useContext(AuthContext);
   const [userAction, setUserAction] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,16 +20,18 @@ const SignUp = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   const handleSignUp = async () => {
-    const userData = { email, password, confirm_password };
+    const userData = { email, password, confirm_password,isLoggedIn };
+    login();
+    console.log(localStorage.getItem("isLoggedIn") === "true")
     try {
       const response = await fetch(backendURL + "/register", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
@@ -44,20 +46,23 @@ const SignUp = () => {
       const data = await response.json();
       // If sign up is successful:
       console.log(data);
-
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
+      logout();
       console.error("Error:", error.message);
       toast.error("Please Enter Valid inputs");
     }
   };
 
   const handleLogin = async () => {
-    const userData = { email, password };
+    login();
+    const userData = { email, password,isLoggedIn:localStorage.getItem("isLoggedIn") === "true" };
+    console.log(localStorage.getItem("isLoggedIn") === "true")
     try {
       const response = await fetch(backendURL + "/login", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
@@ -72,14 +77,17 @@ const SignUp = () => {
       // If login is successful:
       console.log("Login Successful", data);
       localStorage.setItem("userID", data.id); // Save userID
-
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
       console.error("Error:", error);
+      logout();
     }
   };
-
+  useEffect(() => {
+    console.log(isLoggedIn);
+  
+}, [isLoggedIn]);
   const handleForgotPassword = async () => {
     console.log("Forgot Password Pressed");
 
@@ -87,6 +95,7 @@ const SignUp = () => {
     try {
       const response = await fetch(backendURL + "/forgot-password", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userEmail),
       });

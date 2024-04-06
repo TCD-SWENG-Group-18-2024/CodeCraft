@@ -47,19 +47,19 @@ const AboutPage = () => {
           </div>
           <div className="text-container">
             <h2>Meet Our Clients</h2>
-            <p>Our two industry mentors, Mihai Criveti and Ronan Dalton will be guiding us throughout this project. Mihai has been working with IBM since 2008 and has been involved in different projects throughout his career there, ranging from IT Architect to his current position, IBM Consulting and Vice Chair. Ronan has been working with IBM since 2000, where he started off as a Business Analyst and Developer and has evolved into Technical Sales Leader and CTO.</p>
+            <p>Our three industry mentors, Mihai Criveti, Ronan Dalton and Panpan Lin have been guiding us throughout this project. Mihai has been working with IBM since 2008 and has been involved in different projects throughout his career there, ranging from IT Architect to his current position, IBM Consulting and Vice Chair. Ronan has been working with IBM since 2000, where he started off as a Business Analyst and Developer and has evolved into Technical Sales Leader and CTO. Panpan graduated from Trinity College with a Masters of Science in Interactive Digital Media in 2014, and has worked at IBM since 2015, where she now works as an Advisory Software Engineer.</p>
           </div>
         </div>
 
-        {/* <div className="section">
+        <div className="section reverse-section">
           <div className="image-container">
             <img src={macu} alt="Dr. Inmaculada Arnedillo-Sanchez" className="image-left" />
           </div>
           <div className="text-container">
             <h2>Our SWENG Coordinator</h2>
-            <p>Dr. Inmaculada Arnedillo-Sánchez, our module coordinator for Software Engineering Project I & II, brings a diverse educational background and over 24 years of experience at Trinity College Dublin. With degrees from Western Sydney University and the University of Granada in Interpreting and Translation, as well as a Higher Diploma in Education from the University of Cádiz, she offers invalulable expertise to our learning journey. Her Masters of Science and subsequent PhD in Philosophy from Trinity College Dublin further enrich her contributions to our academic experience. We're privileged to have her as our lecturer for this module, as her expertise facilitates valuable collaboration with industry businesses, providing us with an amazing opportunity to apply our skills in real-world settings.</p>
+            <p>Inmaculada Arnedillo-Sánchez, our module coordinator for Software Engineering Project II and the Director of Industry Engagement for the SCSS, brings a diverse educational background and over 24 years of experience at Trinity College Dublin. With degrees from Western Sydney University and the University of Granada in Interpreting and Translation, as well as a Higher Diploma in Education from the University of Cádiz, she offers invaluable expertise to our learning journey. Her Masters in IT in Education and subsequent PhD Technology Enhanced Learning from Trinity College Dublin further enrich her contributions to our academic experience. We're privileged to have her as our lecturer for this module, as her expertise not only enriches our academic experience but also facilitates valuable collaboration with industry businesses, providing us with an amazing opportunity to apply our skills in real-world settings.</p>
           </div>
-        </div> */}
+        </div>
 
       </div>
     </>

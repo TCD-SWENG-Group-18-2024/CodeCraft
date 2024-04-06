@@ -351,7 +351,7 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
          # Make a POST request to /llm/file endpoint with the sample JSON payload and file
          data = MultiDict([
          ('file', (BytesIO(file_content), 'Triangle.java')),
-         ('use_case', 'code_analsis'),
+         ('use_case', 'code_analysis'),
          ('ai_model', 'OpenAI'),
          ('input_language', ''),
          ('output_language', '')
@@ -390,7 +390,7 @@ class TestFileUploadCodeAnalysis(unittest.TestCase):
          ('ai_model', 'OpenAI'),
          ('input_language', ''),
          ('output_language', '')
-         ])
+         ])       
      # Use a MultiDict for the data parameter
          data = MultiDict(data)
          response = self.app.post('/llm/file',content_type='multipart/form-data',data=data)
