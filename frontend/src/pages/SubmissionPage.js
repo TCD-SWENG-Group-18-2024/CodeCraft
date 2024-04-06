@@ -100,6 +100,7 @@ const SubmissionPage = () => {
     try {
       const response = await fetch("http://localhost:8080/llm/text", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },
@@ -175,6 +176,7 @@ const SubmissionPage = () => {
       const response = await fetch("http://localhost:8080/llm/file", {
         method: "POST",
         body: formData,
+        credentials: 'include',
         // headers: {
         //     "Content-Type" : "multipart/form-data",
         // },

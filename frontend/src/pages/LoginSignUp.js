@@ -28,6 +28,7 @@ const SignUp = () => {
     try {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
@@ -57,6 +58,7 @@ const SignUp = () => {
     try {
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
@@ -89,6 +91,7 @@ const SignUp = () => {
     try {
       const response = await fetch("http://localhost:8080/forgot-password", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userEmail),
       });

@@ -11,8 +11,7 @@ from flask_bcrypt import Bcrypt
 from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
-email = ''
-isLoggedIn = False
+
 
 # Load environment varibles
 dotenv.load_dotenv()
@@ -60,9 +59,10 @@ def llm_text_request():
     output_language = data.get('output_language')
     user_input = data.get('user_input')
 
-    if isLoggedIn:
-        email = session.get('email')
-        print(isLoggedIn)
+
+    if session['isLoggedIn']:
+        print(session)
+        email = session['email']
         print(email)
     else:
         email = None
@@ -150,7 +150,6 @@ def register_user():
     email = request.json['email']
     password = request.json['password']
     confirm_password = request.json['confirm_password']
-    global isLoggedIn
     isLoggedIn = request.json['isLoggedIn']
     # Password Requirements:
     if len(password) < 8:
@@ -188,6 +187,7 @@ def register_user():
     db.session.add(new_user)
     db.session.commit()
 
+
     return jsonify({
         "id": new_user.id,
         "email": new_user.email
@@ -200,7 +200,6 @@ def login_user():
     print(email)
     password = request.json['password']
     print(password)
-    global isLoggedIn
     isLoggedIn = request.json['isLoggedIn']
     print(isLoggedIn)
     
@@ -231,6 +230,7 @@ def login_user():
     session.pop('last_login_attempt', None)  # Reset the last login attempt time upon successful login
     session['email'] = email
     session['isLoggedIn'] = isLoggedIn
+    print(f"session is {session}")
     return jsonify({
         "id": user.id,
         "email": user.email
