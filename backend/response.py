@@ -21,14 +21,14 @@ os.environ['HUGGINGFACEHUB_API_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN')
 default_server.start()
 embeddings = OpenAIEmbeddings()
 connections.connect(host="127.0.0.1", port=default_server.listen_port)
-utility.drop_collection('LangChainCollection')
-vectordb = Milvus.from_documents(
-    {},
-    embeddings,
-    connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
-)
-retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
-memory = VectorStoreRetrieverMemory(retriever=retriever)
+#utility.drop_collection('LangChainCollection')
+#vectordb = Milvus.from_documents(
+#    {},
+#    embeddings,
+#    connection_args={"host": "127.0.0.1", "port": default_server.listen_port}
+#)
+#retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
+#memory = VectorStoreRetrieverMemory(retriever=retriever)
 
 # AI Models
 gpt = ChatOpenAI()
@@ -106,8 +106,9 @@ def AIModel(user_input: str, ai_model: str,email:str) -> dict:
             llm = llama
     collection_name = remove_special_characters(email)
     # If the collection had been deleted, it needs to be re-initialised
-    if collection_name not in utility.list_collections():
-        initialise_vectordb(collection_name)
+    memory = initialise_vectordb(collection_name)
+
+
     
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     
@@ -132,9 +133,9 @@ def code_generation(user_input: str, ai_model: str,email:str) -> dict:
         elif ai_model == 'llama':
             llm = llama
     collection_name = remove_special_characters(email)
+    print(f"collection name is{collection_name}")
     # If the collection had been deleted, it needs to be re-initialised
-    if collection_name not in utility.list_collections():
-        initialise_vectordb(collection_name)
+    memory = initialise_vectordb(collection_name)
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
@@ -158,10 +159,9 @@ def code_analysis(user_input: str, ai_model: str,email:str) -> dict:
         elif ai_model == 'llama':
             llm = llama
     collection_name = remove_special_characters(email)
-    print("collection name is",collection_name)
+    print(f"collection name is{collection_name}")
     # If the collection had been deleted, it needs to be re-initialised
-    if collection_name not in utility.list_collections():
-        initialise_vectordb(collection_name)
+    memory = initialise_vectordb(collection_name)
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
@@ -186,8 +186,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str,email:st
             llm = gpt
     collection_name = remove_special_characters(email)
     # If the collection had been deleted, it needs to be re-initialised
-    if collection_name not in utility.list_collections():
-        initialise_vectordb(collection_name)
+    memory = initialise_vectordb(collection_name)
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, memory=memory, verbose=True)
@@ -212,8 +211,7 @@ def code_translation(input_language: str, output_language: str, user_input: str,
             llm = gpt
     collection_name = remove_special_characters(email)
     # If the collection had been deleted, it needs to be re-initialised
-    if collection_name not in utility.list_collections():
-        initialise_vectordb(collection_name)
+    memory = initialise_vectordb(collection_name)
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, memory=memory, verbose=True)
@@ -239,8 +237,7 @@ def initialise_vectordb(email):
     )
 
     retriever = Milvus.as_retriever(vectordb, search_kwargs=dict(k=1))
-    global memory
-    memory = VectorStoreRetrieverMemory(retriever=retriever, input_key='input')
+    return VectorStoreRetrieverMemory(retriever=retriever, input_key='input')
 
 
 if __name__ == "__main__":
