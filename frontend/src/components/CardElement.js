@@ -17,12 +17,14 @@ import Export from "../assets/export.png";
 import CopyCode from "@mui/icons-material/ContentCopy";
 import ExecuteCode from "@mui/icons-material/PlayCircleFilled";
 import { renderToString } from "react-dom/server";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
 import "../styles/CardElement.css";
 
 const CardElement = ({ usecase, query, response, isLoading }) => {
   const [copied, setCopied] = useState(false);
   const [customFileName, setCustomFileName] = useState("");
+  const [codeStatus, setCodeStatus] = useState("");
+  const [codeOutput, setCodeOutput] = useState("");
 
   const copyToClipboard = (response) => {
     const lines = response.split("\n");
@@ -156,7 +158,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
       )}</code></pre>`;
     }
   );
-  
+
   const formattedUsecase = usecase.split("_").join(" ").toUpperCase();
 
   const parseCodeResponse = (response) => {
@@ -200,6 +202,9 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
         console.log(responseData);
 
         toast.success("Code has been successfully executed");
+        
+        setCodeStatus(responseData.exit_code);
+        setCodeOutput(responseData.stdout);
       } else {
         toast.error("Code was not executed: Error Code " + status.status);
       }
@@ -304,6 +309,22 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                 <br />
               </Typography>
             )}
+
+            <Typography
+              sx={{ fontSize: 14 }}
+              style={{ textAlign: "left" }}
+              variant="body2"
+            >
+              Code Status: {codeStatus}
+            </Typography>
+
+            <Typography
+              sx={{ fontSize: 14 }}
+              style={{ textAlign: "left" }}
+              variant="body2"
+            >
+              Code Output: "{codeOutput}"
+            </Typography>
           </>
         )}
       </CardContent>

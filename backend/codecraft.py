@@ -12,7 +12,6 @@ from models import db, User
 from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
 from itsdangerous import URLSafeTimedSerializer
 
-
 # Load environment varibles
 dotenv.load_dotenv()
 

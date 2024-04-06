@@ -9,7 +9,7 @@ import "../styles/LoginSignUp.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { login,logout, isLoggedIn} = useContext(AuthContext);
+  const { login, logout, isLoggedIn } = useContext(AuthContext);
   const [userAction, setUserAction] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +43,7 @@ const SignUp = () => {
       const data = await response.json();
       // If sign up is successful:
       console.log(data);
+      login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
       logout();
@@ -73,7 +74,7 @@ const SignUp = () => {
       // If login is successful:
       console.log("Login Successful", data);
       localStorage.setItem("userID", data.id); // Save userID
-
+      login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
       console.error("Error:", error);
