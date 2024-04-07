@@ -12,6 +12,9 @@ import "./LoginSignUp";
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const SubmissionPage = () => {
   const userID = localStorage.getItem("userID");
   const [inputType, setInputType] = useState("files");
@@ -98,8 +101,9 @@ const SubmissionPage = () => {
     console.log(data);
 
     try {
-      const response = await fetch("http://localhost:8080/llm/text", {
+      const response = await fetch(backendURL + "/llm/text", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },
@@ -172,9 +176,10 @@ const SubmissionPage = () => {
     // console.log(...formDataTest);
 
     try {
-      const response = await fetch("http://localhost:8080/llm/file", {
+      const response = await fetch(backendURL + "/llm/file", {
         method: "POST",
         body: formData,
+        credentials: 'include',
         // headers: {
         //     "Content-Type" : "multipart/form-data",
         // },
@@ -229,7 +234,7 @@ const SubmissionPage = () => {
     if (cards.length === 0) {
       handleCloseDialog();
     } else {
-      fetch("http://localhost:8080/llm/clearmemory", {
+      fetch(backendURL + "/llm/clearmemory", {
         method: "DELETE",
         //headers: {
         //    'Content-Type': 'application/json',

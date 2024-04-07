@@ -58,12 +58,19 @@ def llm_text_request():
     output_language = data.get('output_language')
     user_input = data.get('user_input')
 
+
+    if session['isLoggedIn']:
+        print(session)
+        email = session['email']
+        print(email)
+    else:
+        email = None
     # Throws error if empty request
     if user_input is None:
         return jsonify({'error': 'No user input provided'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language, email)
 
     return jsonify(result)
 
@@ -77,6 +84,13 @@ def llm_file_request():
     input_language = request.form.get('input_language')
     output_language = request.form.get('output_language')
 
+    if session['isLoggedIn']:
+        email = session.get('email')
+        print(session.get('isLoggedIn'))
+        print(email)
+    else:
+        email = None
+    
     # Check if 'file' is in the request files
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
@@ -102,7 +116,7 @@ def llm_file_request():
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language, email)
     return jsonify(result)
 
 
@@ -115,21 +129,21 @@ def clear_memory():
     # Should be 200 whether the collection exists or not
     return jsonify({'success': 'Cleared the Milvus collection.'})
 
-def process_data(user_input, use_case, ai_model, input_language, output_language):
+def process_data(user_input, use_case, ai_model, input_language, output_language,email):
     if use_case is not None:
         use_case = use_case.lower()
     
     if use_case == 'code_analysis':
-        result = code_analysis(user_input, ai_model)
+        result = code_analysis(user_input, ai_model, email)
     elif use_case == 'code_generation':
-        result = code_generation(user_input, ai_model)
+        result = code_generation(user_input, ai_model,email)
     elif use_case == 'code_completion':
-        result = code_completion(user_input, ai_model, input_language)
+        result = code_completion(user_input, ai_model, input_language,email)
     elif use_case == 'code_translation':
-        result = code_translation(input_language, output_language, user_input, ai_model)
+        result = code_translation(input_language, output_language, user_input, ai_model,email)
     elif use_case == '':
         # General model for no specified operation
-        result = AIModel(user_input, ai_model)
+        result = AIModel(user_input, ai_model,email)
     else:
         result = {"error": "Invalid use case"}
 
@@ -142,7 +156,7 @@ def register_user():
     email = request.json['email']
     password = request.json['password']
     confirm_password = request.json['confirm_password']
-
+    isLoggedIn = request.json['isLoggedIn']
     # Password Requirements:
     if len(password) < 8:
         return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
@@ -179,6 +193,10 @@ def register_user():
     db.session.add(new_user)
     db.session.commit()
 
+    session['email'] = email
+    session['isLoggedIn'] = True
+
+
     return jsonify({
         "id": new_user.id,
         "email": new_user.email
@@ -188,11 +206,15 @@ def register_user():
 @app.route('/login', methods=['POST'])
 def login_user():
     email = request.json['email']
+    print(email)
     password = request.json['password']
-
+    print(password)
+    isLoggedIn = request.json['isLoggedIn']
+    print(isLoggedIn)
+    
     email = email.lower()
     user = User.query.filter_by(email=email).first()
-
+    
     if user is None:
         return jsonify({"error": "User does not exist"}), 401
     
@@ -215,7 +237,9 @@ def login_user():
     
     session.pop('login_attempts', None) #Reset counter after the correct password is given
     session.pop('last_login_attempt', None)  # Reset the last login attempt time upon successful login
-
+    session['email'] = email
+    session['isLoggedIn'] = isLoggedIn
+    print(f"session is {session}")
     return jsonify({
         "id": user.id,
         "email": user.email
