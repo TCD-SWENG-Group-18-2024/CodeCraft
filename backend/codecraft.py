@@ -181,8 +181,8 @@ def register_user():
 
     # Username Requirements:
     if email == '':
-        return jsonify({"error": "No username provided"}), 400
-    if not any(email.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
+        return jsonify({"error": "No email provided"}), 400
+    if not re.search(r'^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$', email):
         return jsonify({"error": "Enter a valid email"}), 400
     
     email = email.lower()
