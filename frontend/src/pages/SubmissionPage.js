@@ -30,7 +30,16 @@ const SubmissionPage = () => {
   const [outputLanguage, setOutputLanguage] = useState("");
   const [checked, setChecked] = React.useState(true);
   const [fileName, setFileName] = React.useState("");
-  const tooltipText = "For Code Analysis, Code Translation, its best to submit a file !";
+  const [tooltipText, setTooltipText] = useState("");
+  const infoArray = [
+    "For Code Analysis and Code Translation, its best to submit a file!",
+    "Feel Like you are not gettting a response you want? Try start a new conversation!",
+    "For Code Completion and Code Generation, its recommended type in a prompt!",
+    "Sign up for saving your history!",
+    "Want to run your code here? Just press the play button on the cards!",
+    "Save generated code with click of a button. Just press the clipboard icon on the top right of the card :)",
+    
+  ];
   const [cards, setCards] = useState(() => {
     if (userID === "") {
       return [];
@@ -38,6 +47,14 @@ const SubmissionPage = () => {
     const storedCards = localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
   });
+
+  const handleTooltipHover = () => {
+    // Select a random information from the array
+    const randomIndex = Math.floor(Math.random() * infoArray.length);
+    const randomInfo = infoArray[randomIndex];
+    setTooltipText(randomInfo);
+  };
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -326,7 +343,14 @@ const SubmissionPage = () => {
               setChecked={setChecked}
             />
             <div style={{ display: "flex" }}>
-              <Tooltip title={tooltipText} followCursor>
+              <Tooltip
+                title={
+                  <span style={{ fontSize: "18px", color: "white" }}>
+                    {tooltipText}
+                  </span>
+                }
+                followCursor
+              >
                 <div
                   style={{
                     display: "flex",
@@ -334,6 +358,7 @@ const SubmissionPage = () => {
                     marginRight: "10px",
                   }}
                   className="infoButton"
+                  onMouseEnter={handleTooltipHover}
                 >
                   <InfoIcon sx={{ color: "white" }}></InfoIcon>
                 </div>
