@@ -21,10 +21,7 @@ embeddings = OpenAIEmbeddings()
 milvus_uri = os.getenv('MILVUS_URI')
 milvus_token = os.getenv('MILVUS_TOKEN')
 
-connections.connect("default",
-                    uri=milvus_uri,
-                    token=milvus_token)
-
+connections.connect("default", uri=milvus_uri, token=milvus_token)
 
 # AI Models
 gpt = ChatOpenAI()
@@ -51,6 +48,7 @@ code_generation_template = PromptTemplate(
     input_variables=['history', 'input'],
     template='You are a code generation tool. Please generate code based on the explanation being given.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
+             ' Please include unit tests for all code created. Please include doctests for Python.'
              ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
@@ -82,14 +80,20 @@ general_ai_model_template = PromptTemplate(
              ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
+
+
 def remove_special_characters(input_string):
     # Define a regular expression pattern to match "@" and "."
     pattern = r'[.@]'
+
     # Use the sub() function from the re module to replace matches of the pattern with an empty string
     result = re.sub(pattern, '', input_string)
+
     return result
+
+
 # AI Model Functions
-def AIModel(user_input: str, ai_model: str,email:str) -> dict:
+def AIModel(user_input: str, ai_model: str, email: str) -> dict:
     # GPT by default
     llm = gpt
 
@@ -100,6 +104,7 @@ def AIModel(user_input: str, ai_model: str,email:str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
+    
     collection_name = remove_special_characters(email)
     memory = initialise_vectordb(collection_name)
 
@@ -113,7 +118,7 @@ def AIModel(user_input: str, ai_model: str,email:str) -> dict:
     return response
 
 
-def code_generation(user_input: str, ai_model: str,email:str) -> dict:
+def code_generation(user_input: str, ai_model: str, email: str) -> dict:
     # GPT by default
     llm = gpt
 
@@ -138,7 +143,7 @@ def code_generation(user_input: str, ai_model: str,email:str) -> dict:
     return response
 
 
-def code_analysis(user_input: str, ai_model: str,email:str) -> dict:
+def code_analysis(user_input: str, ai_model: str, email: str) -> dict:
     # GPT by default
     llm = gpt
 
@@ -149,20 +154,21 @@ def code_analysis(user_input: str, ai_model: str,email:str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
+    
     collection_name = remove_special_characters(email)
     memory = initialise_vectordb(collection_name)
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
     code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
     response = code_analysis_chain.invoke({'input': user_input})
-    print("collection name is",collection_name)
+    
     # Save the prompt/response pair in the Milvus collection
     memory.save_context({'input': user_input}, {'output': response['text']})
 
     return response
 
 
-def code_completion(user_input: str, ai_model: str, input_language: str,email:str) -> dict:
+def code_completion(user_input: str, ai_model: str, input_language: str, email: str) -> dict:
     # llama by default
     llm = llama
 
@@ -187,7 +193,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str,email:st
     return response
 
 
-def code_translation(input_language: str, output_language: str, user_input: str, ai_model: str,email:str) -> dict:
+def code_translation(input_language: str, output_language: str, user_input: str, ai_model: str, email: str) -> dict:
     # starcoder by default
     llm = starcoder
 
