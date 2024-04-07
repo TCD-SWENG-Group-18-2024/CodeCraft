@@ -202,6 +202,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
         console.log(responseData);
 
         toast.success("Code has been successfully executed");
+        
         setCodeStatus(responseData.exit_code);
         setCodeOutput(responseData.stdout);
       } else {
@@ -262,7 +263,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                 <ExecuteCode sx={{ height: "20px", width: "20px" }} />
               </button>
             </div>
-  
+            
             {!showOnlyCode && (
               <>
                 <Typography
