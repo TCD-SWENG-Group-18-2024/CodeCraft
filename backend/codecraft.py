@@ -79,7 +79,6 @@ def llm_text_request():
 
 @app.route('/llm/file', methods=['POST'])
 def llm_file_request():
-
     # Extract parameters from JSON payload
     use_case = request.form.get('use_case')
     ai_model = request.form.get('ai_model')
@@ -127,9 +126,11 @@ def clear_memory():
     """
     Clears the MilvusDB collection
     """
-    utility.drop_collection('LangChainCollection')
+    email = session['email']
+    utility.drop_collection(email)
+
     # Should be 200 whether the collection exists or not
-    return jsonify({'success': 'Cleared the Milvus collection.'})
+    return jsonify({'success': 'Cleared the Milvus collection.'}), 200
 
 
 def process_data(user_input, use_case, ai_model, input_language, output_language,email):
@@ -155,7 +156,6 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
 
 @app.route('/register', methods=['POST'])
 def register_user():
-    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
     email = request.json['email']
     password = request.json['password']
     confirm_password = request.json['confirm_password']
