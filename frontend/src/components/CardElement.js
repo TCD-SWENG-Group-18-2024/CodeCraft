@@ -292,7 +292,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                         />
                       }
                       sx={{
-                        marginRight: 1,
+                        marginRight: '1px',
                         marginLeft: 'auto',
                         display: 'flex',
                         flexDirection: 'row-reverse', 

@@ -256,6 +256,7 @@
  }
 
 .card-area{
+  min-height: 79vh;
   width: 100%;
   display: flex;
   flex-direction: column;
