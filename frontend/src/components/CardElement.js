@@ -25,7 +25,6 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
   const [codeOutput, setCodeOutput] = useState("");
   const [showOnlyCode, setShowOnlyCode] = useState(false);
 
-
   const copyToClipboard = (response) => {
     const lines = response.split("\n");
     let codeBlock = "";
@@ -55,6 +54,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
         console.error("Failed to copy:", error);
       });
   };
+
   const handleExportClick = (response) => {
     const lines = response.split("\n");
 
@@ -148,6 +148,34 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     );
   };
 
+  const getOnlyCode = (response) => {
+    const lines = response.split("\n");
+    let codeBlock = "";
+    let language = "";
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("```")) {
+        language = line.substring(3).trim();
+        for (let j = i + 1; j < lines.length; j++) {
+          const codeLine = lines[j].trim();
+          if (codeLine.endsWith("```")) {
+            codeBlock = lines.slice(i + 1, j).join("\n");
+            response = codeBlock;
+            break;
+          }
+        }
+        break;
+      }
+    }
+    return (
+      <SyntaxHighlighter language={language} style={syntax}>
+        {response}
+      </SyntaxHighlighter>
+    );
+  };
+
+  const codeResponse = getOnlyCode(response);
+
   const tempResponse = `<code>${response}</code>`;
 
   const modifiedFeedback = tempResponse.replace(
@@ -213,6 +241,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
       toast.error("Code was not executed: " + error);
     }
   };
+
   return (
     <Card variant="outlined" sx={{ width: "700px", marginBottom: "25px" }}>
       <CardContent>
@@ -224,113 +253,120 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
           </>
         ) : (
           <>
-            <div className="buttons-container">
-            <div className="checkbox-container">
-            <FormControlLabel
-      label="Show Only Code"
-      labelPlacement="start"
-      control={
-        <Checkbox
-          checked={showOnlyCode}
-          onChange={(e) => setShowOnlyCode(e.target.checked)}
-        />
-      }
-      sx={{
-        marginRight: 1,
-        marginLeft: 'auto',
-        display: 'flex',
-        flexDirection: 'row-reverse', 
-        alignItems: 'center',
-      }}
-    />
-            </div>  
-              <button
-                className="copy-button"
-                onClick={() => copyToClipboard(response)}
+            <div className="card-header">
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+                style={{
+                  fontFamily: "'Courier New', Courier, monospace",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
               >
-                <CopyCode sx={{ height: "20px", width: "20px" }} />
-              </button>
-              <button
-                className="export-button"
-                onClick={() => handleExportClick(response)}
-              >
-                <img src={Export} alt="Export Icon" className="export-img" />
-              </button>
-              <button
-                onClick={handleExecutedCode}
-                className="executeCode-button"
-              >
-                <ExecuteCode sx={{ height: "20px", width: "20px" }} />
-              </button>
+                <img
+                  src={app_logo}
+                  alt="App Logo"
+                  style={{
+                    width: "15px",
+                    height: "15px",
+                    marginTop: "3px",
+                    marginRight: "3px",
+                  }}
+                />
+                <div>{formattedUsecase ? formattedUsecase : "Code Analysis"}</div>
+              </Typography>
+              <div className="buttons-container">
+                <div className="checkbox-container">
+                  {usecase !== "code_analysis" ? (
+                    <FormControlLabel
+                      label="Show Only Code"
+                      labelPlacement="start"
+                      control={
+                        <Checkbox
+                          checked={showOnlyCode}
+                          onChange={(e) => setShowOnlyCode(e.target.checked)}
+                        />
+                      }
+                      sx={{
+                        marginRight: 1,
+                        marginLeft: 'auto',
+                        display: 'flex',
+                        flexDirection: 'row-reverse', 
+                        alignItems: 'center',
+                      }}
+                    />
+                  ) : ("")}
+                </div>  
+                <button
+                  className="copy-button"
+                  onClick={() => copyToClipboard(response)}
+                >
+                  <CopyCode sx={{ height: "20px", width: "20px" }} />
+                </button>
+                <button
+                  className="export-button"
+                  onClick={() => handleExportClick(response)}
+                >
+                  <img src={Export} alt="Export Icon" className="export-img" />
+                </button>
+                <button
+                  onClick={handleExecutedCode}
+                  className="executeCode-button"
+                >
+                  <ExecuteCode sx={{ height: "20px", width: "20px" }} />
+                </button>
+              </div>
             </div>
-            
-            {!showOnlyCode && (
-              <>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  gutterBottom
-                  style={{
-                    fontFamily: "'Courier New', Courier, monospace",
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <img
-                    src={app_logo}
-                    alt="App Logo"
-                    style={{
-                      width: "15px",
-                      height: "15px",
-                      marginTop: "3px",
-                      marginRight: "3px",
-                    }}
-                  />
-                  <div>{formattedUsecase ? formattedUsecase : "Code Analysis"}</div>
-                </Typography>
-  
-                <Typography
-                  sx={{ mb: 1.5 }}
-                  color="text.secondary"
-                  style={{
-                    marginTop: "20px",
-                    marginBottom: "20px",
-                    textAlign: "left",
-                  }}
-                >
-                  {query.length > 90 ? query.slice(0, 90) + "..." : query}
-                </Typography>
-  
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  style={{ textAlign: "left" }}
-                >
-                  Code Status: {codeStatus}
-                </Typography>
-  
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  style={{ textAlign: "left" }}
-                >
-                  Code Output: "{codeOutput}"
-                </Typography>
-              </>
-            )}
-  
-            {/* This part is outside the {!showOnlyCode} check, so it's always displayed */}
+            <Typography
+              sx={{ mb: 1.5 }}
+              color="text.secondary"
+              style={{
+                marginTop: "10px",
+                marginBottom: "15px",
+                textAlign: "left",
+              }}
+            >
+              {query.length > 90 ? query.slice(0, 90) + "..." : query}
+            </Typography>
             <Typography
               sx={{ fontSize: 11 }}
               style={{ textAlign: "left" }}
               variant="body2"
             >
-              {response.includes("```") ? (
-                <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
+              {/*Sometimes a query may contain triple backticks, don't want that parsed*/}
+              {response.includes("```") && usecase !== "code_analysis" ? (
+                <>
+                  {showOnlyCode ? (
+                    codeResponse
+                  ) : (
+                    <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
+                  )}
+                </>
               ) : (
                 <ReactMarkdown>{response}</ReactMarkdown>
               )}
             </Typography>
+            <>
+              {usecase !== "code_analysis" && codeStatus ? (
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  style={{ textAlign: "left", marginTop: "10px" }}
+                >
+                  <code>Code Status: {codeStatus}</code>
+                </Typography>
+              ) : ("")}
+              {usecase !== "code_analysis" && codeOutput ? (
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  style={{ textAlign: "left" }}
+                >
+                  <code>Code Output: {codeOutput}</code>
+                </Typography>
+              ) : ("")}
+            </>
           </>
         )}
       </CardContent>
