@@ -10,6 +10,8 @@ RUN pip3 install -r requirements.txt
 
 # Copy backend source code
 COPY response.py .
+COPY config.py .
+COPY models.py .
 COPY codecraft.py .
 
 # Expose port 8080

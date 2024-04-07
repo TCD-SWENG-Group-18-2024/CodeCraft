@@ -1,34 +1,50 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
+import Switch from "@mui/material/Switch"; // Import from `@mui/material` not `@mui/joy`
+import Typography from "@mui/material/Typography"; // Import from `@mui/material`
 import { toast } from "react-hot-toast";
 import Sidebar from "../components/Sidebar";
 import SubmissionBar from "../components/SubmissionBar";
 import Dropdown from "../components/Dropdown";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import "../styles/SubmissionPage.css";
 import "./Home";
 import "./LoginSignUp";
-import Export from "../assets/export.png";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CardElement from "../components/CardElement";
 import ResponsiveDialog from "../components/ConfirmationButton";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const SubmissionPage = () => {
-  const [inputType, setInputType] = useState("textbox");
+  const userID = localStorage.getItem("userID");
+  const [inputType, setInputType] = useState("files");
   const [input, setInput] = useState("");
-  const [useCase, setUseCase] = useState(""); // set default cases
+  const [useCase, setUseCase] = useState("code_analysis"); // set default cases
   const [aiModel, setAIModel] = useState("openai"); //set default AI model
   const [feedback, setFeedback] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [droppedFiles, setDroppedFiles] = useState([]);
-  const [inputLanguage, setInputLanguage] = useState("java");
+  const [inputLanguage, setInputLanguage] = useState("");
   const [outputLanguage, setOutputLanguage] = useState("");
-  const [isDropdownOpen, setIsDropdownopen] = useState(true);
-  const [cards, setCards] = useState([]); // whenever submit is clicked
-  const [newCard, setNewCard] = useState(null);
-  const [copied, setCopied] = useState(false);
+  const [checked, setChecked] = React.useState(true);
+  const [fileName, setFileName] = React.useState("");
+  const [tooltipText, setTooltipText] = useState("");
+  const [cards, setCards] = useState(() => {
+    if (userID === "") {
+      return [];
+    }
+    const storedCards = localStorage.getItem(userID);
+    return storedCards ? JSON.parse(storedCards) : [];
+  });
+
+  const handleTooltipHover = () => {
+    setTooltipText(
+      "For Code Analysis and Code Translation, we recommend submitting a file.\n" +
+      "For Code Generation and Completion, we recommend submitting a text prompt.");
+  };
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -36,37 +52,6 @@ const SubmissionPage = () => {
   const handleTextBoxChange = (event) => {
     setInput(event.target.value);
   };
-
-  /*Handle the dropdowns */
-  const handleUseCaseChange = (event) => {
-    setUseCase(event.target.value);
-  };
-
-  const handleAiModelChange = (event) => {
-    setAIModel(event.target.value);
-  };
-
-  const handleInputTypeChange = (event) => {
-    setInputType(event.target.value);
-    setInput(""); // clear the input when changing between drop file and input text
-    setDroppedFiles([]);
-  };
-
-  const handleInputLanguageChange = (event) => {
-    setInputLanguage(event.target.value);
-  };
-
-  const handleOutputLanguageChange = (event) => {
-    setOutputLanguage(event.target.value);
-  };
-
-  const [customFileName, setCustomFileName] = useState("");
-
-  const highlightCodeBlock = (code) => (
-    <SyntaxHighlighter language="jsx" style={syntax}>
-      {code}
-    </SyntaxHighlighter>
-  );
   // takes input - files
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -82,28 +67,25 @@ const SubmissionPage = () => {
     event.stopPropagation();
 
     const droppedFiles = Array.from(event.dataTransfer.files);
-    setDroppedFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // deconstruct array into separate variables
+    setDroppedFiles(droppedFiles);
     console.log("Dropped Files: ", droppedFiles);
   };
 
-  // need to set max size
-  const MAX_FILE_SIZE = 10000;
+  const MAX_FILE_SIZE = 10 * 1024;
 
   const handleFileSelect = (event) => {
     const selectFile = Array.from(event.target.files);
-    // if (selectFile){
-    //     setDroppedFiles([...droppedFiles, selectFile]);
-    // }
     const filteredFiles = selectFile.filter(
       (file) => file.size <= MAX_FILE_SIZE
     );
-
     if (filteredFiles.length > 0) {
-      setDroppedFiles((prevFiles) => [...prevFiles, ...selectFile]);
+      setDroppedFiles(selectFile);
+      setFileName(selectFile[0].name);
       console.log("Selected File: ", selectFile);
     } else {
-      // alert("Selected File(s) to exceeded the size limit of 10000 bytes");
-      toast.error("Selected File(s) to exceeded the size limit of 10000 bytes");
+      toast.error(
+        "Selected File exceeds the size limit of " + MAX_FILE_SIZE / 1024 + "KB"
+      );
     }
   };
 
@@ -115,8 +97,7 @@ const SubmissionPage = () => {
             return;
         }*/
     if (input.trim() === "" && inputType === "textbox") {
-      // alert("Please Enter some code before submitting");
-      toast.error("Please Enter some code before submitting");
+      toast.error("Please enter some code before submitting");
       return;
     }
 
@@ -131,8 +112,9 @@ const SubmissionPage = () => {
     console.log(data);
 
     try {
-      const response = await fetch("http://localhost:8080/llm/text", {
+      const response = await fetch(backendURL + "/llm/text", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -150,10 +132,7 @@ const SubmissionPage = () => {
     } catch (error) {
       setFeedback(`Error occurred while submitting: ${error.message}`);
     } finally {
-      setTimeout(() => {
-        // Simulate API response
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     }
 
     // setFeedback(`Submission successful. Language: ${selectedLanguage}`);
@@ -179,59 +158,16 @@ const SubmissionPage = () => {
     }
   };
 
-  const formatFeedback = (responseData) => {
-    let formattedFeedback = "";
-
-    if (useCase === "code_generation") {
-      const formattedText = responseData.text
-        ? `\n${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    } else if (useCase === "code_completion") {
-      const formattedCode = responseData.text
-        ? `Completed Code:\n${JSON.stringify(responseData.text, null, 2)}`
-        : "";
-
-      formattedFeedback = [formattedCode].filter(Boolean).join("\n\n");
-    } else if (useCase === "code_analysis") {
-      const formattedText = responseData.text
-        ? `Analysis:\n${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    } else if (useCase === "code_translation") {
-      const formattedText = responseData.text
-        ? `Translated Code: \n${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    } else {
-      // empty use case: just generic LLM response
-      const formattedText = responseData.text
-        ? `${responseData.text.replace(/\\n/g, "\n")}`
-        : "";
-
-      formattedFeedback = [formattedText].filter(Boolean).join("\n\n");
-    }
-
-    return formattedFeedback;
-  };
-
-  // need a function that handles submitting a file to backend.
-  // https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-
   const handleFileSubmit = async () => {
     // haven't test if it works or not
     if (droppedFiles.length === 0) {
-    //   alert("Please select or drop some files before submitting");
-      toast.error("Please select or drop some files before submitting");
+      toast.error("Please select or drop a file before submitting");
       return;
     }
 
     const formData = new FormData();
     droppedFiles.forEach((file) => {
-      formData.append(`file`, file);
+      formData.set(`file`, file);
     });
 
     formData.append("use_case", useCase);
@@ -251,9 +187,10 @@ const SubmissionPage = () => {
     // console.log(...formDataTest);
 
     try {
-      const response = await fetch("http://localhost:8080/llm/file", {
+      const response = await fetch(backendURL + "/llm/file", {
         method: "POST",
         body: formData,
+        credentials: "include",
         // headers: {
         //     "Content-Type" : "multipart/form-data",
         // },
@@ -265,16 +202,13 @@ const SubmissionPage = () => {
         setFeedback(responseData.text);
       } else {
         setFeedback(
-          `File Submission failed, Server return ${response.status} status`
+          `File Submission failed, Server returned ${response.status} status`
         );
       }
     } catch (error) {
       setFeedback(`Error occurred while submitting files: ${error.message}`);
     } finally {
-      setTimeout(() => {
-        // Simulate API response
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     }
     console.log("Feedback", feedback);
   };
@@ -282,9 +216,17 @@ const SubmissionPage = () => {
   const handleSubmit = () => {
     setIsLoading(true);
     if (inputType === "textbox") {
-      handleTextSubmit();
+      toast.promise(handleTextSubmit(), {
+        loading: "Loading...",
+        success: "Success!",
+        error: "Something went wrong, please try again",
+      });
     } else if (inputType === "files") {
-      handleFileSubmit();
+      toast.promise(handleFileSubmit(), {
+        loading: "Loading...",
+        success: "Success!",
+        error: "Something went wrong, please try again",
+      });
     }
   };
 
@@ -300,7 +242,7 @@ const SubmissionPage = () => {
     if (cards.length === 0) {
       handleCloseDialog();
     } else {
-      fetch("http://localhost:8080/llm/clearmemory", {
+      fetch(backendURL + "/llm/clearmemory", {
         method: "DELETE",
         //headers: {
         //    'Content-Type': 'application/json',
@@ -324,97 +266,10 @@ const SubmissionPage = () => {
     }
   };
 
-  const capitaliseFirstLetter = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
+  useEffect(() => {
+    localStorage.setItem(userID, JSON.stringify(cards));
+  }, [cards, userID]);
 
-  const formatUseCase = (str) => {
-    const words = str.split("_");
-    const capitalizedWords = words.map(
-      (word) => word.charAt(0).toUpperCase() + word.slice(1)
-    );
-    return capitalizedWords.join(" ");
-  };
-
-  const formatAIModel = (str) => {
-    if (str === "StarCoder") {
-      return "StarCoder";
-    } else return "GPT3.5";
-  };
-
-  const handleExportClick = (feedback) => {
-    const lines = feedback.split("\n");
-
-    let codeBlock = "";
-    let language = "";
-
-    // Loop through each line to find the starting marker
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-
-      if (line.startsWith("```")) {
-        // Extract the language from the line
-        language = line.substring(3).trim();
-
-        // Start capturing the code block from the next line
-        for (let j = i + 1; j < lines.length; j++) {
-          const codeLine = lines[j].trim();
-
-          // Check if the line is the ending marker
-          if (codeLine.endsWith("```")) {
-            // Extract the code block content
-            codeBlock = lines.slice(i + 1, j).join("\n");
-            feedback = codeBlock;
-            break; // Exit the loop once the ending marker is found
-          }
-        }
-        break; // Exit the loop once the starting marker is found
-      }
-    }
-    const extensionMap = {
-      python: ".py",
-      java: ".java",
-      c: ".c",
-      "c++": ".cpp",
-      "c#": ".cs",
-      assembly: ".S",
-      javascript: ".js",
-      jsx: ".jsx",
-      html: ".html",
-      css: ".css",
-      ruby: "ruby",
-      php: "php",
-      kotlin: ".kt",
-      r: ".R",
-      perl: ".pl",
-      json: ".json",
-      plaintext: ".txt"
-      // Add more mappings for other languages as needed
-    };
-
-    const fileExtension = extensionMap[language] || ".txt";
-
-    // Call the export function with the determined file extension
-    exportFeedback(feedback, fileExtension);
-  };
-
-  const exportFeedback = (feedback, fileExtension) => {
-    const fileName = customFileName || "feedback";
-
-    const blob = new Blob([feedback], { type: "text/plain;charset=utf-8" });
-
-    const a = document.createElement("a");
-    a.style.display = "none";
-
-    a.href = window.URL.createObjectURL(blob);
-
-    a.download = fileName + fileExtension;
-
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-  };
   useEffect(() => {
     // have to wait for feedback to update before you can add card
     if (feedback) {
@@ -429,54 +284,32 @@ const SubmissionPage = () => {
     }
   }, [feedback]);
   const addCard = () => {
-    const newCard = {
-      usecase: useCase,
-      query: input,
-      response: feedback,
-      isLoading: isLoading,
-    };
-    setCards((prevCards) => [newCard, ...prevCards]); // Add the new card to the dictionary
-  };
-
-  const copyToClipboard = (feedback) => {
-    const lines = feedback.split("\n");
-    let codeBlock = "";
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line.startsWith("```")) {
-        line.substring(3).trim();
-        for (let j = i + 1; j < lines.length; j++) {
-          const codeLine = lines[j].trim();
-          if (codeLine.endsWith("```")) {
-            codeBlock = lines.slice(i + 1, j).join("\n");
-            feedback = codeBlock;
-            break;
+    const newCard =
+      inputType === "files"
+        ? {
+            usecase: useCase,
+            query: fileName,
+            response: feedback,
+            isLoading: isLoading,
           }
-        }
-        break;
-      }
-    }
-    navigator.clipboard.writeText(feedback)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
-      })
-      .catch((error) => {
-        console.error('Failed to copy:', error);
-      });
+        : {
+            usecase: useCase,
+            query: input,
+            response: feedback,
+            isLoading: isLoading,
+          };
+
+    // Only store the latest 10 cards
+    setCards((prevCards) => {
+      const updatedCards = [newCard, ...prevCards.slice(0, 9)];
+      return updatedCards;
+    });
   };
 
-  // const pastCards = useMemo(() => {
-  //     return cards.slice(1).map((card, index) => (
-  //         <div key={index}>
-  //             <CardElement
-  //                 usecase={card.usecase}
-  //                 response={card.response}
-  //                 isLoading={false} // Set isLoading to false for all cards except the most recent one
-  //             />
-  //         </div>
-  //     ));
-  // }, [cards, isLoading]);
+  const handleInputTypeToggle = (event) => {
+    setChecked(event.target.checked);
+    setInputType(event.target.checked ? "files" : "textbox");
+  };
 
   return [
     <>
@@ -496,16 +329,93 @@ const SubmissionPage = () => {
               setInputLanguage={setInputLanguage}
               outputLanguage={outputLanguage}
               setOutputLanguage={setOutputLanguage}
+              checked={checked}
+              setChecked={setChecked}
             />
-            <div>
-              {inputType === "textbox" && (
-                <div className="submission">
-                  <SubmissionBar
-                    input={input}
-                    handleTextBoxChange={handleTextBoxChange}
-                    handleKeyDown={handleKeyDown}
-                    handleSubmit={handleSubmit}
-                  />
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center"}}>
+              <Tooltip
+                title={
+                  <span style={{ fontSize: "13px", color: "white", whiteSpace: "pre-line" }}>
+                    {tooltipText}
+                  </span>
+                }
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: "10px",
+                  }}
+                  className="infoButton"
+                  onMouseEnter={handleTooltipHover}
+                >
+                  <InfoIcon sx={{ color: "white" }}></InfoIcon>
+                </div>
+              </Tooltip>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginRight: "10px",
+                }}
+              >
+                <Typography component="div" level="body2">
+                  Text
+                </Typography>
+                <Switch checked={checked} onChange={handleInputTypeToggle} />
+                <Typography component="div" level="body2">
+                  File
+                </Typography>
+              </div>
+              <div>
+                {inputType === "textbox" && (
+                  <div className="submission">
+                    <SubmissionBar
+                      input={input}
+                      handleTextBoxChange={handleTextBoxChange}
+                      handleKeyDown={handleKeyDown}
+                      handleSubmit={handleSubmit}
+                    />
+                    <ResponsiveDialog
+                      open={dialogOpen}
+                      handleClose={handleCloseDialog}
+                      handleYesClick={handleYesClick}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={handleNewConversation}
+                      sx={{ ml: 2, height: "56px", padding: "15px" }}
+                    >
+                      New Conversation
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {inputType === "files" && (
+                <div className="fileInputContainer">
+                  <div
+                    className="fileDropZone"
+                    onDrop={handleFileDrop}
+                    onDragOver={handleDragOver}
+                    onClick={() => document.getElementById("fileInput").click()}
+                  >
+                    {droppedFiles.length > 0 ? (
+                      <a>
+                        {droppedFiles.map((file, index) => (
+                          <li key={index}>{file && file.name}</li>
+                        ))}
+                      </a>
+                    ) : (
+                      <p>Drag files here or Click to select</p>
+                    )}
+                    <input
+                      id="fileInput"
+                      type="file"
+                      onChange={(e) => {
+                        handleFileSelect(e);
+                      }}
+                    />
+                  </div>
                   <ResponsiveDialog
                     open={dialogOpen}
                     handleClose={handleCloseDialog}
@@ -513,84 +423,25 @@ const SubmissionPage = () => {
                   />
                   <Button
                     variant="contained"
+                    onClick={handleSubmit}
+                    sx={{ ml: 2, height: "56px", padding: "16px 32px" }}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    variant="contained"
                     onClick={handleNewConversation}
-                    sx={{ ml: 2, height: "56px", padding: "15px" }}
+                    sx={{ ml: 2, height: "56px", padding: "16px 48px" }}
                   >
                     New Conversation
                   </Button>
                 </div>
               )}
             </div>
-            {inputType === "files" && (
-              <div className="fileInputContainer">
-                <div
-                  className="fileDropZone"
-                  onDrop={handleFileDrop}
-                  onDragOver={handleDragOver}
-                  onClick={() => document.getElementById("fileInput").click()}
-                >
-                  {droppedFiles.length > 0 ? (
-                    <a>
-                      {droppedFiles.map((file, index) => (
-                        <li key={index}>{file && file.name}</li>
-                      ))}
-                    </a>
-                  ) : (
-                    <p>Drag files here or Click to select</p>
-                  )}
-                  <input
-                    id="fileInput"
-                    type="file"
-                    onChange={(e) => {
-                      handleFileSelect(e);
-                    }}
-                  />
-                </div>
-                <ResponsiveDialog
-                  open={dialogOpen}
-                  handleClose={handleCloseDialog}
-                  handleYesClick={handleYesClick}
-                />
-                <Button
-                  variant="contained"
-                  onClick={handleSubmit}
-                  sx={{ ml: 2, height: "64px", padding: "16px 32px" }}
-                >
-                  Submit
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleNewConversation}
-                  sx={{ ml: 2, height: "64px", padding: "16px 48px" }}
-                >
-                  New Conversation
-                </Button>
-              </div>
-            )}
           </div>
 
           <div className="feedBackArea">
             <div className="card-area">
-              {!isLoading && feedback && cards.length !== 0 && (
-                <div className="button-container">
-                  <button
-                    className="copy-button"
-                    onClick={() => {
-                      copyToClipboard(feedback);
-                    }}
-                  >
-                    <ContentCopyIcon sx={{height: "20px", width: "20px"}}/>
-                  </button>
-                  <button
-                    className="export-button"
-                    onClick={() => {
-                      handleExportClick(feedback);
-                    }}
-                  >
-                    <img src={Export} alt="Export Icon" className="export-img" />
-                  </button>
-                </div>
-              )}
               {/* <div>
                             <CardElement
                                 usecase={useCase}
@@ -613,24 +464,8 @@ const SubmissionPage = () => {
           </div>
         </div>
       </div>
-
-      <div className="wave_container">
-        <div className="wave"></div>
-        <div className="wave"></div>
-        <div className="wave"></div>
-      </div>
     </>,
   ];
 };
 
 export default SubmissionPage;
-
-// for export file format
-{
-  /* <input
-    type="text"
-    value={customFileName}
-    onChange={(e) => setCustomFileName(e.target.value)}    
-    placeholder="Enter custom file name"
-/> */
-}

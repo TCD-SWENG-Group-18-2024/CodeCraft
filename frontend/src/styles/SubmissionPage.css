@@ -23,6 +23,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .submission{
   display: flex;
   flex-direction: row;
@@ -36,21 +37,27 @@
 }
 
 .fileInputContainer{
-  width: 75%; 
+  width: 100%; 
   position: relative;
-  margin-bottom: 20px;
-  margin-top: 20px;
   display: flex;
   align-items: flex-start;
 }
 
 .fileDropZone{
-  width: 150%;
-  height: 20px;
+  width: 482.5px;
+  height: 12px;
   border: 2px dashed black;
   padding: 20px;
   text-align: center;
   cursor: pointer;
+}
+
+.fileDropZone p {
+  margin-top: -5px;
+}
+
+.fileDropZone li {
+  margin-top: -5px;
 }
 
 .fileDropZone:hover{
@@ -249,7 +256,7 @@
  }
 
 .card-area{
-  height: 700px;
+  min-height: 79vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -261,91 +268,9 @@
   margin-left: 620px;
 }
 
-.export-button{
-  transform: translateY(35px);    
-  margin-left: 10px;
-  height: 25px;
-  width: 25px;
+.infoButton :hover{
+  cursor: pointer;
 }
-.export-img{
-  height: 20px;
-  width: 20px;
-}
-.exportButton:hover{
-    color: white;
-    background-color: #0F62FE;
-}
-
-.copy-button{
-  transform: translateY(35px);    
-  height: 25px;
-  width: 25px;
-}
-.copyButton:hover{
-    color: white;
-    background-color: #0F62FE;
-}
-/*
-.exportButton{
-  display: inline-block;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1em;
-
-  padding: 0.75em 1em;
-  color: #0F62FE;
-
-  border: 0.15em solid #0F62FE;
-  border-radius: calc(0.75em + 0.5em + 0.15em);
-
-  transition: 2s;
-
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    top: -1.5em;
-
-    z-index: -1;
-
-    width: 200%;
-    aspect-ratio: 1;
-
-    border-radius: 40%;
-
-    background-color: rgba(#0F62FE, 0.25);
-
-    transition: 2s;
-  }
-
-  &:before{
-    left: -80%;
-    transform: translate3d(0, 1em, 0) rotate(-340deg);
-  }
-
-  &:after{
-    right: -80%;
-    transform: translate3d(0, 1em, 0) rotate(390deg);
-  }
-
-  &:hover,
-  &:focus{
-    color: white;
-    background-color: rgba(15, 98, 254, 0.75);
-    border-color: white;
-
-    &:before, 
-    &:after {
-      background-color: rgba(#0F62FE, 0.75);
-    }
-  }
- }
-*/
-
  
 @keyframes bounce {
   from, to {
@@ -372,4 +297,16 @@
   bottom: 0;
   z-index: -1;
 }
+
+.submissionSwitchContainer {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.submissionSwitchContainer > div {
+  flex-shrink: 0;
+  margin-right: 0px;
+}
+
 

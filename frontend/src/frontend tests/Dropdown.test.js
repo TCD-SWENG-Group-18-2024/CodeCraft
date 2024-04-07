@@ -2,20 +2,22 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Dropdown from '../components/Dropdown';
 
-test('renders dropdown with input type selection', () => {
+test('renders dropdown with AI model selection', () => {
   const { getByText } = render(<Dropdown />);
 
-  const inputTypeDropdownButton = getByText('-Select Input Type-');
+ const aiModelDropdownButton = getByText(/-Select AI Model-/);
 
-  expect(inputTypeDropdownButton).toBeInTheDocument();
+  expect(aiModelDropdownButton).toBeInTheDocument();
 
-  fireEvent.click(inputTypeDropdownButton);
+  fireEvent.click(aiModelDropdownButton);
 });
 
 test('renders dropdown with use case selection', () => {
   const setUseCase = jest.fn();
+  const setChecked = jest.fn();
+  const setinputType = jest.fn();
   const { getByText } = render(
-    <Dropdown useCase="code_analysis" setUseCase={setUseCase} />
+    <Dropdown useCase="code_analysis" setUseCase={setUseCase} setChecked={setChecked} setInputType={setinputType}/>
   );
 
   const useCaseDropdown = getByText('Code Analysis');

@@ -11,6 +11,33 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15); /* Glow effect on hover */
 }
 
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.export-button,
+.copy-button,
+.executeCode-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+}
+.export-img{
+    height: 20px;
+    width: 20px;
+}
+
 .cardStyle {
     position: relative;
     width: 50vw;

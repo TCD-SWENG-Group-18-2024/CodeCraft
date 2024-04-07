@@ -41,12 +41,15 @@ mail = Mail(app)
 with app.app_context():
     db.create_all()
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/')
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
+
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -58,25 +61,37 @@ def llm_text_request():
     output_language = data.get('output_language')
     user_input = data.get('user_input')
 
+    if session['isLoggedIn']:
+        print(session)
+        email = session['email']
+        print(email)
+    else:
+        email = None
     # Throws error if empty request
     if user_input is None:
         return jsonify({'error': 'No user input provided'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language)
+    result = process_data(user_input, use_case, ai_model,input_language, output_language, email)
 
     return jsonify(result)
 
 
 @app.route('/llm/file', methods=['POST'])
 def llm_file_request():
-
     # Extract parameters from JSON payload
     use_case = request.form.get('use_case')
     ai_model = request.form.get('ai_model')
     input_language = request.form.get('input_language')
     output_language = request.form.get('output_language')
 
+    if session['isLoggedIn']:
+        email = session.get('email')
+        print(session.get('isLoggedIn'))
+        print(email)
+    else:
+        email = None
+    
     # Check if 'file' is in the request files
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
@@ -102,7 +117,7 @@ def llm_file_request():
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language)
+    result = process_data(user_input, use_case, ai_model, input_language, output_language, email)
     return jsonify(result)
 
 
@@ -111,25 +126,28 @@ def clear_memory():
     """
     Clears the MilvusDB collection
     """
-    utility.drop_collection('LangChainCollection')
-    # Should be 200 whether the collection exists or not
-    return jsonify({'success': 'Cleared the Milvus collection.'})
+    email = session['email']
+    utility.drop_collection(email)
 
-def process_data(user_input, use_case, ai_model, input_language, output_language):
+    # Should be 200 whether the collection exists or not
+    return jsonify({'success': 'Cleared the Milvus collection.'}), 200
+
+
+def process_data(user_input, use_case, ai_model, input_language, output_language,email):
     if use_case is not None:
         use_case = use_case.lower()
     
     if use_case == 'code_analysis':
-        result = code_analysis(user_input, ai_model)
+        result = code_analysis(user_input, ai_model, email)
     elif use_case == 'code_generation':
-        result = code_generation(user_input, ai_model)
+        result = code_generation(user_input, ai_model,email)
     elif use_case == 'code_completion':
-        result = code_completion(user_input, ai_model, input_language)
+        result = code_completion(user_input, ai_model, input_language,email)
     elif use_case == 'code_translation':
-        result = code_translation(input_language, output_language, user_input, ai_model)
+        result = code_translation(input_language, output_language, user_input, ai_model,email)
     elif use_case == '':
         # General model for no specified operation
-        result = AIModel(user_input, ai_model)
+        result = AIModel(user_input, ai_model,email)
     else:
         result = {"error": "Invalid use case"}
 
@@ -138,10 +156,10 @@ def process_data(user_input, use_case, ai_model, input_language, output_language
 
 @app.route('/register', methods=['POST'])
 def register_user():
-    ALLOWED_EMAIL_EXTENSIONS = ['@gmail.com','@tcd.ie']
     email = request.json['email']
     password = request.json['password']
     confirm_password = request.json['confirm_password']
+    isLoggedIn = request.json['isLoggedIn']
 
     # Password Requirements:
     if len(password) < 8:
@@ -163,8 +181,8 @@ def register_user():
 
     # Username Requirements:
     if email == '':
-        return jsonify({"error": "No username provided"}), 400
-    if not any(email.endswith(ext) for ext in ALLOWED_EMAIL_EXTENSIONS):
+        return jsonify({"error": "No email provided"}), 400
+    if not re.search(r'^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$', email):
         return jsonify({"error": "Enter a valid email"}), 400
     
     email = email.lower()
@@ -179,6 +197,9 @@ def register_user():
     db.session.add(new_user)
     db.session.commit()
 
+    session['email'] = email
+    session['isLoggedIn'] = True
+
     return jsonify({
         "id": new_user.id,
         "email": new_user.email
@@ -188,11 +209,15 @@ def register_user():
 @app.route('/login', methods=['POST'])
 def login_user():
     email = request.json['email']
+    print(email)
     password = request.json['password']
-
+    print(password)
+    isLoggedIn = request.json['isLoggedIn']
+    print(isLoggedIn)
+    
     email = email.lower()
     user = User.query.filter_by(email=email).first()
-
+    
     if user is None:
         return jsonify({"error": "User does not exist"}), 401
     
@@ -215,7 +240,10 @@ def login_user():
     
     session.pop('login_attempts', None) #Reset counter after the correct password is given
     session.pop('last_login_attempt', None)  # Reset the last login attempt time upon successful login
-
+    session['email'] = email
+    session['isLoggedIn'] = isLoggedIn
+    print(f"session is {session}")
+    
     return jsonify({
         "id": user.id,
         "email": user.email
@@ -242,6 +270,7 @@ def forgot_password():
     email = request.json['email']  # Extract email from user input
     # Check if the user exists
     user = User.query.filter_by(email=email).first()
+    
     if user is None:
         return jsonify({"error": "User does not exist"}), 404
     else:
@@ -338,7 +367,7 @@ def create_submission(code : str, language : str) -> str:
     headers = {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
@@ -358,16 +387,15 @@ def get_submission(token : str) -> dict:
 
     # Define key and host
     headers = {
-        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
     # GET request
     response = requests.get(url, headers=headers, params=querystring)
 
-    # GET request again if it is still processing
-    while (response.json()['status_id'] == 2):
-        time.sleep(0.5)
+    # GET request again if it is still processing or in the queue
+    while (response.json()['status_id'] == 1 or response.json()['status_id'] == 2):
         response = requests.get(url, headers=headers, params=querystring)
 
     # Return response
