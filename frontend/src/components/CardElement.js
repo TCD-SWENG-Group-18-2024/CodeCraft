@@ -6,7 +6,8 @@ import {
   Checkbox,
   FormControlLabel,
   Skeleton,
-  Typography
+  Typography,
+  Tooltip
 } from "@mui/material";
 import React, { useState } from "react";
 import { renderToString } from "react-dom/server";
@@ -24,6 +25,8 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
   const [codeStatus, setCodeStatus] = useState("");
   const [codeOutput, setCodeOutput] = useState("");
   const [showOnlyCode, setShowOnlyCode] = useState(false);
+
+  const isCode = (usecase !== "code_analysis" ? "Code" : "Content");
 
   const copyToClipboard = (response) => {
     const lines = response.split("\n");
@@ -46,7 +49,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     navigator.clipboard
       .writeText(response)
       .then(() => {
-        if (!copied) toast.success("Content Copied to Clipboard!");
+        if (!copied) toast.success(isCode + " Copied to Clipboard!");
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // Reset copied state after 3 seconds
       })
@@ -297,25 +300,33 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
                       }}
                     />
                   ) : ("")}
-                </div>  
-                <button
-                  className="copy-button"
-                  onClick={() => copyToClipboard(response)}
-                >
-                  <CopyCode sx={{ height: "20px", width: "20px" }} />
-                </button>
-                <button
-                  className="export-button"
-                  onClick={() => handleExportClick(response)}
-                >
-                  <img src={Export} alt="Export Icon" className="export-img" />
-                </button>
-                <button
-                  onClick={handleExecutedCode}
-                  className="executeCode-button"
-                >
-                  <ExecuteCode sx={{ height: "20px", width: "20px" }} />
-                </button>
+                </div>
+                <Tooltip title={"Copy " + isCode + " to Clipboard"} arrow>
+                  <button
+                    className="copy-button"
+                    onClick={() => copyToClipboard(response)}
+                  >
+                    <CopyCode sx={{ height: "20px", width: "20px" }} />
+                  </button>
+                </Tooltip>
+                <Tooltip title={"Export " + isCode + " to File"} arrow>
+                  <button
+                    className="export-button"
+                    onClick={() => handleExportClick(response)}
+                  >
+                    <img src={Export} alt="Export Icon" className="export-img" />
+                  </button>
+                </Tooltip>
+                {usecase !== "code_analysis" ? (
+                  <Tooltip title="Attempt Code Execution" arrow>
+                    <button
+                      onClick={handleExecutedCode}
+                      className="executeCode-button"
+                    >
+                      <ExecuteCode sx={{ height: "20px", width: "20px" }} />
+                    </button>
+                  </Tooltip>
+                ) : ("")}
               </div>
             </div>
             <Typography

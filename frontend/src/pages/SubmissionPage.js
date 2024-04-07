@@ -31,15 +31,6 @@ const SubmissionPage = () => {
   const [checked, setChecked] = React.useState(true);
   const [fileName, setFileName] = React.useState("");
   const [tooltipText, setTooltipText] = useState("");
-  const infoArray = [
-    "For Code Analysis and Code Translation, its best to submit a file!",
-    "Feel Like you are not gettting a response you want? Try start a new conversation!",
-    "For Code Completion and Code Generation, its recommended type in a prompt!",
-    "Sign up for saving your history!",
-    "Want to run your code here? Just press the play button on the cards!",
-    "Save generated code with click of a button. Just press the clipboard icon on the top right of the card :)",
-    
-  ];
   const [cards, setCards] = useState(() => {
     if (userID === "") {
       return [];
@@ -49,10 +40,9 @@ const SubmissionPage = () => {
   });
 
   const handleTooltipHover = () => {
-    // Select a random information from the array
-    const randomIndex = Math.floor(Math.random() * infoArray.length);
-    const randomInfo = infoArray[randomIndex];
-    setTooltipText(randomInfo);
+    setTooltipText(
+      "For Code Analysis and Code Translation, we recommend submitting a file.\n" +
+      "For Code Generation and Completion, we recommend submitting a text prompt.");
   };
 
   const toggleSidebar = () => {
@@ -81,7 +71,7 @@ const SubmissionPage = () => {
     console.log("Dropped Files: ", droppedFiles);
   };
 
-  const MAX_FILE_SIZE = 10000;
+  const MAX_FILE_SIZE = 10 * 1024;
 
   const handleFileSelect = (event) => {
     const selectFile = Array.from(event.target.files);
@@ -94,7 +84,7 @@ const SubmissionPage = () => {
       console.log("Selected File: ", selectFile);
     } else {
       toast.error(
-        "Selected File exceeds the size limit of " + MAX_FILE_SIZE / 1000 + "KB"
+        "Selected File exceeds the size limit of " + MAX_FILE_SIZE / 1024 + "KB"
       );
     }
   };
@@ -342,14 +332,13 @@ const SubmissionPage = () => {
               checked={checked}
               setChecked={setChecked}
             />
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center"}}>
               <Tooltip
                 title={
-                  <span style={{ fontSize: "18px", color: "white" }}>
+                  <span style={{ fontSize: "13px", color: "white", whiteSpace: "pre-line" }}>
                     {tooltipText}
                   </span>
                 }
-                followCursor
               >
                 <div
                   style={{
@@ -363,7 +352,6 @@ const SubmissionPage = () => {
                   <InfoIcon sx={{ color: "white" }}></InfoIcon>
                 </div>
               </Tooltip>
-
               <div
                 style={{
                   display: "flex",

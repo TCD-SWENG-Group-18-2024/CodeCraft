@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 2px;
+    gap: 8px;
 }
 
 .export-button,
@@ -33,14 +33,12 @@
     width: 26px;
     height: 26px;
 }
-.export-button,
-.copy-button,
-.checkbox-container {
-    margin-right: 8px;
-}
 .export-img{
     height: 20px;
     width: 20px;
+}
+.checkbox-container {
+    margin-right: 8px;
 }
 
 .cardStyle {
