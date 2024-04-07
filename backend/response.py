@@ -48,6 +48,7 @@ code_generation_template = PromptTemplate(
     input_variables=['history', 'input'],
     template='You are a code generation tool. Please generate code based on the explanation being given.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
+             ' Please include unit tests for all code created. Please include doctests for Python.'
              ' Relevant pieces of previous information: {history}'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
@@ -117,7 +118,7 @@ def AIModel(user_input: str, ai_model: str, email: str) -> dict:
     return response
 
 
-def code_generation(user_input: str, ai_model: str,email:str) -> dict:
+def code_generation(user_input: str, ai_model: str, email: str) -> dict:
     # GPT by default
     llm = gpt
 

@@ -117,7 +117,7 @@ def llm_file_request():
         return jsonify({'error': 'Failed to decode file content as UTF-8'}), 400
 
     # Call the appropriate function based on use_case and ai_model
-    result = process_data(user_input, use_case, ai_model,input_language, output_language, email)
+    result = process_data(user_input, use_case, ai_model, input_language, output_language, email)
     return jsonify(result)
 
 
