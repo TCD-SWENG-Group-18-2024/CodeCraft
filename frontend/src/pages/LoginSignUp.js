@@ -51,7 +51,6 @@ const SignUp = () => {
     } catch (error) {
       logout();
       console.error("Error:", error.message);
-      toast.error("Please Enter Valid inputs");
     }
   };
 
