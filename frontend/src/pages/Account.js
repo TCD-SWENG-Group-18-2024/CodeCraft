@@ -20,9 +20,8 @@ function Account() {
                 <Link to="/">Back to Home</Link>
             </div>
             <div className="userGreeting">
-                <h1>Hello, User!</h1>
-                <p> Welcome back!</p>
-                <p> Manage Your Account Here </p>
+                <h1>{userEmail}</h1>
+                <p>Manage Your Account Here</p>
             </div>
             <ul className="featureList">
                 <li><Link to="/edit-profile">Edit Profile</Link></li>

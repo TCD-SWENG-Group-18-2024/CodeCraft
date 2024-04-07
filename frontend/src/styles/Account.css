@@ -30,9 +30,10 @@
 
 .userGreeting h1 {
     color: #2a2a2a;
-    font-size: 2em; /* 增加字体大小 */
-    font-weight: 600; /* 字体加粗 */
+    font-size: 2em;
+    font-weight: 600;
     margin-bottom: 0.25em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .userGreeting p {
@@ -63,7 +64,7 @@
 .featureList li a {
     color: #007bff;
     text-decoration: none;
-    display: block; /* 使链接充满整个列表项 */
+    display: block;
     padding: 0.75em 1em;
     transition: all 0.2s ease-in-out;
 }
