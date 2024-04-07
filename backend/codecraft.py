@@ -41,12 +41,15 @@ mail = Mail(app)
 with app.app_context():
     db.create_all()
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/')
 def homepage():
     return {"message": "Hello SwEng Project Group 18"}
+
 
 @app.route('/llm/text', methods=['POST'])
 def llm_text_request():
@@ -57,7 +60,6 @@ def llm_text_request():
     input_language = data.get('input_language')
     output_language = data.get('output_language')
     user_input = data.get('user_input')
-
 
     if session['isLoggedIn']:
         print(session)
@@ -129,6 +131,7 @@ def clear_memory():
     # Should be 200 whether the collection exists or not
     return jsonify({'success': 'Cleared the Milvus collection.'})
 
+
 def process_data(user_input, use_case, ai_model, input_language, output_language,email):
     if use_case is not None:
         use_case = use_case.lower()
@@ -157,6 +160,7 @@ def register_user():
     password = request.json['password']
     confirm_password = request.json['confirm_password']
     isLoggedIn = request.json['isLoggedIn']
+
     # Password Requirements:
     if len(password) < 8:
         return jsonify({"error": "Password should be at least 8 characters long"}), 400 # Min length of password
@@ -195,7 +199,6 @@ def register_user():
 
     session['email'] = email
     session['isLoggedIn'] = True
-
 
     return jsonify({
         "id": new_user.id,
@@ -240,6 +243,7 @@ def login_user():
     session['email'] = email
     session['isLoggedIn'] = isLoggedIn
     print(f"session is {session}")
+    
     return jsonify({
         "id": user.id,
         "email": user.email
@@ -266,6 +270,7 @@ def forgot_password():
     email = request.json['email']  # Extract email from user input
     # Check if the user exists
     user = User.query.filter_by(email=email).first()
+    
     if user is None:
         return jsonify({"error": "User does not exist"}), 404
     else:
@@ -362,7 +367,7 @@ def create_submission(code : str, language : str) -> str:
     headers = {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
@@ -382,16 +387,15 @@ def get_submission(token : str) -> dict:
 
     # Define key and host
     headers = {
-        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),        # TODO: Generate API Keys
+        "X-RapidAPI-Key": os.getenv("CODE_EXE_KEY"),
         "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
     }
 
     # GET request
     response = requests.get(url, headers=headers, params=querystring)
 
-    # GET request again if it is still processing
-    while (response.json()['status_id'] == 2):
-        time.sleep(0.5)
+    # GET request again if it is still processing or in the queue
+    while (response.json()['status_id'] == 1 or response.json()['status_id'] == 2):
         response = requests.get(url, headers=headers, params=querystring)
 
     # Return response
