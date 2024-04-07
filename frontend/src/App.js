@@ -19,24 +19,31 @@ console.log("backend URL: " + backendURL);
 
 function App() {
 
-    // dont need the below logic anymore, Handled in AuthProvider
-    // State for managing login status
-    /*const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Function to ping the backend
+const pingBackend = () => {
+  fetch(backendURL)
+    .then(response => {
+      if (response.ok) {
+        console.log('Backend is Alive');
+      } else {
+        console.error('Error pinging backend: Error Code ', response.status);
+      }
+    })
+    .catch(error => {
+      console.error('Error pinging backend: ', error);
+    });
+  };
 
-    // Check for user authentication status when the app loads
-    useEffect(() => {
-      const storedUserID = localStorage.getItem('userID');
-      setIsLoggedIn(!!storedUserID);
-    }, []);
+  // Interval to ping every 10 seconds (adjust as needed)
+  const pingInterval = setInterval(pingBackend, 10 * 1000);
 
-     // Function to handle logout
-     const handleLogout = () => {
-      // Clear any authentication tokens or user IDs
-      localStorage.removeItem('userID');
-      setIsLoggedIn(false);
-      // Additional logout logic if needed
-    };
-*/
+  // Function to stop the ping interval when frontend is closed
+  const stopPing = () => {
+    clearInterval(pingInterval);
+  };
+
+  // Call stopPing when the frontend is closed or unloaded
+  window.addEventListener('beforeunload', stopPing);
 
   return (
     <div>

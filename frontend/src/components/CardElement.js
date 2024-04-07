@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import CopyCode from "@mui/icons-material/ContentCopy";
+import ExecuteCode from "@mui/icons-material/PlayCircleFilled";
 import {
   Card,
   CardContent,
-  CardActions,
-  Typography,
-  IconButton,
   Checkbox,
+  FormControlLabel,
   Skeleton,
-  TextField,
+  Typography,
+  Tooltip
 } from "@mui/material";
+import React, { useState } from "react";
+import { renderToString } from "react-dom/server";
 import { toast } from "react-hot-toast";
+import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nord as syntax } from "react-syntax-highlighter/dist/esm/styles/prism";
 import app_logo from "../assets/codecraft.png";
 import Export from "../assets/export.png";
-import CopyCode from "@mui/icons-material/ContentCopy";
-import ExecuteCode from "@mui/icons-material/PlayCircleFilled";
-import { renderToString } from "react-dom/server";
-import ReactMarkdown from "react-markdown";
 import "../styles/CardElement.css";
 
 const CardElement = ({ usecase, query, response, isLoading }) => {
@@ -25,6 +24,9 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
   const [customFileName, setCustomFileName] = useState("");
   const [codeStatus, setCodeStatus] = useState("");
   const [codeOutput, setCodeOutput] = useState("");
+  const [showOnlyCode, setShowOnlyCode] = useState(false);
+
+  const isCode = (usecase !== "code_analysis" ? "Code" : "Content");
 
   const copyToClipboard = (response) => {
     const lines = response.split("\n");
@@ -47,7 +49,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     navigator.clipboard
       .writeText(response)
       .then(() => {
-        if (!copied) toast.success("Content Copied to Clipboard!");
+        if (!copied) toast.success(isCode + " Copied to Clipboard!");
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // Reset copied state after 3 seconds
       })
@@ -55,6 +57,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
         console.error("Failed to copy:", error);
       });
   };
+
   const handleExportClick = (response) => {
     const lines = response.split("\n");
 
@@ -148,6 +151,34 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
     );
   };
 
+  const getOnlyCode = (response) => {
+    const lines = response.split("\n");
+    let codeBlock = "";
+    let language = "";
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("```")) {
+        language = line.substring(3).trim();
+        for (let j = i + 1; j < lines.length; j++) {
+          const codeLine = lines[j].trim();
+          if (codeLine.endsWith("```")) {
+            codeBlock = lines.slice(i + 1, j).join("\n");
+            response = codeBlock;
+            break;
+          }
+        }
+        break;
+      }
+    }
+    return (
+      <SyntaxHighlighter language={language} style={syntax}>
+        {response}
+      </SyntaxHighlighter>
+    );
+  };
+
+  const codeResponse = getOnlyCode(response);
+
   const tempResponse = `<code>${response}</code>`;
 
   const modifiedFeedback = tempResponse.replace(
@@ -213,6 +244,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
       toast.error("Code was not executed: " + error);
     }
   };
+
   return (
     <Card variant="outlined" sx={{ width: "700px", marginBottom: "25px" }}>
       <CardContent>
@@ -224,111 +256,132 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
           </>
         ) : (
           <>
-            <div className="buttons-container">
-              <button
-                className="copy-button"
-                onClick={() => {
-                  copyToClipboard(response);
+            <div className="card-header">
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+                style={{
+                  fontFamily: "'Courier New', Courier, monospace",
+                  display: "flex",
+                  flexDirection: "row",
                 }}
               >
-                <CopyCode sx={{ height: "20px", width: "20px" }} />
-              </button>
-              <button
-                className="export-button"
-                onClick={() => {
-                  handleExportClick(response);
-                }}
-              >
-                <img src={Export} alt="Export Icon" className="export-img" />
-              </button>
-              <button
-                onClick={() => {
-                  handleExecutedCode();
-                }}
-                className="executeCode-button"
-              >
-                <ExecuteCode
-                  sx={{ height: "20px", width: "20px" }}
-                ></ExecuteCode>
-              </button>
+                <img
+                  src={app_logo}
+                  alt="App Logo"
+                  style={{
+                    width: "15px",
+                    height: "15px",
+                    marginTop: "3px",
+                    marginRight: "3px",
+                  }}
+                />
+                <div>{formattedUsecase ? formattedUsecase : "Code Analysis"}</div>
+              </Typography>
+              <div className="buttons-container">
+                <div className="checkbox-container">
+                  {usecase !== "code_analysis" ? (
+                    <FormControlLabel
+                      label="Show Only Code"
+                      labelPlacement="start"
+                      control={
+                        <Checkbox
+                          checked={showOnlyCode}
+                          onChange={(e) => setShowOnlyCode(e.target.checked)}
+                        />
+                      }
+                      sx={{
+                        marginRight: '1px',
+                        marginLeft: 'auto',
+                        display: 'flex',
+                        flexDirection: 'row-reverse', 
+                        alignItems: 'center',
+                      }}
+                    />
+                  ) : ("")}
+                </div>
+                <Tooltip title={"Copy " + isCode + " to Clipboard"} arrow>
+                  <button
+                    className="copy-button"
+                    onClick={() => copyToClipboard(response)}
+                  >
+                    <CopyCode sx={{ height: "20px", width: "20px" }} />
+                  </button>
+                </Tooltip>
+                <Tooltip title={"Export " + isCode + " to File"} arrow>
+                  <button
+                    className="export-button"
+                    onClick={() => handleExportClick(response)}
+                  >
+                    <img src={Export} alt="Export Icon" className="export-img" />
+                  </button>
+                </Tooltip>
+                {usecase !== "code_analysis" ? (
+                  <Tooltip title="Attempt Code Execution" arrow>
+                    <button
+                      onClick={handleExecutedCode}
+                      className="executeCode-button"
+                    >
+                      <ExecuteCode sx={{ height: "20px", width: "20px" }} />
+                    </button>
+                  </Tooltip>
+                ) : ("")}
+              </div>
             </div>
             <Typography
-              sx={{ fontSize: 14 }}
-              style={{
-                fontFamily: "'Courier New', Courier, monospace",
-                display: "flex",
-                flexDirection: "row",
-              }}
-              color="text.secondary"
-              gutterBottom
-            >
-              <img
-                src={app_logo}
-                alt="App Logo"
-                style={{
-                  width: "15px",
-                  height: "15px",
-                  marginTop: "3px",
-                  marginRight: "3px",
-                }}
-              />
-              <div>{formattedUsecase ? formattedUsecase : "Code Analysis"}</div>
-            </Typography>
-            <Typography
               sx={{ mb: 1.5 }}
+              color="text.secondary"
               style={{
-                marginTop: "20px",
-                marginBottom: "20px",
+                marginTop: "10px",
+                marginBottom: "15px",
                 textAlign: "left",
               }}
-              color="text.secondary"
             >
               {query.length > 90 ? query.slice(0, 90) + "..." : query}
             </Typography>
-            {response.includes("```") && response.split("```").length >= 1 ? (
-              <Typography
-                sx={{ fontSize: 11 }}
-                style={{ textAlign: "left" }}
-                variant="body2"
-              >
-                <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
-                <br />
-              </Typography>
-            ) : (
-              <Typography
-                sx={{ fontSize: 11 }}
-                style={{ textAlign: "left" }}
-                variant="body2"
-              >
-                {usecase !== "code_analysis" ? (
-                    <pre className="code-block">{highlightCodeBlock(response)}</pre>
+            <Typography
+              sx={{ fontSize: 11 }}
+              style={{ textAlign: "left" }}
+              variant="body2"
+            >
+              {/*Sometimes a query may contain triple backticks, don't want that parsed*/}
+              {response.includes("```") && usecase !== "code_analysis" ? (
+                <>
+                  {showOnlyCode ? (
+                    codeResponse
                   ) : (
-                    <ReactMarkdown>{response}</ReactMarkdown>
-                  )
-                }
-                <br />
-              </Typography>
-            )}
-
-            <Typography
-              sx={{ fontSize: 14 }}
-              style={{ textAlign: "left" }}
-              variant="body2"
-            >
-              Code Status: {codeStatus}
+                    <div dangerouslySetInnerHTML={{ __html: modifiedFeedback }} />
+                  )}
+                </>
+              ) : (
+                <ReactMarkdown>{response}</ReactMarkdown>
+              )}
             </Typography>
-
-            <Typography
-              sx={{ fontSize: 14 }}
-              style={{ textAlign: "left" }}
-              variant="body2"
-            >
-              Code Output: "{codeOutput}"
-            </Typography>
+            <>
+              {usecase !== "code_analysis" && codeStatus ? (
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  style={{ textAlign: "left", marginTop: "10px" }}
+                >
+                  <code>Code Status: {codeStatus}</code>
+                </Typography>
+              ) : ("")}
+              {usecase !== "code_analysis" && codeOutput ? (
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  style={{ textAlign: "left" }}
+                >
+                  <code>Code Output: {codeOutput}</code>
+                </Typography>
+              ) : ("")}
+            </>
           </>
         )}
       </CardContent>
     </Card>
-  );
-};
+  ); 
+              };
 export default CardElement;
