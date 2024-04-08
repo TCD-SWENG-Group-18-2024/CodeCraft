@@ -54,7 +54,7 @@ code_analysis_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-code_generation_template = PromptTemplate(
+code_generation_template_history = PromptTemplate(
     input_variables=['history', 'input'],
     template='You are a code generation tool. Please generate code based on the explanation being given.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
@@ -63,8 +63,16 @@ code_generation_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
+code_generation_template = PromptTemplate(
+    input_variables=['input'],
+    template='You are a code generation tool. Please generate code based on the explanation being given.'
+             ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
+             ' Please include unit tests for all code created. Please include doctests for Python.'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
 code_completion_template = PromptTemplate(
-    input_variables=['history','input_language', 'input'],
+    input_variables=['history', 'input_language', 'input'],
     template='You are a code completion tool. The input will be incompleted code in {input_language}.'
              ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
              ' parenthesis, curly braces, etc. where needed. Please ensure that the code is correct'
@@ -144,15 +152,19 @@ def code_generation(user_input: str, ai_model: str, email: str) -> dict:
         elif ai_model == 'llama':
             llm = llama
 
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
+    if email != None:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
-    response = code_generation_chain.invoke({'input': user_input})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
+        response = code_generation_chain.invoke({'input': user_input})
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    else:
+        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, verbose=True)
+        response = code_generation_chain.invoke({'input': user_input})
 
     return response
 
