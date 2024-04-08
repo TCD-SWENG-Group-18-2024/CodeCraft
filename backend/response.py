@@ -71,7 +71,7 @@ code_generation_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-code_completion_template = PromptTemplate(
+code_completion_template_history = PromptTemplate(
     input_variables=['history', 'input_language', 'input'],
     template='You are a code completion tool. The input will be incompleted code in {input_language}.'
              ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
@@ -79,6 +79,16 @@ code_completion_template = PromptTemplate(
              ' and follows best practices or standards set in programming language mentioned above.'
              ' The output should only be a completed version of the inputted code.'
              ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
+code_completion_template = PromptTemplate(
+    input_variables=['input_language', 'input'],
+    template='You are a code completion tool. The input will be incompleted code in {input_language}.'
+             ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
+             ' parenthesis, curly braces, etc. where needed. Please ensure that the code is correct'
+             ' and follows best practices or standards set in programming language mentioned above.'
+             ' The output should only be a completed version of the inputted code.'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
@@ -210,15 +220,19 @@ def code_completion(user_input: str, ai_model: str, input_language: str, email: 
         elif ai_model == 'openai':
             llm = gpt
 
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
+    if email != None:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, memory=memory, verbose=True)
-    response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template_history, memory=memory, verbose=True)
+        response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    else:
+        code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, verbose=True)
+        response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
     return response
 
