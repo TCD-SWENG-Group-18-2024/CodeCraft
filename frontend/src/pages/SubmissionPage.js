@@ -252,6 +252,7 @@ const SubmissionPage = () => {
     } else {
       fetch(backendURL + "/llm/clearmemory", {
         method: "DELETE",
+        credentials: "include",
         //headers: {
         //    'Content-Type': 'application/json',
         //},
