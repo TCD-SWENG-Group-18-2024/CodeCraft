@@ -33,41 +33,14 @@ llama = HuggingFaceHub(
 )
 
 # Templates
-code_analysis_template_history = PromptTemplate(
-    input_variables=['history', 'input'],
-    template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
-             ' Please tell me what my code does and give feedback and tips on how to improve it.'
-             ' You will help me identify potential bugs in this code, give important suggestions'
-             ' on improving the code quality and maintainability, and check if it adheres to coding'
-             ' standards and best practices.'
-             ' Relevant pieces of previous information: {history}'
-             ' Please be specific as possible. My code is here as follows: {input}'
-)
-
 code_analysis_template = PromptTemplate(
-    input_variables=['input'],
+    input_variables=['history', 'input'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
              ' Please tell me what my code does and give feedback and tips on how to improve it.'
              ' You will help me identify potential bugs in this code, give important suggestions'
              ' on improving the code quality and maintainability, and check if it adheres to coding'
              ' standards and best practices.'
-             ' Please be specific as possible. My code is here as follows: {input}'
-)
-
-code_generation_template_history = PromptTemplate(
-    input_variables=['history', 'input'],
-    template='You are a code generation tool. Please generate code based on the explanation being given.'
-             ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
-             ' Please include unit tests for all code created. Please include doctests for Python.'
              ' Relevant pieces of previous information: {history}'
-             ' Please be specific as possible. My code is here as follows: {input}'
-)
-
-code_generation_template = PromptTemplate(
-    input_variables=['input'],
-    template='You are a code generation tool. Please generate code based on the explanation being given.'
-             ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
-             ' Please include unit tests for all code created. Please include doctests for Python.'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
@@ -131,20 +104,16 @@ def AIModel(user_input: str, ai_model: str, email: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
+    
+    collection_name = remove_special_characters(email)
+    memory = initialise_vectordb(collection_name)
 
-    if email != None:
-        collection_name = remove_special_characters(email)
-        memory = initialise_vectordb(collection_name)
+    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
+    response = code_analysis_chain.invoke({'input': user_input})
 
-        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template_history, memory=memory, verbose=True)
-        response = code_analysis_chain.invoke({'input': user_input})
-
-        # Save the prompt/response pair in the Milvus collection
-        memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
-        code_analysis_chain = code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, verbose=True)
-        response = code_analysis_chain.invoke({'input': user_input})
+    # Save the prompt/response pair in the Milvus collection
+    memory.save_context({'input': user_input}, {'output': response['text']})
 
     return response
 
@@ -165,7 +134,7 @@ def code_generation(user_input: str, ai_model: str, email: str) -> dict:
     memory = initialise_vectordb(collection_name)
 
     # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template_history, memory=memory, verbose=True)
+    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
     response = code_generation_chain.invoke({'input': user_input})
 
     # Save the prompt/response pair in the Milvus collection
@@ -186,19 +155,15 @@ def code_analysis(user_input: str, ai_model: str, email: str) -> dict:
         elif ai_model == 'llama':
             llm = llama
     
-    if email != None:
-        collection_name = remove_special_characters(email)
-        memory = initialise_vectordb(collection_name)
+    collection_name = remove_special_characters(email)
+    memory = initialise_vectordb(collection_name)
 
-        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template_history, memory=memory, verbose=True)
-        response = code_analysis_chain.invoke({'input': user_input})
-
-        # Save the prompt/response pair in the Milvus collection
-        memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
-        code_analysis_chain = code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, verbose=True)
-        response = code_analysis_chain.invoke({'input': user_input})
+    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
+    response = code_analysis_chain.invoke({'input': user_input})
+    
+    # Save the prompt/response pair in the Milvus collection
+    memory.save_context({'input': user_input}, {'output': response['text']})
 
     return response
 
