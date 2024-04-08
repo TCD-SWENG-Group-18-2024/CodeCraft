@@ -92,11 +92,18 @@ code_completion_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-code_translation_template = PromptTemplate(
+code_translation_template_history = PromptTemplate(
     input_variables=['history', 'input_language', 'output_language', 'input'],
     template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
              ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
              ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
+code_translation_template = PromptTemplate(
+    input_variables=['input_language', 'output_language', 'input'],
+    template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
+             ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
@@ -249,15 +256,19 @@ def code_translation(input_language: str, output_language: str, user_input: str,
         elif ai_model == 'openai':
             llm = gpt
 
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
+    if email != None:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, memory=memory, verbose=True)
-    response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template_history, memory=memory, verbose=True)
+        response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    else:
+        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, verbose=True)
+        response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})    
 
     return response
 
