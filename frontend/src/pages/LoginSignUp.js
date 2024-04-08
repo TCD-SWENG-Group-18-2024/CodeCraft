@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef,useEffect } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../components/AuthContext";
@@ -20,6 +20,7 @@ const SignUp = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -133,9 +134,20 @@ const SignUp = () => {
   const handlePasswordEnter = (e) => {
     if (e.key == "Enter") {
       e.preventDefault();
-      handleSubmit();
+      if (userAction === "Sign Up") {
+        confirmPasswordRef.current.focus();
+      } else {
+        handleSubmit();
+      }
     }
   };
+
+  const handleConfirmPasswordEnter = (e) => {
+    if (e.key == "Enter") {
+      e.preventDefault();
+      handleSubmit();
+    }
+  }
 
   return (
     <>
@@ -181,8 +193,8 @@ const SignUp = () => {
                 placeholder="Confirm your Password"
                 value={confirm_password}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                onKeyDown={handlePasswordEnter}
-                ref={passwordRef}
+                onKeyDown={handleConfirmPasswordEnter}
+                ref={confirmPasswordRef}
               />
             </div>
           ) : null}

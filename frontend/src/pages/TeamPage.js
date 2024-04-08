@@ -24,6 +24,7 @@ const TeamPage = () => {
                     </p>
                 </div>
                 <TeamGrid />
+                <div className="footerSpace"/>
             </div>
         </>
     );

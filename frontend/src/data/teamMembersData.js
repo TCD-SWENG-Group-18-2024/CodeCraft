@@ -99,7 +99,6 @@ const teamMembersData = [
       image: Abdullah,
       description: 'I am Abdullah and I am on the backend team for this project. I am a 2nd Year Integrated Computer Science student. I have experience in Python, Java, C, and more. I have worked on several projects in the past, one includes an AI algorithm that can play board games. I also research state estimation on the Formula Trinity Autonomous team!'
     },
-  ];
-  
-  export default teamMembersData;
-  
+];
+
+export default teamMembersData;

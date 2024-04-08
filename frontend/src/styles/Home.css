@@ -209,6 +209,7 @@ body, h1, h2, p, a, button {
     width: 100%;
     overflow: hidden;
     position: relative;
+    margin-top: 18.2vh;
 }
 .wave {
     background: rgb(255 255 255 / 25%);

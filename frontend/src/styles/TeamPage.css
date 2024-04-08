@@ -55,3 +55,7 @@
 .back-home-button:hover {
     background-color: #0056b3;
 }
+
+.footerSpace {
+  height: 9.5vh;
+}

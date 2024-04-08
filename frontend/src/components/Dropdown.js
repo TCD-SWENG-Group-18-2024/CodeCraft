@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../styles/Dropdown.css';
 
 // Dropdown component
@@ -9,13 +9,60 @@ const Dropdown = ({inputType, setInputType,
                    outputLanguage, setOutputLanguage,
                    checked, setChecked}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [outputFocused, setOutputFocused] = useState(false);
+  const inputRef = useRef(null);
+  const outputRef = useRef(null);
+
+  const handleInputFocus = () => {
+    setInputFocused(true);
+  };
+
+  const handleOutputFocus = () => {
+    setOutputFocused(true);
+  }
+
+  const handleInputBlur = () => {
+    setInputFocused(false);
+  };
+
+  const handleOutputBlur = () => {
+    setOutputFocused(false);
+  };
+
+  const handleInputChange = (e) => {
+    setInputLanguage(e.target.value);
+  };
+
+  const handleOutputChange = (e) => {
+    setOutputLanguage(e.target.value);
+  };
+
+  const handleInputEnter = (e) => {
+    if (e.key == "Enter") {
+        e.preventDefault();
+        inputRef.current.blur();
+    }
+  }
+
+  const handleOutputEnter = (e) => {
+    if (e.key == "Enter") {
+        e.preventDefault();
+        outputRef.current.blur();
+    }
+  }
+
+  let displayedInput = inputLanguage;
+  if (!inputFocused && inputLanguage) {
+    displayedInput = `Input Language: ${inputLanguage}`;
+  }
+
+  let displayedOutput = outputLanguage;
+  if (!outputFocused && outputLanguage) {
+    displayedOutput = `Output Language: ${outputLanguage}`;
+  }
 
   const capitaliseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
-
-  const formatInputType = (inputType) => {
-    if (inputType === "files") return "File Submission"
-    else return "Text Submission"
-  };
 
   const formatUseCase = (useCase) => { 
     return useCase
@@ -92,57 +139,30 @@ const Dropdown = ({inputType, setInputType,
         </li>
 
         {useCase === "code_completion" || useCase === "code_translation" ? (<>
-            <li className="menu-item">
-                <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                    {inputLanguage === "java" || inputLanguage === "python" || inputLanguage === "c"
-                ? <>Input Language: {capitaliseFirstLetter(inputLanguage)}</> : <>-Select Input Language-</>}
-                    
-                </a>
-                <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}>
-                    <li className="menu-item">
-                        <a href="#0" onClick={()=>setInputLanguage("java")}>
-                            Java
-                        </a>
-                    </li>
-                    <li className="menu-item">
-                        <a href="#0" onClick={()=>setInputLanguage("python")}>
-                            Python
-                        </a>
-                    </li>
-                    <li className="menu-item">
-                        <a href="#0" onClick={()=>setInputLanguage("c")}>
-                            C
-                        </a>
-                    </li>
-                </ol>   
+            <li className="text-item">
+                <input
+                    value={inputFocused ? inputLanguage : displayedInput}
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleInputEnter}
+                    placeholder="-Enter Input Language-"
+                    ref={inputRef}
+                />
             </li>
         </>): null}
 
         {useCase === "code_translation" ? (<>
-            <li className="menu-item">
-                <a href='#0'onMouseEnter={()=>setIsDropdownOpen(true)}>
-                    {outputLanguage === "java" || outputLanguage === "python" || outputLanguage === "c" 
-                ? <>Output Language: {capitaliseFirstLetter(outputLanguage)}</> : <>-Select Output Language-</>}
-                    
-                
-                </a>
-                <ol className={isDropdownOpen?'sub-menu':'hide-dropdown' }onClick={()=>setIsDropdownOpen(false)}>
-                    <li className="menu-item">
-                        <a href="#0" onClick={()=>setOutputLanguage("java")}>
-                            Java
-                        </a>
-                    </li>
-                    <li className="menu-item">
-                        <a href="#0" onClick={()=>setOutputLanguage("python")}>
-                            Python
-                        </a>
-                    </li>
-                    <li className="menu-item">
-                        <a href="#0" onClick={()=>setOutputLanguage("c")}>
-                            C
-                        </a>
-                    </li>
-                </ol>   
+            <li className="text-item">
+                <input
+                    value={outputFocused ? outputLanguage : displayedOutput}
+                    onChange={handleOutputChange}
+                    onFocus={handleOutputFocus}
+                    onBlur={handleOutputBlur}
+                    onKeyDown={handleOutputEnter}
+                    placeholder="-Enter Output Language-"
+                    ref={outputRef}
+                />
             </li>
         </>):null}
 
