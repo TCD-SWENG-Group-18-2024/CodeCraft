@@ -9,7 +9,8 @@ from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from models import db, User
-from response import code_generation, code_completion, code_translation, code_analysis, AIModel, utility
+from response import (code_generation, code_completion, code_translation, code_analysis, AIModel, utility,
+                      remove_special_characters)
 from itsdangerous import URLSafeTimedSerializer
 
 # Load environment varibles
@@ -61,10 +62,8 @@ def llm_text_request():
     output_language = data.get('output_language')
     user_input = data.get('user_input')
 
-    if session['isLoggedIn']:
-        print(session)
+    if 'email' in session:
         email = session['email']
-        print(email)
     else:
         email = None
     # Throws error if empty request
@@ -85,10 +84,8 @@ def llm_file_request():
     input_language = request.form.get('input_language')
     output_language = request.form.get('output_language')
 
-    if session['isLoggedIn']:
+    if 'email' in session:
         email = session.get('email')
-        print(session.get('isLoggedIn'))
-        print(email)
     else:
         email = None
     
@@ -126,8 +123,9 @@ def clear_memory():
     """
     Clears the MilvusDB collection
     """
-    email = session['email']
-    utility.drop_collection(email)
+    if 'email' in session:
+        email = remove_special_characters(session['email'])
+        utility.drop_collection(email)
 
     # Should be 200 whether the collection exists or not
     return jsonify({'success': 'Cleared the Milvus collection.'}), 200

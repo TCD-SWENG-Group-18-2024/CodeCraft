@@ -139,8 +139,8 @@ def AIModel(user_input: str, ai_model: str, email: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
-    
-    if email != None:
+
+    try:
         collection_name = remove_special_characters(email)
         memory = initialise_vectordb(collection_name)
 
@@ -150,7 +150,7 @@ def AIModel(user_input: str, ai_model: str, email: str) -> dict:
 
         # Save the prompt/response pair in the Milvus collection
         memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
+    except:
         code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, verbose=True)
         response = code_analysis_chain.invoke({'input': user_input})
 
@@ -169,17 +169,17 @@ def code_generation(user_input: str, ai_model: str, email: str) -> dict:
         elif ai_model == 'llama':
             llm = llama
 
-    if email != None:
+    try:
         collection_name = remove_special_characters(email)
         memory = initialise_vectordb(collection_name)
 
         # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
+        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template_history, memory=memory, verbose=True)
         response = code_generation_chain.invoke({'input': user_input})
 
         # Save the prompt/response pair in the Milvus collection
         memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
+    except:
         code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, verbose=True)
         response = code_generation_chain.invoke({'input': user_input})
 
@@ -197,8 +197,8 @@ def code_analysis(user_input: str, ai_model: str, email: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
-    
-    if email != None:
+
+    try:
         collection_name = remove_special_characters(email)
         memory = initialise_vectordb(collection_name)
 
@@ -208,7 +208,7 @@ def code_analysis(user_input: str, ai_model: str, email: str) -> dict:
 
         # Save the prompt/response pair in the Milvus collection
         memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
+    except:
         code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, verbose=True)
         response = code_analysis_chain.invoke({'input': user_input})
 
@@ -227,7 +227,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str, email: 
         elif ai_model == 'openai':
             llm = gpt
 
-    if email != None:
+    try:
         collection_name = remove_special_characters(email)
         memory = initialise_vectordb(collection_name)
 
@@ -237,7 +237,7 @@ def code_completion(user_input: str, ai_model: str, input_language: str, email: 
 
         # Save the prompt/response pair in the Milvus collection
         memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
+    except:
         code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, verbose=True)
         response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
@@ -256,28 +256,27 @@ def code_translation(input_language: str, output_language: str, user_input: str,
         elif ai_model == 'openai':
             llm = gpt
 
-    if email != None:
+    try:
         collection_name = remove_special_characters(email)
         memory = initialise_vectordb(collection_name)
 
         # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template_history, memory=memory, verbose=True)
-        response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})
+        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template_history, memory=memory,
+                                          verbose=True)
+        response = code_translation_chain.invoke(
+            {'input_language': input_language, 'output_language': output_language, 'input': user_input})
 
         # Save the prompt/response pair in the Milvus collection
         memory.save_context({'input': user_input}, {'output': response['text']})
-    else:
+    except:
         code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, verbose=True)
-        response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})    
+        response = code_translation_chain.invoke(
+            {'input_language': input_language, 'output_language': output_language, 'input': user_input})
 
     return response
 
 
 def initialise_vectordb(email):
-    """
-    Initialises an empty VectorDB.
-    This function is inelegant but seemingly necessary because of Python's weirdness with variable scope
-    """
     vectordb = Milvus.from_documents(
         {},
         embeddings,
