@@ -11,32 +11,28 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15); /* Glow effect on hover */
 }
 
-.card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+.buttons-container{
 
-.buttons-container {
-    display: flex;
-    align-items: center;
+    display: flex; /* Ensure the buttons are displayed in a row */
+    align-items: center; /* Center the buttons vertically */
     justify-content: flex-end;
-    gap: 8px;
+    gap: 2px; /* Add space between the buttons */
 }
 
 .export-button,
 .copy-button,
-.executeCode-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
+.executeCode-button,
+.checkbox-container { /* Add this class to your checkbox container */
+    margin-right: 8px;
 }
+
+
 .export-img{
     height: 20px;
     width: 20px;
 }
+
+
 
 .cardStyle {
     position: relative;

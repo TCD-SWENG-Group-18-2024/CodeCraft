@@ -14,13 +14,6 @@ jest.mock('react-syntax-highlighter/dist/esm/styles/prism', () => ({
     nord: jest.fn(),
   }));
   
-  jest.mock('react-markdown', () => {
-    return {
-      __esModule: true,
-      default: () => <div>Mocked ReactMarkdown component</div>,
-    };
-  });
-
   describe('SubmissionPage', () => {
   test('renders submission page without crashing', () => {
     render(<MemoryRouter>
@@ -123,11 +116,9 @@ jest.mock('react-syntax-highlighter/dist/esm/styles/prism', () => ({
   
   test('renders dropdown with use case selection', () => {
     const setUseCase = jest.fn();
-  const setChecked = jest.fn();
-  const setinputType = jest.fn();
-  const { getByText } = render(
-    <Dropdown useCase="code_analysis" setUseCase={setUseCase} setChecked={setChecked} setInputType={setinputType}/>
-  );
+    const { getByText } = render(
+      <Dropdown useCase="code_analysis" setUseCase={setUseCase} />
+    );
   
     const useCaseDropdown = getByText('Code Analysis');
     expect(useCaseDropdown).toBeInTheDocument();

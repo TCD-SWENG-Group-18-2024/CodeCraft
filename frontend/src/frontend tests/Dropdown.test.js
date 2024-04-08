@@ -14,10 +14,8 @@ test('renders dropdown with AI model selection', () => {
 
 test('renders dropdown with use case selection', () => {
   const setUseCase = jest.fn();
-  const setChecked = jest.fn();
-  const setinputType = jest.fn();
   const { getByText } = render(
-    <Dropdown useCase="code_analysis" setUseCase={setUseCase} setChecked={setChecked} setInputType={setinputType}/>
+    <Dropdown useCase="code_analysis" setUseCase={setUseCase} />
   );
 
   const useCaseDropdown = getByText('Code Analysis');

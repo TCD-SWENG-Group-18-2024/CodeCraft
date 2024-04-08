@@ -51,6 +51,7 @@ const SignUp = () => {
     } catch (error) {
       logout();
       console.error("Error:", error.message);
+      toast.error("Please Enter Valid inputs");
     }
   };
 
@@ -76,7 +77,6 @@ const SignUp = () => {
       // If login is successful:
       console.log("Login Successful", data);
       localStorage.setItem("userID", data.id); // Save userID
-      localStorage.setItem("userEmail", userData.email) // Save user email
       login();
       navigate("/"); // Navigate to the home page using react-router
     } catch (error) {
