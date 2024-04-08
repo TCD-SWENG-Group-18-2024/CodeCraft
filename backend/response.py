@@ -290,5 +290,5 @@ def initialise_vectordb(email):
 
 
 if __name__ == "__main__":
-    # Enter code here to debug
+    # Enter code to debug
     pass
