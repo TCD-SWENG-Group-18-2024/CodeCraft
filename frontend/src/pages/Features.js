@@ -74,14 +74,12 @@ const Features = () =>{
                     <h2>Integration with <span className = "underline-letter">L</span>LMs</h2>
                 </div>
                 <div className = "llms-content">
-                    <p>In an era dominated by artificial intelligence, our Codecraft platform leads the way in innovation. By integration
-                        with leading language models such as <a href="https://openai.com" className="llm-link">OpenAI</a>, <a href="https://ai.meta.com/blog/code-llama-large-language-model-coding/" className="llm-link">Code Llama</a> and <a href="https://www.ibm.com/watsonx" className="llm-link">WatsonX</a>, 
-                        Codecraft unlocks a new realm of possibilities.<br/>
+                    <p>Our Codecraft integrates
+                        with leading language models such as <a href="https://openai.com" className="llm-link">OpenAI</a>, <a href="https://ai.meta.com/blog/code-llama-large-language-model-coding/" className="llm-link">Code Llama</a> and <a href="https://www.ibm.com/watsonx" className="llm-link">WatsonX</a>. 
+                        <br/>
                         With OpenAI's expertise in natural language understanding and generation, 
                         and WatsonX's advanced natural language processing capabilities, CodeCraft empowers developers like never before.
                         With the AI capabilities of our CodeCraft, you can explain your coding ideas in everyday language, and it will turn them into ready-to-use code. 
-                        Whether you're new to coding or an experienced developer, our AI assistance ensures coding is accessible and enjoyable. 
-                        CodeCraft simplifies the coding process, letting you focus on creativity rather than technical details.
                     </p>
                 </div>
             </div>
@@ -92,9 +90,7 @@ const Features = () =>{
                 <div className = "file-content">
                     <p>
                     CodeCraft offers file management capabilities, simplifying the process of handling result files within 
-                    the platform. Users can seamlessly export their result files in various formats, including Java, Python, C, or plain text 
-                    (txt) files. With intuitive features like drag-and-drop functionality and batch uploading, users can effortlessly upload 
-                    input files, enabling them to analyze and process their data effectively.
+                    the platform. Users can seamlessly export their result files in various formats, including Java, Python and C, while also benifiting from the copy-to-clipboard feature.
                     </p>
                 </div>
             </div>
@@ -108,8 +104,6 @@ const Features = () =>{
                     of developers across different domains, the feedback box incorporates advanced functionality that automatically identifies
                     the language type by analyzing the code pattern within provided code snippets, it is also equipped with comprehensive syntax highlighting
                     , ensuring clear differentiation of code elements for enhanced readability and comprehension.
-                    Additionally, code formatting feature is there to optimize the coding experience for users in these languages.
-                    Developers can confidently rely on CodeCraft to provide a seamless and user-friendly coding environment.
                     </p>
                 </div>
             </div>
@@ -121,23 +115,17 @@ const Features = () =>{
                     CodeCraft provides functionalities to help users analyze their code effectively. 
                     From identifying errors and performance to ensuring code quality and security, 
                     CodeCraft's analysis tools empower developers to maintain robust and reliable codebases. 
-                    Features include static code analysis, which examines code without executing it to find potential issues, 
-                    code quality metrics for assessing the overall quality of the codebase, and dependency checking to detect 
-                    dependencies between components, ensuring compatibility and stability.
                     </p>
                     <h3 className = "toolkit-subheading">Code Completion</h3>
                     <p>
                     With CodeCraft's code completion feature, developers can enhance their coding efficiency and accuracy. 
                     As users write code, CodeCraft offers context-aware suggestions, helping them quickly complete code snippets, 
-                    functions, or variable names. By anticipating the developer's intent and providing relevant suggestions , 
-                    CodeCraft enables users to write code faster and with fewer errors, ultimately improving productivity and code quality.
+                    functions, or variable names.
                     </p>
                     <h3 className = "toolkit-subheading">Code Translation</h3>
                     <p>
                     With code translation, Developers can seamlessly convert code
                     written in one language to another, eliminating the need for manual translation and reducing development time. 
-                    Whether migrating codebases or integrating components written in different languages, CodeCraft's code translation feature 
-                    streamlines the development process and accelerates project delivery.
                     </p>
                     <h3 className = "toolkit-subheading">Code Generation</h3>
                     <p>
