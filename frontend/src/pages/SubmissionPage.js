@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Suspense } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Switch from "@mui/material/Switch"; // Import from `@mui/material` not `@mui/joy`
 import Typography from "@mui/material/Typography"; // Import from `@mui/material`
 import { toast } from "react-hot-toast";
@@ -31,6 +31,7 @@ const SubmissionPage = () => {
   const [checked, setChecked] = React.useState(true);
   const [fileName, setFileName] = React.useState("");
   const [tooltipText, setTooltipText] = useState("");
+  const submissionRef = useRef(null);
   const [cards, setCards] = useState(() => {
     if (userID === "") {
       return [];
@@ -143,7 +144,14 @@ const SubmissionPage = () => {
 
   // Allows user to key into tab in the submission box
   const handleKeyDown = (event) => {
-    if (event.key === "Tab") {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      // Allow the user to press enter to submit their query
+      submissionRef.current.blur();
+      handleSubmit();
+    } 
+    else if (event.key === "Tab") {
       event.preventDefault();
 
       const { selectionStart, selectionEnd } = event.target;
@@ -375,6 +383,7 @@ const SubmissionPage = () => {
                       handleTextBoxChange={handleTextBoxChange}
                       handleKeyDown={handleKeyDown}
                       handleSubmit={handleSubmit}
+                      submissionRef={submissionRef}
                     />
                     <ResponsiveDialog
                       open={dialogOpen}
