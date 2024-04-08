@@ -5,7 +5,8 @@ import { toast } from "react-hot-toast";
 import Sidebar from "../components/Sidebar";
 import SubmissionBar from "../components/SubmissionBar";
 import Dropdown from "../components/Dropdown";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import "../styles/SubmissionPage.css";
 import "./Home";
 import "./LoginSignUp";
@@ -29,13 +30,21 @@ const SubmissionPage = () => {
   const [outputLanguage, setOutputLanguage] = useState("");
   const [checked, setChecked] = React.useState(true);
   const [fileName, setFileName] = React.useState("");
+  const [tooltipText, setTooltipText] = useState("");
   const [cards, setCards] = useState(() => {
-    if(userID===""){
+    if (userID === "") {
       return [];
     }
     const storedCards = localStorage.getItem(userID);
     return storedCards ? JSON.parse(storedCards) : [];
   });
+
+  const handleTooltipHover = () => {
+    setTooltipText(
+      "For Code Analysis and Code Translation, we recommend submitting a file.\n" +
+      "For Code Generation and Completion, we recommend submitting a text prompt.");
+  };
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -62,7 +71,7 @@ const SubmissionPage = () => {
     console.log("Dropped Files: ", droppedFiles);
   };
 
-  const MAX_FILE_SIZE = 10000;
+  const MAX_FILE_SIZE = 10 * 1024;
 
   const handleFileSelect = (event) => {
     const selectFile = Array.from(event.target.files);
@@ -74,7 +83,9 @@ const SubmissionPage = () => {
       setFileName(selectFile[0].name);
       console.log("Selected File: ", selectFile);
     } else {
-      toast.error("Selected File exceeds the size limit of " + MAX_FILE_SIZE/1000 + "KB");
+      toast.error(
+        "Selected File exceeds the size limit of " + MAX_FILE_SIZE / 1024 + "KB"
+      );
     }
   };
 
@@ -103,7 +114,7 @@ const SubmissionPage = () => {
     try {
       const response = await fetch(backendURL + "/llm/text", {
         method: "POST",
-        credentials: 'include',
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -179,7 +190,7 @@ const SubmissionPage = () => {
       const response = await fetch(backendURL + "/llm/file", {
         method: "POST",
         body: formData,
-        credentials: 'include',
+        credentials: "include",
         // headers: {
         //     "Content-Type" : "multipart/form-data",
         // },
@@ -205,14 +216,11 @@ const SubmissionPage = () => {
   const handleSubmit = () => {
     setIsLoading(true);
     if (inputType === "textbox") {
-      toast.promise(
-        handleTextSubmit(),
-        {
-          loading: "Loading...",
-          success: "Success!",
-          error: "Something went wrong, please try again",
-        }
-      );
+      toast.promise(handleTextSubmit(), {
+        loading: "Loading...",
+        success: "Success!",
+        error: "Something went wrong, please try again",
+      });
     } else if (inputType === "files") {
       toast.promise(handleFileSubmit(), {
         loading: "Loading...",
@@ -260,7 +268,7 @@ const SubmissionPage = () => {
 
   useEffect(() => {
     localStorage.setItem(userID, JSON.stringify(cards));
-  }, [cards, userID])
+  }, [cards, userID]);
 
   useEffect(() => {
     // have to wait for feedback to update before you can add card
@@ -276,18 +284,20 @@ const SubmissionPage = () => {
     }
   }, [feedback]);
   const addCard = () => {
-    const newCard = 
-      inputType === "files" ? ({
-        usecase: useCase,
-        query: fileName,
-        response: feedback,
-        isLoading: isLoading,
-      }) : ({
-        usecase: useCase,
-        query: input,
-        response: feedback,
-        isLoading: isLoading,
-      });
+    const newCard =
+      inputType === "files"
+        ? {
+            usecase: useCase,
+            query: fileName,
+            response: feedback,
+            isLoading: isLoading,
+          }
+        : {
+            usecase: useCase,
+            query: input,
+            response: feedback,
+            isLoading: isLoading,
+          };
 
     // Only store the latest 10 cards
     setCards((prevCards) => {
@@ -322,7 +332,26 @@ const SubmissionPage = () => {
               checked={checked}
               setChecked={setChecked}
             />
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "center"}}>
+              <Tooltip
+                title={
+                  <span style={{ fontSize: "13px", color: "white", whiteSpace: "pre-line" }}>
+                    {tooltipText}
+                  </span>
+                }
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: "10px",
+                  }}
+                  className="infoButton"
+                  onMouseEnter={handleTooltipHover}
+                >
+                  <InfoIcon sx={{ color: "white" }}></InfoIcon>
+                </div>
+              </Tooltip>
               <div
                 style={{
                   display: "flex",
