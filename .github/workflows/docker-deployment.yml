@@ -30,7 +30,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: tcdswenggroup18/codecraft:frontend-deployment
+          images: tcdswenggroup18/codecraft:frontend-showcase
           
       - name: Build and Push frontend
         id: docker_build
@@ -39,7 +39,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: tcdswenggroup18/codecraft:frontend-deployment
+          tags: tcdswenggroup18/codecraft:frontend-showcase
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Image digest
@@ -69,7 +69,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: tcdswenggroup18/codecraft:backend-deployment
+          images: tcdswenggroup18/codecraft:backend-showcase
           
       - name: Build and Push backend
         id: docker_build
@@ -78,7 +78,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: tcdswenggroup18/codecraft:backend-deployment
+          tags: tcdswenggroup18/codecraft:backend-showcase
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Image digest
