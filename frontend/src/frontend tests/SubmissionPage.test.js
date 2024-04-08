@@ -142,8 +142,4 @@ jest.mock('react-syntax-highlighter/dist/esm/styles/prism', () => ({
     expect(setUseCase).toHaveBeenCalledWith('code_generation');
   });
 
-  
-
-  });
-
- 
+});

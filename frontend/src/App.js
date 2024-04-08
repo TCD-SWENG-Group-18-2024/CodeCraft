@@ -20,19 +20,19 @@ console.log("backend URL: " + backendURL);
 function App() {
 
   // Function to ping the backend
-const pingBackend = () => {
-  fetch(backendURL)
-    .then(response => {
-      if (response.ok) {
-        console.log('Backend is Alive');
-      } else {
-        console.error('Error pinging backend: Error Code ', response.status);
-      }
-    })
-    .catch(error => {
-      console.error('Error pinging backend: ', error);
-    });
-  };
+  const pingBackend = () => {
+    fetch(backendURL)
+      .then(response => {
+        if (response.ok) {
+          console.log('Backend is Alive');
+        } else {
+          console.error('Error pinging backend: Error Code ', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('Error pinging backend: ', error);
+      });
+    };
 
   // Interval to ping every 10 seconds (adjust as needed)
   const pingInterval = setInterval(pingBackend, 10 * 1000);
@@ -67,7 +67,6 @@ const pingBackend = () => {
     </Router>
     <Footer />
     </div>
-    
 
   );
 }
