@@ -256,7 +256,7 @@
  }
 
 .card-area{
-  height: 700px;
+  min-height: 79vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -268,68 +268,9 @@
   margin-left: 620px;
 }
 
-
-/*
-.exportButton{
-  display: inline-block;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1em;
-
-  padding: 0.75em 1em;
-  color: #0F62FE;
-
-  border: 0.15em solid #0F62FE;
-  border-radius: calc(0.75em + 0.5em + 0.15em);
-
-  transition: 2s;
-
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    top: -1.5em;
-
-    z-index: -1;
-
-    width: 200%;
-    aspect-ratio: 1;
-
-    border-radius: 40%;
-
-    background-color: rgba(#0F62FE, 0.25);
-
-    transition: 2s;
-  }
-
-  &:before{
-    left: -80%;
-    transform: translate3d(0, 1em, 0) rotate(-340deg);
-  }
-
-  &:after{
-    right: -80%;
-    transform: translate3d(0, 1em, 0) rotate(390deg);
-  }
-
-  &:hover,
-  &:focus{
-    color: white;
-    background-color: rgba(15, 98, 254, 0.75);
-    border-color: white;
-
-    &:before, 
-    &:after {
-      background-color: rgba(#0F62FE, 0.75);
-    }
-  }
- }
-*/
-
+.infoButton :hover{
+  cursor: pointer;
+}
  
 @keyframes bounce {
   from, to {
@@ -367,5 +308,3 @@
   flex-shrink: 0;
   margin-right: 0px;
 }
-
-
