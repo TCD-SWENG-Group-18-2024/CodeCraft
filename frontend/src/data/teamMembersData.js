@@ -25,7 +25,7 @@ const teamMembersData = [
       role: 'Integration Team Lead',
       year: '3rd',
       image: Mariam,
-      description: ''
+      description: 'I\'m Mariam and I am the Integration Team Lead for this project! I am a Third Year Computer Science Major and Business Minor student and I have experience in programming with languages such as Java, Python, C, Haskell, Assembly, ReactJS, JavaScript, HTML and CSS. I have worked on many other software engineering projects. For instance,  my SwEng project from last year where I collaborated with Mersus Technology, and another project where we created a Recipe Filtering Website. Additionally, I\'ve tackled various programming projects from my modules at Trinity. On the business side, I\'ve participated in numerous group projects involving entrepreneurship, marketing, and business planning. I\'m thoroughly enjoying this year\'s project, and I\'m eager to see the final product we\'ll deliver!'
       },
     {
       id: 3,
@@ -33,7 +33,7 @@ const teamMembersData = [
       role: 'Styling Team Lead',
       year: '3rd',
       image: Leah,
-      description: 'I\'m Leah and I am the Styling Team Leader for this project! I am a 3rd year Computer Science student and I have experience in programming with languages such as Java, C, Python, Prolog, Haskell, R, Verilog, VHDL, ARM Assembly, ReactJS, Javascript, CSS and HTML. I have worked on other projects such as creating an App to explore data relating to artificial space objects, SwEng Project with Mersus Technology and developing a web application for a song guessing game. I have also took part in some Hackathons including one with KPMG in Glasgow! I\'m excited to be working on this project and can’t wait to see what we are able to produce:)'
+      description: 'I\'m Leah and I am the Styling Team Leader for this project! I am a 3rd year Computer Science student and I have experience in programming with languages such as Java, C, Python, Prolog, Haskell, R, Verilog, VHDL, ARM Assembly, ReactJS, Javascript, CSS and HTML. I have worked on other projects such as creating an App to explore data relating to artificial space objects, SwEng Project with Mersus Technology and developing a web application for a song guessing game. I have also took part in some Hackathons including one with JP Morgan in Glasgow! I\'m excited to be working on this project and can’t wait to see what we are able to produce:)'
     },
     {
       id: 4,
@@ -99,7 +99,6 @@ const teamMembersData = [
       image: Abdullah,
       description: 'I am Abdullah and I am on the backend team for this project. I am a 2nd Year Integrated Computer Science student. I have experience in Python, Java, C, and more. I have worked on several projects in the past, one includes an AI algorithm that can play board games. I also research state estimation on the Formula Trinity Autonomous team!'
     },
-  ];
-  
-  export default teamMembersData;
-  
+];
+
+export default teamMembersData;
