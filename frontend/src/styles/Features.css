@@ -32,7 +32,7 @@
     align-items: center; /* Center vertically */
     width:70%; 
     height:200px;
-    font-size:30px;
+    font-size:35px;
     font-weight: 200;
     color:rgb(239, 240, 245);
 }
@@ -43,7 +43,7 @@
 }
 .lm-button {
     position:relative;
-    margin-top: 60px;
+    margin-top: 120px;
     text-decoration: none;
     background-color: #5054ca; 
     color: white;
@@ -52,7 +52,7 @@
     font-size: 1.2rem; 
     transition: background-color 0.3s ease;
 }
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     .lm-button{
         display: none; /* Hide the button on smaller screens */
     }
@@ -86,7 +86,7 @@
     display: flex;
     text-align: left;
     align-items: center;
-    font-size: 26px;
+    font-size: 30px;
     color: aliceblue;
     letter-spacing: -1px;
     margin-left: 10px
@@ -126,7 +126,7 @@
     display: flex;
     text-align: left;
     align-items: center;
-    font-size: 26px;
+    font-size: 30px;
     color: aliceblue;
     letter-spacing: -1px;
     margin-left: 10px
@@ -152,7 +152,7 @@
     display: flex;
     text-align: left;
     align-items: center;
-    font-size: 26px;
+    font-size: 30px;
     color: rgb(90, 82, 82);
     letter-spacing: -1px;
     margin-left: 10px
@@ -183,6 +183,18 @@
     font-size: 52px;
     font-weight: 500;
 }
+@media (max-width: 500px) {
+    .llms-container h2,
+    .llms-container p,
+    .file-container h2,
+    .file-container p,
+    .language-container h2,
+    .language-container p,
+    .toolkit-container h2,
+    .toolkit-container p{
+        display: none;
+    }
+}
 .toolkit-content{
     width: 80%;
 }
@@ -196,7 +208,7 @@
 .toolkit-subheading{
     text-align: left;
     color: white;
-    font-size: 35px;
+    font-size: 40px;
     font-weight: 300;
     border-bottom: 1px solid white;
 }
@@ -204,7 +216,7 @@
     margin-top: 40px;
     margin-bottom: 40px;
     text-align: left;
-    font-size: 26px;
+    font-size: 30px;
     color: white;
 }
 .language-column h2{

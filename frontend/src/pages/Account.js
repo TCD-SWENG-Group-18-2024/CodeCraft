@@ -22,7 +22,7 @@ function Account() {
                 </div>
                 <div className="userGreeting">
                     <p>You are signed in as</p>
-                    <h1>{userEmail}</h1>
+                    <h1>{userEmail ? userEmail : "User"}</h1>
                 </div>
                 <button className="signOutButton" onClick={handleSignout}>Sign Out</button>
             </div>
@@ -31,4 +31,3 @@ function Account() {
 }
 
 export default Account;
-

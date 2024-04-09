@@ -33,7 +33,7 @@ llama = HuggingFaceHub(
 )
 
 # Templates
-code_analysis_template = PromptTemplate(
+code_analysis_template_history = PromptTemplate(
     input_variables=['history', 'input'],
     template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
              ' Please tell me what my code does and give feedback and tips on how to improve it.'
@@ -44,7 +44,17 @@ code_analysis_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-code_generation_template = PromptTemplate(
+code_analysis_template = PromptTemplate(
+    input_variables=['input'],
+    template='You are a code analysis tool. Please evaluate my code and check for any possible mistakes.'
+             ' Please tell me what my code does and give feedback and tips on how to improve it.'
+             ' You will help me identify potential bugs in this code, give important suggestions'
+             ' on improving the code quality and maintainability, and check if it adheres to coding'
+             ' standards and best practices.'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
+code_generation_template_history = PromptTemplate(
     input_variables=['history', 'input'],
     template='You are a code generation tool. Please generate code based on the explanation being given.'
              ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
@@ -53,8 +63,16 @@ code_generation_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-code_completion_template = PromptTemplate(
-    input_variables=['history','input_language', 'input'],
+code_generation_template = PromptTemplate(
+    input_variables=['input'],
+    template='You are a code generation tool. Please generate code based on the explanation being given.'
+             ' Please ensure that the generated code is correct, follows best practices, and meets the given criteria.'
+             ' Please include unit tests for all code created. Please include doctests for Python.'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
+code_completion_template_history = PromptTemplate(
+    input_variables=['history', 'input_language', 'input'],
     template='You are a code completion tool. The input will be incompleted code in {input_language}.'
              ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
              ' parenthesis, curly braces, etc. where needed. Please ensure that the code is correct'
@@ -64,11 +82,28 @@ code_completion_template = PromptTemplate(
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
-code_translation_template = PromptTemplate(
+code_completion_template = PromptTemplate(
+    input_variables=['input_language', 'input'],
+    template='You are a code completion tool. The input will be incompleted code in {input_language}.'
+             ' Your job is to correct the code so that it is working and complete. Add in semicolons,'
+             ' parenthesis, curly braces, etc. where needed. Please ensure that the code is correct'
+             ' and follows best practices or standards set in programming language mentioned above.'
+             ' The output should only be a completed version of the inputted code.'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
+code_translation_template_history = PromptTemplate(
     input_variables=['history', 'input_language', 'output_language', 'input'],
     template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
              ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
              ' Relevant pieces of previous information: {history}'
+             ' Please be specific as possible. My code is here as follows: {input}'
+)
+
+code_translation_template = PromptTemplate(
+    input_variables=['input_language', 'output_language', 'input'],
+    template='You are a code translation tool. Please translate my code from {input_language} to {output_language}.'
+             ' Please ensure that the generated code is correct with attention to semicolons, curly braces and'
              ' Please be specific as possible. My code is here as follows: {input}'
 )
 
@@ -104,16 +139,20 @@ def AIModel(user_input: str, ai_model: str, email: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
-    
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
-    response = code_analysis_chain.invoke({'input': user_input})
+    try:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template_history, memory=memory, verbose=True)
+        response = code_analysis_chain.invoke({'input': user_input})
+
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    except:
+        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, verbose=True)
+        response = code_analysis_chain.invoke({'input': user_input})
 
     return response
 
@@ -130,15 +169,19 @@ def code_generation(user_input: str, ai_model: str, email: str) -> dict:
         elif ai_model == 'llama':
             llm = llama
 
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
+    try:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, memory=memory, verbose=True)
-    response = code_generation_chain.invoke({'input': user_input})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template_history, memory=memory, verbose=True)
+        response = code_generation_chain.invoke({'input': user_input})
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    except:
+        code_generation_chain = LLMChain(llm=llm, prompt=code_generation_template, verbose=True)
+        response = code_generation_chain.invoke({'input': user_input})
 
     return response
 
@@ -154,16 +197,20 @@ def code_analysis(user_input: str, ai_model: str, email: str) -> dict:
             llm = starcoder
         elif ai_model == 'llama':
             llm = llama
-    
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, memory=memory, verbose=True)
-    response = code_analysis_chain.invoke({'input': user_input})
-    
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+    try:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
+
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template_history, memory=memory, verbose=True)
+        response = code_analysis_chain.invoke({'input': user_input})
+
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    except:
+        code_analysis_chain = LLMChain(llm=llm, prompt=code_analysis_template, verbose=True)
+        response = code_analysis_chain.invoke({'input': user_input})
 
     return response
 
@@ -180,15 +227,19 @@ def code_completion(user_input: str, ai_model: str, input_language: str, email: 
         elif ai_model == 'openai':
             llm = gpt
 
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
+    try:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, memory=memory, verbose=True)
-    response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template_history, memory=memory, verbose=True)
+        response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    except:
+        code_completion_chain = LLMChain(llm=llm, prompt=code_completion_template, verbose=True)
+        response = code_completion_chain.invoke({'input_language': input_language, 'input': user_input})
 
     return response
 
@@ -205,24 +256,27 @@ def code_translation(input_language: str, output_language: str, user_input: str,
         elif ai_model == 'openai':
             llm = gpt
 
-    collection_name = remove_special_characters(email)
-    memory = initialise_vectordb(collection_name)
+    try:
+        collection_name = remove_special_characters(email)
+        memory = initialise_vectordb(collection_name)
 
-    # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
-    code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, memory=memory, verbose=True)
-    response = code_translation_chain.invoke({'input_language': input_language, 'output_language': output_language, 'input': user_input})
+        # Passing in memory to the LLMChain, so we don't need to pass the memory into invoke()
+        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template_history, memory=memory,
+                                          verbose=True)
+        response = code_translation_chain.invoke(
+            {'input_language': input_language, 'output_language': output_language, 'input': user_input})
 
-    # Save the prompt/response pair in the Milvus collection
-    memory.save_context({'input': user_input}, {'output': response['text']})
+        # Save the prompt/response pair in the Milvus collection
+        memory.save_context({'input': user_input}, {'output': response['text']})
+    except:
+        code_translation_chain = LLMChain(llm=llm, prompt=code_translation_template, verbose=True)
+        response = code_translation_chain.invoke(
+            {'input_language': input_language, 'output_language': output_language, 'input': user_input})
 
     return response
 
 
 def initialise_vectordb(email):
-    """
-    Initialises an empty VectorDB.
-    This function is inelegant but seemingly necessary because of Python's weirdness with variable scope
-    """
     vectordb = Milvus.from_documents(
         {},
         embeddings,
@@ -236,5 +290,5 @@ def initialise_vectordb(email):
 
 
 if __name__ == "__main__":
-    # Enter code here to debug
+    # Enter code to debug
     pass
