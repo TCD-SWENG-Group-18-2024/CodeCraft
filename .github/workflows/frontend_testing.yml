@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
