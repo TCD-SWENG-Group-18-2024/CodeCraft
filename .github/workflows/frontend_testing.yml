@@ -24,7 +24,9 @@ jobs:
       run: |
         cd frontend
         npm install
+        npm install @fortawesome/react-frontawesome
         npm install @fortawesome/fontawesome-svg-core
+        npm install @fortawesome/free-solid-svg-icons
 
     - name: Run tests
       run: |
