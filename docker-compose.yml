@@ -1,6 +1,6 @@
 services:
   backend:
-    image: tcdswenggroup18/codecraft:backend-deployment
+    image: tcdswenggroup18/codecraft:backend-latest
     build:
       context: .
     ports:
@@ -11,7 +11,7 @@ services:
       - ./backend/.env
 
   frontend:
-    image: tcdswenggroup18/codecraft:frontend-deployment
+    image: tcdswenggroup18/codecraft:frontend-latest
     build:
       context: .
     ports:

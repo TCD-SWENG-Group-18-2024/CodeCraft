@@ -19,6 +19,9 @@ import app_logo from "../assets/codecraft.png";
 import Export from "../assets/export.png";
 import "../styles/CardElement.css";
 
+const backendURL = process.env.REACT_APP_BACKEND_URL;
+console.log("backend URL: " + backendURL);
+
 const CardElement = ({ usecase, query, response, isLoading }) => {
   const [copied, setCopied] = useState(false);
   const [customFileName, setCustomFileName] = useState("");
@@ -220,7 +223,7 @@ const CardElement = ({ usecase, query, response, isLoading }) => {
         return;
       }
 
-      const status = await fetch("http://localhost:8080/execute", {
+      const status = await fetch(backendURL + "/execute", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
