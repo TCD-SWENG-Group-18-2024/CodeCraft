@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,10 +24,15 @@ jobs:
         node-version: '14'
 
     - name: Install npm dependencies
-      run: npm install
+      run: |
+        cd frontend
+        npm install
+        npm install @fortawesome/react-fontawesome
+        npm install @fortawesome/fontawesome-svg-core
+        npm install @fortawesome/free-solid-svg-icons
 
     - name: Run tests
       run: |
-       cd frontend
-       npm test
-       a
+        cd frontend
+        npm test
+        a
