@@ -21,10 +21,12 @@ jobs:
         node-version: '14'
 
     - name: Install npm dependencies
-      run: npm install
+      run: |
+        cd frontend
+        npm install
 
     - name: Run tests
       run: |
-       cd frontend
-       npm test
-       a
+        cd frontend
+        npm test
+        a
